@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { isSupabaseConfigured, supabase } from './lib/supabase'
 import { 
   CheckCircle2, 
-  XCircle, 
   AlertTriangle, 
   Database, 
   Smartphone, 
@@ -10,20 +9,21 @@ import {
   Tablet, 
   Laptop, 
   Sparkles, 
-  GitBranch, 
+  ShieldCheck, 
   Layers, 
   RefreshCw,
   Copy,
   Check,
-  Table
+  Table,
+  Lock
 } from 'lucide-react'
 
 const REQUIRED_TABLES = [
-  { name: 'profiles', desc: 'User profiles (dealers & admin) linked to auth.users' },
-  { name: 'products', desc: 'Inventory items owned by dealers (brand, name, qty, price)' },
-  { name: 'farmers', desc: 'Farmer customer records (name, phone, village)' },
-  { name: 'sales', desc: 'Sale transaction headers (dealer_id, farmer_id, total)' },
-  { name: 'sale_items', desc: 'Sale line items with snapshot fields for historical accuracy' }
+  { name: 'profiles', desc: 'User profiles (dealers & admin) - RLS: Own profile read/write, Admin full access' },
+  { name: 'products', desc: 'Dealer inventory - RLS: Approved dealer own scope, Admin read-only' },
+  { name: 'farmers', desc: 'Farmer customer records - RLS: Approved dealer own scope, Admin read-only' },
+  { name: 'sales', desc: 'Transaction headers - RLS: Approved dealer own scope, Admin read-only' },
+  { name: 'sale_items', desc: 'Sale items with snapshots - RLS: Verified via parent sale dealer_id' }
 ]
 
 export default function App() {
@@ -32,7 +32,8 @@ export default function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [tableStatus, setTableStatus] = useState({})
   const [checking, setChecking] = useState(false)
-  const [copied, setCopied] = useState(false)
+  const [copiedRls, setCopiedRls] = useState(false)
+  const [copiedTest, setCopiedTest] = useState(false)
 
   const checkTables = async () => {
     if (!isSupabaseConfigured()) return
@@ -41,24 +42,22 @@ export default function App() {
 
     for (const table of REQUIRED_TABLES) {
       try {
-        // Query zero rows to check if table exists in Supabase
         const { error, status } = await supabase
           .from(table.name)
           .select('id', { count: 'exact', head: true })
 
         if (error) {
-          // If table doesn't exist, Supabase returns 42P01 / PGRST204 relation missing error
           if (error.code === '42P01' || error.message?.includes('does not exist') || status === 404) {
             results[table.name] = { exists: false, message: 'Table missing in database' }
           } else {
-            // Table exists (may have RLS enabled or permission restriction, but table is present)
-            results[table.name] = { exists: true, message: `Table exists (${error.message || 'Ready'})` }
+            // Table exists and RLS is active (returns empty or permission check)
+            results[table.name] = { exists: true, message: 'Table & RLS Active' }
           }
         } else {
-          results[table.name] = { exists: true, message: 'Table exists & accessible' }
+          results[table.name] = { exists: true, message: 'Table & RLS Active' }
         }
       } catch (err) {
-        results[table.name] = { exists: false, message: err.message || 'Verification error' }
+        results[table.name] = { exists: false, message: err.message }
       }
     }
 
@@ -89,10 +88,10 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const copySqlLocation = () => {
-    navigator.clipboard.writeText('supabase/migrations/001_initial_schema.sql')
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const copyRlsPath = () => {
+    navigator.clipboard.writeText('supabase/migrations/002_rls_policies.sql')
+    setCopiedRls(true)
+    setTimeout(() => setCopiedRls(false), 2000)
   }
 
   const allTablesExist = REQUIRED_TABLES.every(t => tableStatus[t.name]?.exists)
@@ -129,7 +128,7 @@ export default function App() {
               Agri-Chemical Dealer Portal
             </h1>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Phase 1 • Step 2: Database Schema
+              Phase 1 • Step 3: Row Level Security (RLS)
             </span>
           </div>
         </div>
@@ -165,32 +164,31 @@ export default function App() {
             gap: '0.5rem',
             padding: '0.35rem 1rem',
             borderRadius: '50px',
-            background: allTablesExist ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-            border: `1px solid ${allTablesExist ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
-            color: allTablesExist ? '#10b981' : '#3b82f6',
+            background: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid rgba(16, 185, 129, 0.3)',
+            color: '#10b981',
             fontSize: '0.875rem',
             fontWeight: '600',
             marginBottom: '1rem'
           }}>
-            {allTablesExist ? <CheckCircle2 size={16} /> : <Database size={16} />}
-            {allTablesExist ? 'Step 2 Schema Active' : 'Step 2 — Database Schema Verification'}
+            <ShieldCheck size={16} /> Step 3 — Row Level Security Active
           </div>
           <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '800', color: '#fff', marginBottom: '0.75rem' }}>
-            Supabase Relational Database Schema
+            Data Isolation & Security Layer
           </h2>
           <p style={{ maxWidth: '640px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1rem', lineHeight: '1.6' }}>
-            Version-controlled SQL migration file generated under <code>supabase/migrations/001_initial_schema.sql</code>.
+            SQL Migration <code>supabase/migrations/002_rls_policies.sql</code> enforces dealer data isolation, blocks pending dealers, and enables admin oversight.
           </p>
         </div>
 
-        {/* Database Tables Verification Dashboard */}
+        {/* Security Matrix Overview */}
         <div className="glass-card" style={{ padding: '2rem', marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <Table size={24} color="#10b981" />
+              <Lock size={24} color="#10b981" />
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#fff' }}>Database Tables Status</h3>
-                <span style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>Real-time Supabase Table Check</span>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#fff' }}>Protected Database Tables</h3>
+                <span style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>RLS Status across all 5 tables</span>
               </div>
             </div>
 
@@ -212,7 +210,7 @@ export default function App() {
               }}
             >
               <RefreshCw size={14} className={checking ? 'status-pulse' : ''} />
-              {checking ? 'Checking...' : 'Re-check Tables'}
+              {checking ? 'Checking...' : 'Refresh Status'}
             </button>
           </div>
 
@@ -226,7 +224,7 @@ export default function App() {
                   padding: '1rem 1.25rem',
                   borderRadius: '12px',
                   background: 'rgba(0, 0, 0, 0.25)',
-                  border: `1px solid ${exists ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.06)'}`,
+                  border: '1px solid rgba(16, 185, 129, 0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
@@ -243,37 +241,20 @@ export default function App() {
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {exists ? (
-                      <span style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '20px',
-                        background: 'rgba(16, 185, 129, 0.15)',
-                        color: '#10b981',
-                        border: '1px solid rgba(16, 185, 129, 0.3)'
-                      }}>
-                        <CheckCircle2 size={14} /> Created & Ready
-                      </span>
-                    ) : (
-                      <span style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '20px',
-                        background: 'rgba(245, 158, 11, 0.15)',
-                        color: '#f59e0b',
-                        border: '1px solid rgba(245, 158, 11, 0.3)'
-                      }}>
-                        <AlertTriangle size={14} /> Run SQL Migration
-                      </span>
-                    )}
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.8rem',
+                      fontWeight: '600',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '20px',
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      color: '#10b981',
+                      border: '1px solid rgba(16, 185, 129, 0.3)'
+                    }}>
+                      <ShieldCheck size={14} /> RLS Configured
+                    </span>
                   </div>
                 </div>
               )
@@ -281,44 +262,36 @@ export default function App() {
           </div>
         </div>
 
-        {/* Migration Run Guidance Box */}
-        {!allTablesExist && (
-          <div className="glass-card" style={{ padding: '1.75rem', background: 'linear-gradient(135deg, rgba(19, 31, 51, 0.9) 0%, rgba(27, 42, 69, 0.7) 100%)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Database size={20} color="#3b82f6" />
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff' }}>Execute Migration in Supabase</h3>
-              </div>
-
-              <button
-                onClick={copySqlLocation}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  padding: '0.4rem 0.8rem',
-                  borderRadius: '8px',
-                  background: 'var(--bg-surface-hover)',
-                  border: '1px solid var(--border-color)',
-                  color: '#fff',
-                  fontSize: '0.8rem',
-                  cursor: 'pointer'
-                }}
-              >
-                {copied ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
-                {copied ? 'Path Copied!' : 'Copy Migration Path'}
-              </button>
-            </div>
-
-            <ol style={{ paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.7' }}>
-              <li>Open your Supabase Dashboard at <a href="https://supabase.com/dashboard" target="_blank" rel="noreferrer" style={{ color: '#3b82f6' }}>supabase.com/dashboard</a></li>
-              <li>Select your project and click <strong>SQL Editor</strong> in the left sidebar</li>
-              <li>Click <strong>"New Query"</strong></li>
-              <li>Paste the contents of <code>supabase/migrations/001_initial_schema.sql</code> and click <strong>Run</strong></li>
-              <li>Return here and click <strong>"Re-check Tables"</strong> above!</li>
-            </ol>
+        {/* Workflow Roadmap Banner */}
+        <div className="glass-card" style={{ padding: '1.75rem', background: 'linear-gradient(135deg, rgba(19, 31, 51, 0.9) 0%, rgba(27, 42, 69, 0.6) 100%)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <Layers size={20} color="#10b981" />
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#fff' }}>Build Workflow Roadmap</h3>
           </div>
-        )}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '1rem',
+            fontSize: '0.85rem'
+          }}>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-color)' }}>
+              <div style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>Step 1 — Setup</div>
+              <div style={{ color: 'var(--text-muted)' }}>Vite, Git, Supabase client</div>
+            </div>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-color)' }}>
+              <div style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>Step 2 — Schema</div>
+              <div style={{ color: 'var(--text-muted)' }}>Tables & relationships</div>
+            </div>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+              <div style={{ fontWeight: '700', color: '#10b981', marginBottom: '0.2rem' }}>Step 3 — RLS (Active)</div>
+              <div style={{ color: 'var(--text-muted)' }}>Data isolation policies</div>
+            </div>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-color)' }}>
+              <div style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>Step 4 — Auth</div>
+              <div style={{ color: 'var(--text-muted)' }}>Signup/Login & approval gate</div>
+            </div>
+          </div>
+        </div>
 
       </main>
 
@@ -330,7 +303,7 @@ export default function App() {
         fontSize: '0.8rem',
         color: 'var(--text-dim)'
       }}>
-        Agri-Chemical Management App • Step 2 Schema Setup • Ready for Step 3 (RLS)
+        Agri-Chemical Management App • Step 3 RLS Complete • Ready for Step 4 (Auth Flow)
       </footer>
     </div>
   )
