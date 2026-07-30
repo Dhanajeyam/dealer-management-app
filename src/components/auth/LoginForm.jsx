@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 
-export default function LoginForm({ onSuccess }) {
+export default function LoginForm({ onSuccess, onForgotPassword }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -24,11 +25,18 @@ export default function LoginForm({ onSuccess }) {
         password: password.trim()
       })
 
-      if (authError) throw authError
+      if (authError) {
+        console.error('Supabase auth signin error:', authError)
+        const msg = authError.message || authError.error_description || (typeof authError === 'string' ? authError : 'Invalid login credentials.')
+        throw new Error(msg)
+      }
 
       if (onSuccess) onSuccess(data.user)
     } catch (err) {
-      setError(err.message || 'Failed to sign in. Please check your credentials.')
+      const displayMsg = typeof err?.message === 'string' && err.message !== '{}' 
+        ? err.message 
+        : 'Invalid login credentials. Please check your email and password.'
+      setError(displayMsg)
     } finally {
       setLoading(false)
     }
@@ -63,7 +71,7 @@ export default function LoginForm({ onSuccess }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="dealer@shop.com"
+            placeholder="Enter your email address"
             required
             style={{
               width: '100%',
@@ -105,6 +113,41 @@ export default function LoginForm({ onSuccess }) {
             }}
           />
         </div>
+      </div>
+
+      {/* Remember Me & Forgot Password Row */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        fontSize: '0.85rem',
+        marginTop: '-0.25rem'
+      }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', cursor: 'pointer', userSelect: 'none' }}>
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            style={{ accentColor: '#10b981', cursor: 'pointer' }}
+          />
+          Remember me
+        </label>
+
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#10b981',
+            fontSize: '0.85rem',
+            fontWeight: '500',
+            cursor: 'pointer',
+            padding: 0
+          }}
+        >
+          Forgot Password?
+        </button>
       </div>
 
       <button

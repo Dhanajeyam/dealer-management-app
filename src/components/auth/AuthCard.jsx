@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
+import ForgotPasswordForm from './ForgotPasswordForm'
 import { Sparkles, LogIn, UserPlus } from 'lucide-react'
 
 export default function AuthCard({ onAuthSuccess }) {
-  const [tab, setTab] = useState('login') // 'login' | 'signup'
+  const [view, setView] = useState('login') // 'login' | 'signup' | 'forgot_password'
 
   return (
     <div style={{
@@ -37,69 +38,75 @@ export default function AuthCard({ onAuthSuccess }) {
 
       {/* Auth Card Container */}
       <div className="glass-card" style={{ padding: '2rem' }}>
-        {/* Tab switcher */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '0.4rem',
-          padding: '0.35rem',
-          borderRadius: '12px',
-          background: 'rgba(0, 0, 0, 0.3)',
-          marginBottom: '1.75rem'
-        }}>
-          <button
-            onClick={() => setTab('login')}
-            style={{
-              padding: '0.6rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: tab === 'login' ? 'var(--bg-surface-hover)' : 'transparent',
-              color: tab === 'login' ? '#10b981' : 'var(--text-muted)',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <LogIn size={16} /> Sign In
-          </button>
+        {/* Navigation Tabs (Only visible when not on forgot_password) */}
+        {view !== 'forgot_password' && (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '0.4rem',
+            padding: '0.35rem',
+            borderRadius: '12px',
+            background: 'rgba(0, 0, 0, 0.3)',
+            marginBottom: '1.75rem'
+          }}>
+            <button
+              onClick={() => setView('login')}
+              style={{
+                padding: '0.6rem',
+                borderRadius: '9px',
+                border: 'none',
+                background: view === 'login' ? 'var(--bg-surface-hover)' : 'transparent',
+                color: view === 'login' ? '#10b981' : 'var(--text-muted)',
+                fontSize: '0.9rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.4rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              <LogIn size={16} /> Sign In
+            </button>
 
-          <button
-            onClick={() => setTab('signup')}
-            style={{
-              padding: '0.6rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: tab === 'signup' ? 'var(--bg-surface-hover)' : 'transparent',
-              color: tab === 'signup' ? '#10b981' : 'var(--text-muted)',
-              fontSize: '0.9rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <UserPlus size={16} /> Register Dealer
-          </button>
-        </div>
+            <button
+              onClick={() => setView('signup')}
+              style={{
+                padding: '0.6rem',
+                borderRadius: '9px',
+                border: 'none',
+                background: view === 'signup' ? 'var(--bg-surface-hover)' : 'transparent',
+                color: view === 'signup' ? '#10b981' : 'var(--text-muted)',
+                fontSize: '0.9rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.4rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              <UserPlus size={16} /> Register Dealer
+            </button>
+          </div>
+        )}
 
-        {tab === 'login' ? (
-          <LoginForm onSuccess={onAuthSuccess} />
-        ) : (
+        {view === 'login' && (
+          <LoginForm
+            onSuccess={onAuthSuccess}
+            onForgotPassword={() => setView('forgot_password')}
+          />
+        )}
+
+        {view === 'signup' && (
           <SignupForm onSuccess={onAuthSuccess} />
         )}
-      </div>
 
-      {/* Admin Notice */}
-      <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-        Admins use the standard Sign In tab. Admin accounts are managed directly by platform administration.
+        {view === 'forgot_password' && (
+          <ForgotPasswordForm onBackToLogin={() => setView('login')} />
+        )}
       </div>
     </div>
   )

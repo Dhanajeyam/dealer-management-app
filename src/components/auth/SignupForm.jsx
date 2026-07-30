@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { UserPlus, Mail, Lock, Store, Phone, AlertCircle } from 'lucide-react'
+import { UserPlus, Mail, Lock, Store, Phone, AlertCircle, Info } from 'lucide-react'
 
 export default function SignupForm({ onSuccess }) {
   const [email, setEmail] = useState('')
@@ -9,6 +9,7 @@ export default function SignupForm({ onSuccess }) {
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isRateLimited, setIsRateLimited] = useState(false)
 
   const handleSignup = async (e) => {
     e.preventDefault()
@@ -24,6 +25,7 @@ export default function SignupForm({ onSuccess }) {
 
     setLoading(true)
     setError('')
+    setIsRateLimited(false)
 
     try {
       const { data, error: authError } = await supabase.auth.signUp({
@@ -38,11 +40,16 @@ export default function SignupForm({ onSuccess }) {
         }
       })
 
-      if (authError) throw authError
+      if (authError) {
+        if (authError.message?.toLowerCase().includes('rate limit')) {
+          setIsRateLimited(true)
+        }
+        throw authError
+      }
 
       const user = data.user
       if (user) {
-        // Fallback explicit profile insertion to ensure profile exists even if trigger delayed
+        // Fallback explicit profile insertion to ensure profile exists
         const { error: profileError } = await supabase
           .from('profiles')
           .upsert({
@@ -70,18 +77,39 @@ export default function SignupForm({ onSuccess }) {
     <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
       {error && (
         <div style={{
-          padding: '0.75rem 1rem',
+          padding: '0.85rem 1rem',
           borderRadius: '10px',
           background: 'rgba(239, 68, 68, 0.12)',
           border: '1px solid rgba(239, 68, 68, 0.3)',
           color: '#f87171',
           fontSize: '0.85rem',
           display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
+          flexDirection: 'column',
+          gap: '0.4rem'
         }}>
-          <AlertCircle size={16} style={{ flexShrink: 0 }} />
-          <span>{error}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <AlertCircle size={16} style={{ flexShrink: 0 }} />
+            <span style={{ fontWeight: '600' }}>{error}</span>
+          </div>
+
+          {isRateLimited && (
+            <div style={{
+              marginTop: '0.5rem',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              background: 'rgba(0, 0, 0, 0.3)',
+              color: '#d1d5db',
+              fontSize: '0.8rem',
+              lineHeight: '1.5'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#fbbf24', fontWeight: '600', marginBottom: '0.3rem' }}>
+                <Info size={14} /> How to fix Supabase Email Rate Limit:
+              </div>
+              1. Open <strong>Supabase Dashboard -&gt; Authentication -&gt; Providers -&gt; Email</strong>.<br />
+              2. Toggle <strong>OFF "Confirm email"</strong>.<br />
+              3. Save settings &amp; try signing up again!
+            </div>
+          )}
         </div>
       )}
 
