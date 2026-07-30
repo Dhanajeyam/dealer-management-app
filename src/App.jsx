@@ -3,7 +3,7 @@ import { isSupabaseConfigured, supabase } from './lib/supabase'
 import AuthCard from './components/auth/AuthCard'
 import PendingGate from './components/gates/PendingGate'
 import BlockedGate from './components/gates/BlockedGate'
-import DealerPlaceholder from './components/dashboards/DealerPlaceholder'
+import DealerDashboard from './components/dashboards/DealerDashboard'
 import AdminPlaceholder from './components/dashboards/AdminPlaceholder'
 import { Sparkles, Loader2 } from 'lucide-react'
 
@@ -167,7 +167,7 @@ export default function App() {
 
     if (status === 'approved') {
       return (
-        <DealerPlaceholder
+        <DealerDashboard
           profile={profile}
           user={user}
           onSignOut={handleSignOut}
