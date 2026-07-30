@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { isSupabaseConfigured, supabase } from './lib/supabase'
 import { 
   CheckCircle2, 
+  XCircle, 
   AlertTriangle, 
   Database, 
   Smartphone, 
@@ -11,16 +12,63 @@ import {
   Sparkles, 
   GitBranch, 
   Layers, 
-  ArrowRight 
+  RefreshCw,
+  Copy,
+  Check,
+  Table
 } from 'lucide-react'
+
+const REQUIRED_TABLES = [
+  { name: 'profiles', desc: 'User profiles (dealers & admin) linked to auth.users' },
+  { name: 'products', desc: 'Inventory items owned by dealers (brand, name, qty, price)' },
+  { name: 'farmers', desc: 'Farmer customer records (name, phone, village)' },
+  { name: 'sales', desc: 'Sale transaction headers (dealer_id, farmer_id, total)' },
+  { name: 'sale_items', desc: 'Sale line items with snapshot fields for historical accuracy' }
+]
 
 export default function App() {
   const [configured, setConfigured] = useState(false)
   const [deviceType, setDeviceType] = useState('Desktop')
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [tableStatus, setTableStatus] = useState({})
+  const [checking, setChecking] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const checkTables = async () => {
+    if (!isSupabaseConfigured()) return
+    setChecking(true)
+    const results = {}
+
+    for (const table of REQUIRED_TABLES) {
+      try {
+        // Query zero rows to check if table exists in Supabase
+        const { error, status } = await supabase
+          .from(table.name)
+          .select('id', { count: 'exact', head: true })
+
+        if (error) {
+          // If table doesn't exist, Supabase returns 42P01 / PGRST204 relation missing error
+          if (error.code === '42P01' || error.message?.includes('does not exist') || status === 404) {
+            results[table.name] = { exists: false, message: 'Table missing in database' }
+          } else {
+            // Table exists (may have RLS enabled or permission restriction, but table is present)
+            results[table.name] = { exists: true, message: `Table exists (${error.message || 'Ready'})` }
+          }
+        } else {
+          results[table.name] = { exists: true, message: 'Table exists & accessible' }
+        }
+      } catch (err) {
+        results[table.name] = { exists: false, message: err.message || 'Verification error' }
+      }
+    }
+
+    setTableStatus(results)
+    setChecking(false)
+  }
 
   useEffect(() => {
-    setConfigured(isSupabaseConfigured())
+    const isConf = isSupabaseConfigured()
+    setConfigured(isConf)
 
     const handleResize = () => {
       const width = window.innerWidth
@@ -33,8 +81,21 @@ export default function App() {
 
     handleResize()
     window.addEventListener('resize', handleResize)
+
+    if (isConf) {
+      checkTables()
+    }
+
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  const copySqlLocation = () => {
+    navigator.clipboard.writeText('supabase/migrations/001_initial_schema.sql')
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  const allTablesExist = REQUIRED_TABLES.every(t => tableStatus[t.name]?.exists)
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -68,12 +129,12 @@ export default function App() {
               Agri-Chemical Dealer Portal
             </h1>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Phase 1 • Step 1 Scaffolding Complete
+              Phase 1 • Step 2: Database Schema
             </span>
           </div>
         </div>
 
-        {/* Device Viewport Pill */}
+        {/* Viewport indicator */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -93,166 +154,171 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Responsive Body */}
+      {/* Main Container */}
       <main className="container" style={{ flex: 1, padding: '2.5rem 1.5rem' }}>
         
-        {/* Hero Section */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        {/* Header Title */}
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.35rem 1rem',
             borderRadius: '50px',
-            background: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
-            color: '#10b981',
+            background: allTablesExist ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+            border: `1px solid ${allTablesExist ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
+            color: allTablesExist ? '#10b981' : '#3b82f6',
             fontSize: '0.875rem',
             fontWeight: '600',
             marginBottom: '1rem'
           }}>
-            <CheckCircle2 size={16} /> Step 1 Complete
+            {allTablesExist ? <CheckCircle2 size={16} /> : <Database size={16} />}
+            {allTablesExist ? 'Step 2 Schema Active' : 'Step 2 — Database Schema Verification'}
           </div>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', fontWeight: '800', color: '#fff', marginBottom: '0.75rem' }}>
-            Project Scaffolded & Ready
+          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '800', color: '#fff', marginBottom: '0.75rem' }}>
+            Supabase Relational Database Schema
           </h2>
-          <p style={{ maxWidth: '640px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: '1.6' }}>
-            React web application is initialized with Vite, styled with a fully responsive layout system, and prepared for Supabase backend connection.
+          <p style={{ maxWidth: '640px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1rem', lineHeight: '1.6' }}>
+            Version-controlled SQL migration file generated under <code>supabase/migrations/001_initial_schema.sql</code>.
           </p>
         </div>
 
-        {/* Status Cards Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '1.5rem',
-          marginBottom: '3rem'
-        }}>
-          
-          {/* Supabase Status Card */}
-          <div className="glass-card" style={{ padding: '1.75rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div style={{
-                  width: '42px',
-                  height: '42px',
+        {/* Database Tables Verification Dashboard */}
+        <div className="glass-card" style={{ padding: '2rem', marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <Table size={24} color="#10b981" />
+              <div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#fff' }}>Database Tables Status</h3>
+                <span style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>Real-time Supabase Table Check</span>
+              </div>
+            </div>
+
+            <button 
+              onClick={checkTables}
+              disabled={checking || !configured}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.5rem 1rem',
+                borderRadius: '10px',
+                background: 'var(--bg-surface-hover)',
+                border: '1px solid var(--border-color)',
+                color: '#fff',
+                cursor: checking ? 'wait' : 'pointer',
+                fontSize: '0.85rem',
+                fontWeight: '600'
+              }}
+            >
+              <RefreshCw size={14} className={checking ? 'status-pulse' : ''} />
+              {checking ? 'Checking...' : 'Re-check Tables'}
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            {REQUIRED_TABLES.map(table => {
+              const status = tableStatus[table.name]
+              const exists = status?.exists
+
+              return (
+                <div key={table.name} style={{
+                  padding: '1rem 1.25rem',
                   borderRadius: '12px',
-                  background: configured ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)',
+                  background: 'rgba(0, 0, 0, 0.25)',
+                  border: `1px solid ${exists ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.06)'}`,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '0.75rem'
                 }}>
-                  <Database size={22} color={configured ? '#10b981' : '#f59e0b'} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#fff' }}>Supabase Connection</h3>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Backend Provider</span>
-                </div>
-              </div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                fontSize: '0.75rem',
-                fontWeight: '600',
-                padding: '0.25rem 0.65rem',
-                borderRadius: '12px',
-                background: configured ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
-                color: configured ? '#10b981' : '#f59e0b'
-              }}>
-                <span className="status-pulse" style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: configured ? '#10b981' : '#f59e0b'
-                }} />
-                {configured ? 'Connected' : 'Pending Credentials'}
-              </div>
-            </div>
+                  <div style={{ flex: '1 1 250px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                      <code style={{ fontSize: '0.95rem', fontWeight: '700', color: '#fff' }}>public.{table.name}</code>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                      {table.desc}
+                    </div>
+                  </div>
 
-            {configured ? (
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
-                Supabase client initialized with environment variables. Ready for database schema & auth integration in upcoming steps.
-              </p>
-            ) : (
-              <div>
-                <p style={{ fontSize: '0.9rem', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.75rem' }}>
-                  <AlertTriangle size={16} /> Environment variables needed in <code>.env</code>
-                </p>
-                <div style={{
-                  background: 'rgba(0, 0, 0, 0.3)',
-                  padding: '0.75rem',
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {exists ? (
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        padding: '0.3rem 0.75rem',
+                        borderRadius: '20px',
+                        background: 'rgba(16, 185, 129, 0.15)',
+                        color: '#10b981',
+                        border: '1px solid rgba(16, 185, 129, 0.3)'
+                      }}>
+                        <CheckCircle2 size={14} /> Created & Ready
+                      </span>
+                    ) : (
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        fontSize: '0.8rem',
+                        fontWeight: '600',
+                        padding: '0.3rem 0.75rem',
+                        borderRadius: '20px',
+                        background: 'rgba(245, 158, 11, 0.15)',
+                        color: '#f59e0b',
+                        border: '1px solid rgba(245, 158, 11, 0.3)'
+                      }}>
+                        <AlertTriangle size={14} /> Run SQL Migration
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Migration Run Guidance Box */}
+        {!allTablesExist && (
+          <div className="glass-card" style={{ padding: '1.75rem', background: 'linear-gradient(135deg, rgba(19, 31, 51, 0.9) 0%, rgba(27, 42, 69, 0.7) 100%)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Database size={20} color="#3b82f6" />
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff' }}>Execute Migration in Supabase</h3>
+              </div>
+
+              <button
+                onClick={copySqlLocation}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  padding: '0.4rem 0.8rem',
                   borderRadius: '8px',
+                  background: 'var(--bg-surface-hover)',
+                  border: '1px solid var(--border-color)',
+                  color: '#fff',
                   fontSize: '0.8rem',
-                  fontFamily: 'monospace',
-                  color: 'var(--text-muted)'
-                }}>
-                  VITE_SUPABASE_URL=<br/>
-                  VITE_SUPABASE_ANON_KEY=
-                </div>
-              </div>
-            )}
-          </div>
+                  cursor: 'pointer'
+                }}
+              >
+                {copied ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
+                {copied ? 'Path Copied!' : 'Copy Migration Path'}
+              </button>
+            </div>
 
-          {/* Git & Responsive Framework Card */}
-          <div className="glass-card" style={{ padding: '1.75rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-              <div style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '12px',
-                background: 'rgba(59, 130, 246, 0.15)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <GitBranch size={22} color="#3b82f6" />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#fff' }}>Git & Architecture</h3>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Version Control & Stack</span>
-              </div>
-            </div>
-            <ul style={{ listStyle: 'none', fontSize: '0.9rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CheckCircle2 size={16} color="#10b981" /> Git repository initialized
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CheckCircle2 size={16} color="#10b981" /> Responsive breakpoints configured
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CheckCircle2 size={16} color="#10b981" /> Lucide UI icons integrated
-              </li>
-            </ul>
+            <ol style={{ paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.7' }}>
+              <li>Open your Supabase Dashboard at <a href="https://supabase.com/dashboard" target="_blank" rel="noreferrer" style={{ color: '#3b82f6' }}>supabase.com/dashboard</a></li>
+              <li>Select your project and click <strong>SQL Editor</strong> in the left sidebar</li>
+              <li>Click <strong>"New Query"</strong></li>
+              <li>Paste the contents of <code>supabase/migrations/001_initial_schema.sql</code> and click <strong>Run</strong></li>
+              <li>Return here and click <strong>"Re-check Tables"</strong> above!</li>
+            </ol>
           </div>
-        </div>
-
-        {/* Workflow Roadmap Banner */}
-        <div className="glass-card" style={{ padding: '1.75rem', background: 'linear-gradient(135deg, rgba(19, 31, 51, 0.9) 0%, rgba(27, 42, 69, 0.6) 100%)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-            <Layers size={20} color="#10b981" />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: '#fff' }}>Build Workflow Roadmap</h3>
-          </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '1rem',
-            fontSize: '0.85rem'
-          }}>
-            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-              <div style={{ fontWeight: '700', color: '#10b981', marginBottom: '0.2rem' }}>Step 1 — Setup (Active)</div>
-              <div style={{ color: 'var(--text-muted)' }}>Vite + React, Git, Supabase setup</div>
-            </div>
-            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>Step 2 — Schema</div>
-              <div style={{ color: 'var(--text-muted)' }}>Tables: users, products, farmers, sales</div>
-            </div>
-            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-color)' }}>
-              <div style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>Step 3 — Security</div>
-              <div style={{ color: 'var(--text-muted)' }}>Row-Level Security (RLS) policies</div>
-            </div>
-          </div>
-        </div>
+        )}
 
       </main>
 
@@ -264,7 +330,7 @@ export default function App() {
         fontSize: '0.8rem',
         color: 'var(--text-dim)'
       }}>
-        Agri-Chemical Dealer Management App • Step 1 Complete • Ready for Step 2
+        Agri-Chemical Management App • Step 2 Schema Setup • Ready for Step 3 (RLS)
       </footer>
     </div>
   )
