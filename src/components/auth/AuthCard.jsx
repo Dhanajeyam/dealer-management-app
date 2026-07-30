@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import ForgotPasswordForm from './ForgotPasswordForm'
-import { Sparkles, LogIn, UserPlus } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 export default function AuthCard({ onAuthSuccess }) {
   const [view, setView] = useState('login') // 'login' | 'signup' | 'forgot_password'
@@ -37,75 +37,26 @@ export default function AuthCard({ onAuthSuccess }) {
       </div>
 
       {/* Auth Card Container */}
-      <div className="glass-card" style={{ padding: '2rem' }}>
-        {/* Navigation Tabs (Only visible when not on forgot_password) */}
-        {view !== 'forgot_password' && (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '0.4rem',
-            padding: '0.35rem',
-            borderRadius: '12px',
-            background: 'rgba(0, 0, 0, 0.3)',
-            marginBottom: '1.75rem'
-          }}>
-            <button
-              onClick={() => setView('login')}
-              style={{
-                padding: '0.6rem',
-                borderRadius: '9px',
-                border: 'none',
-                background: view === 'login' ? 'var(--bg-surface-hover)' : 'transparent',
-                color: view === 'login' ? '#10b981' : 'var(--text-muted)',
-                fontSize: '0.9rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.4rem',
-                transition: 'all 0.2s'
-              }}
-            >
-              <LogIn size={16} /> Sign In
-            </button>
-
-            <button
-              onClick={() => setView('signup')}
-              style={{
-                padding: '0.6rem',
-                borderRadius: '9px',
-                border: 'none',
-                background: view === 'signup' ? 'var(--bg-surface-hover)' : 'transparent',
-                color: view === 'signup' ? '#10b981' : 'var(--text-muted)',
-                fontSize: '0.9rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.4rem',
-                transition: 'all 0.2s'
-              }}
-            >
-              <UserPlus size={16} /> Register Dealer
-            </button>
-          </div>
-        )}
-
+      <div className="glass-card" style={{ padding: '2.25rem 2rem' }}>
         {view === 'login' && (
           <LoginForm
             onSuccess={onAuthSuccess}
             onForgotPassword={() => setView('forgot_password')}
+            onSwitchToSignup={() => setView('signup')}
           />
         )}
 
         {view === 'signup' && (
-          <SignupForm onSuccess={onAuthSuccess} />
+          <SignupForm
+            onSuccess={onAuthSuccess}
+            onSwitchToLogin={() => setView('login')}
+          />
         )}
 
         {view === 'forgot_password' && (
-          <ForgotPasswordForm onBackToLogin={() => setView('login')} />
+          <ForgotPasswordForm
+            onBackToLogin={() => setView('login')}
+          />
         )}
       </div>
     </div>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { UserPlus, Mail, Lock, Store, Phone, AlertCircle, Info } from 'lucide-react'
+import { UserPlus, Mail, Lock, Store, Phone, AlertCircle, Info, ArrowLeft } from 'lucide-react'
 
-export default function SignupForm({ onSuccess }) {
+export default function SignupForm({ onSuccess, onSwitchToLogin }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [shopName, setShopName] = useState('')
@@ -75,6 +75,15 @@ export default function SignupForm({ onSuccess }) {
 
   return (
     <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+      <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.2rem' }}>
+          Create Dealer Account
+        </h3>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          Register your shop to get started
+        </p>
+      </div>
+
       {error && (
         <div style={{
           padding: '0.85rem 1rem',
@@ -103,11 +112,9 @@ export default function SignupForm({ onSuccess }) {
               lineHeight: '1.5'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#fbbf24', fontWeight: '600', marginBottom: '0.3rem' }}>
-                <Info size={14} /> How to fix Supabase Email Rate Limit:
+                <Info size={14} /> Supabase Rate Limit Notice:
               </div>
-              1. Open <strong>Supabase Dashboard -&gt; Authentication -&gt; Providers -&gt; Email</strong>.<br />
-              2. Toggle <strong>OFF "Confirm email"</strong>.<br />
-              3. Save settings &amp; try signing up again!
+              In Supabase Dashboard -&gt; Authentication -&gt; Providers -&gt; Email, turn OFF "Confirm Email" to bypass signup rate limits.
             </div>
           )}
         </div>
@@ -242,6 +249,32 @@ export default function SignupForm({ onSuccess }) {
         <UserPlus size={18} />
         {loading ? 'Creating Dealer Account...' : 'Register Dealer Account'}
       </button>
+
+      {/* Already have an account divider & link */}
+      <div style={{
+        height: '1px',
+        background: 'var(--border-color)',
+        margin: '0.5rem 0 0.25rem 0'
+      }} />
+
+      <div style={{ textAlign: 'center' }}>
+        <button
+          type="button"
+          onClick={onSwitchToLogin}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--text-muted)',
+            fontSize: '0.85rem',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem'
+          }}
+        >
+          <ArrowLeft size={14} /> Already have an account? <span style={{ color: '#10b981', fontWeight: '600' }}>Sign In</span>
+        </button>
+      </div>
     </form>
   )
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 
-export default function LoginForm({ onSuccess, onForgotPassword }) {
+export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignup }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(true)
@@ -63,7 +63,7 @@ export default function LoginForm({ onSuccess, onForgotPassword }) {
 
       <div>
         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-          Email Address
+          Email
         </label>
         <div style={{ position: 'relative' }}>
           <Mail size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -71,7 +71,7 @@ export default function LoginForm({ onSuccess, onForgotPassword }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email address"
+            placeholder="Enter your email"
             required
             style={{
               width: '100%',
@@ -98,7 +98,7 @@ export default function LoginForm({ onSuccess, onForgotPassword }) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
+            placeholder="Enter your password"
             required
             style={{
               width: '100%',
@@ -115,15 +115,9 @@ export default function LoginForm({ onSuccess, onForgotPassword }) {
         </div>
       </div>
 
-      {/* Remember Me & Forgot Password Row */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        fontSize: '0.85rem',
-        marginTop: '-0.25rem'
-      }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', cursor: 'pointer', userSelect: 'none' }}>
+      {/* Remember me checkbox */}
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '-0.25rem' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', cursor: 'pointer' }}>
           <input
             type="checkbox"
             checked={rememberMe}
@@ -132,29 +126,14 @@ export default function LoginForm({ onSuccess, onForgotPassword }) {
           />
           Remember me
         </label>
-
-        <button
-          type="button"
-          onClick={onForgotPassword}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#10b981',
-            fontSize: '0.85rem',
-            fontWeight: '500',
-            cursor: 'pointer',
-            padding: 0
-          }}
-        >
-          Forgot Password?
-        </button>
       </div>
 
+      {/* Login Button */}
       <button
         type="submit"
         disabled={loading}
         style={{
-          marginTop: '0.5rem',
+          marginTop: '0.25rem',
           padding: '0.85rem',
           borderRadius: '12px',
           background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
@@ -172,8 +151,57 @@ export default function LoginForm({ onSuccess, onForgotPassword }) {
         }}
       >
         <LogIn size={18} />
-        {loading ? 'Signing in...' : 'Sign In'}
+        {loading ? 'Logging in...' : 'Login'}
       </button>
+
+      {/* Forgot Password Link */}
+      <div style={{ textAlign: 'center', marginTop: '0.25rem' }}>
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#10b981',
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            cursor: 'pointer'
+          }}
+        >
+          Forgot Password?
+        </button>
+      </div>
+
+      {/* Divider */}
+      <div style={{
+        height: '1px',
+        background: 'var(--border-color)',
+        margin: '0.5rem 0'
+      }} />
+
+      {/* Don't have an account section */}
+      <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          Don't have an account?
+        </span>
+        <button
+          type="button"
+          onClick={onSwitchToSignup}
+          style={{
+            background: 'transparent',
+            border: '1px solid var(--border-color)',
+            borderRadius: '10px',
+            padding: '0.55rem 1.25rem',
+            color: '#fff',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'background 0.2s'
+          }}
+        >
+          Create Dealer Account
+        </button>
+      </div>
     </form>
   )
 }
