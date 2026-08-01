@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 
@@ -8,6 +8,15 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
   const [rememberMe, setRememberMe] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Load remembered email from localStorage on mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('chemical_shop_remembered_email')
+    if (savedEmail) {
+      setEmail(savedEmail)
+      setRememberMe(true)
+    }
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -19,6 +28,13 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
     setLoading(true)
     setError('')
 
+    // Handle Remember Me email persistence
+    if (rememberMe) {
+      localStorage.setItem('chemical_shop_remembered_email', email.trim())
+    } else {
+      localStorage.removeItem('chemical_shop_remembered_email')
+    }
+
     try {
       const { data, error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
@@ -27,15 +43,26 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
 
       if (authError) {
         console.error('Supabase auth signin error:', authError)
-        const msg = authError.message || authError.error_description || (typeof authError === 'string' ? authError : 'Invalid login credentials.')
-        throw new Error(msg)
+        throw authError
       }
 
       if (onSuccess) onSuccess(data.user)
     } catch (err) {
-      const displayMsg = typeof err?.message === 'string' && err.message !== '{}' 
-        ? err.message 
-        : 'Invalid login credentials. Please check your email and password.'
+      console.error('Login exception:', err)
+      const rawMsg = (err?.message || '').toLowerCase()
+      const errCode = (err?.code || '').toLowerCase()
+      let displayMsg = ''
+
+      if (rawMsg.includes('email not confirmed') || errCode.includes('email_not_confirmed')) {
+        displayMsg = 'Email not confirmed. Please check your inbox or confirm your email address.'
+      } else if (rawMsg.includes('invalid login credentials') || errCode.includes('invalid_credentials')) {
+        displayMsg = 'Incorrect email or password.'
+      } else if (rawMsg.includes('rate limit') || err?.status === 429) {
+        displayMsg = 'Too many login attempts. Please wait a moment and try again.'
+      } else {
+        displayMsg = err?.message || 'Incorrect email or password.'
+      }
+
       setError(displayMsg)
     } finally {
       setLoading(false)
@@ -62,13 +89,16 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
       )}
 
       <div>
-        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+        <label htmlFor="login-email" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
           Email
         </label>
         <div style={{ position: 'relative' }}>
           <Mail size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
           <input
+            id="login-email"
+            name="email"
             type="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
@@ -89,13 +119,16 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
       </div>
 
       <div>
-        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+        <label htmlFor="login-password" style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
           Password
         </label>
         <div style={{ position: 'relative' }}>
           <Lock size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
           <input
+            id="login-password"
+            name="password"
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"

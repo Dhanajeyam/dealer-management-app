@@ -4,7 +4,7 @@ import AuthCard from './components/auth/AuthCard'
 import PendingGate from './components/gates/PendingGate'
 import BlockedGate from './components/gates/BlockedGate'
 import DealerDashboard from './components/dashboards/DealerDashboard'
-import AdminPlaceholder from './components/dashboards/AdminPlaceholder'
+import AdminDashboard from './components/dashboards/AdminDashboard'
 import { Sparkles, Loader2 } from 'lucide-react'
 
 export default function App() {
@@ -130,10 +130,10 @@ export default function App() {
     )
   }
 
-  // 3. Authenticated Admin -> Render Admin Workspace Placeholder
+  // 3. Authenticated Admin -> Render Admin Workspace Dashboard
   if (profile?.role === 'admin') {
     return (
-      <AdminPlaceholder
+      <AdminDashboard
         profile={profile}
         user={user}
         onSignOut={handleSignOut}

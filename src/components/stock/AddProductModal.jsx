@@ -14,8 +14,8 @@ const PRESET_BRANDS = [
 
 const UNITS = ['kg', 'litre', 'ml', 'packet', 'bag', 'units']
 
-export default function AddProductModal({ isOpen, onClose, onProductAdded }) {
-  const [selectedBrand, setSelectedBrand] = useState('Bayer')
+export default function AddProductModal({ isOpen, onClose, onProductAdded, existingProducts = [] }) {
+  const [selectedBrand, setSelectedBrand] = useState('')
   const [customBrand, setCustomBrand] = useState('')
   const [isCustomBrand, setIsCustomBrand] = useState(false)
   const [name, setName] = useState('')
@@ -25,6 +25,28 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Dynamically combine preset brands with distinct custom brands from existing products
+  const availableBrands = Array.from(
+    new Set([
+      ...PRESET_BRANDS,
+      ...existingProducts.map(p => p.brand).filter(Boolean)
+    ])
+  ).sort()
+
+  // Reset all state when modal opens or closes
+  React.useEffect(() => {
+    if (isOpen) {
+      setSelectedBrand('')
+      setCustomBrand('')
+      setIsCustomBrand(false)
+      setName('')
+      setQuantity('')
+      setUnit('kg')
+      setPrice('')
+      setError('')
+    }
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const handleBrandChange = (e) => {
@@ -32,9 +54,11 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded }) {
     if (val === 'CUSTOM') {
       setIsCustomBrand(true)
       setSelectedBrand('')
+      setCustomBrand('') // Clear custom brand input when switching to custom entry
     } else {
       setIsCustomBrand(false)
       setSelectedBrand(val)
+      setCustomBrand('')
     }
   }
 
@@ -45,7 +69,12 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded }) {
     const numQty = parseFloat(quantity)
     const numPrice = parseFloat(price)
 
-    if (!finalBrand || !finalName || isNaN(numQty) || isNaN(numPrice)) {
+    if (!finalBrand) {
+      setError('Please select a brand or enter a custom brand name.')
+      return
+    }
+
+    if (!finalName || isNaN(numQty) || isNaN(numPrice)) {
       setError('Please fill in all required fields with valid numbers.')
       return
     }
@@ -115,8 +144,9 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded }) {
       setName('')
       setQuantity('')
       setPrice('')
+      setCustomBrand('')
       setIsCustomBrand(false)
-      setSelectedBrand('Bayer')
+      setSelectedBrand('')
       if (onProductAdded) onProductAdded()
       onClose()
     } catch (err) {
@@ -194,19 +224,23 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded }) {
             <select
               value={isCustomBrand ? 'CUSTOM' : selectedBrand}
               onChange={handleBrandChange}
+              required
               style={{
                 width: '100%',
                 padding: '0.75rem 1rem',
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: '#fff',
+                color: selectedBrand || isCustomBrand ? '#fff' : 'var(--text-muted)',
                 fontSize: '0.95rem',
                 outline: 'none',
                 cursor: 'pointer'
               }}
             >
-              {PRESET_BRANDS.map(b => (
+              <option value="" disabled style={{ background: '#131f33', color: '#94a3b8' }}>
+                -- Select Brand --
+              </option>
+              {availableBrands.map(b => (
                 <option key={b} value={b} style={{ background: '#131f33', color: '#fff' }}>{b}</option>
               ))}
               <option value="CUSTOM" style={{ background: '#131f33', color: '#10b981' }}>+ Add Custom Brand</option>

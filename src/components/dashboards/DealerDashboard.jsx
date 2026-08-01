@@ -12,6 +12,13 @@ import EditFarmerModal from '../farmers/EditFarmerModal'
 import FarmerDetailModal from '../farmers/FarmerDetailModal'
 import FarmerCard from '../farmers/FarmerCard'
 
+// Sales Module Components
+import NewSaleModal from '../sales/NewSaleModal'
+import BillReceiptModal from '../sales/BillReceiptModal'
+
+// Analytics Component
+import AnalyticsView from '../analytics/AnalyticsView'
+
 import { 
   Store, 
   LogOut, 
@@ -27,12 +34,18 @@ import {
   Layers,
   Users,
   MapPin,
-  UserPlus
+  UserPlus,
+  ShoppingCart,
+  TrendingUp
 } from 'lucide-react'
 
 export default function DealerDashboard({ profile, user, onSignOut }) {
-  // Navigation State ('stock' | 'farmers')
+  // Navigation State ('stock' | 'farmers' | 'analytics')
   const [activeTab, setActiveTab] = useState('stock')
+
+  // Sales & Receipts State
+  const [isNewSaleOpen, setIsNewSaleOpen] = useState(false)
+  const [activeReceiptData, setActiveReceiptData] = useState(null)
 
   // Stock State
   const [products, setProducts] = useState([])
@@ -258,9 +271,49 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
           >
             <Users size={16} /> Farmer Directory ({farmers.length})
           </button>
+
+          <button
+            onClick={() => setActiveTab('analytics')}
+            style={{
+              padding: '0.55rem 1.1rem',
+              borderRadius: '9px',
+              border: 'none',
+              background: activeTab === 'analytics' ? 'var(--bg-surface-hover)' : 'transparent',
+              color: activeTab === 'analytics' ? '#10b981' : 'var(--text-muted)',
+              fontSize: '0.875rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              transition: 'all 0.2s'
+            }}
+          >
+            <TrendingUp size={16} /> Analytics &amp; Reports
+          </button>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <button
+            onClick={() => setIsNewSaleOpen(true)}
+            style={{
+              padding: '0.55rem 1.15rem',
+              borderRadius: '10px',
+              background: '#10b981',
+              border: 'none',
+              color: '#fff',
+              fontSize: '0.875rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
+            }}
+          >
+            <ShoppingCart size={18} /> + New Sale / Cart
+          </button>
+
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <span style={{ fontWeight: '600', color: '#fff' }}>{user?.email}</span>
             {profile?.phone && <span style={{ fontSize: '0.78rem' }}>{profile.phone}</span>}
@@ -669,6 +722,15 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
           </div>
         )}
 
+        {/* ============================================================ */}
+        {/* TAB 3: ANALYTICS MODULE                                     */}
+        {/* ============================================================ */}
+        {activeTab === 'analytics' && (
+          <AnalyticsView
+            onNavigateToStock={() => setActiveTab('stock')}
+          />
+        )}
+
       </main>
 
       {/* Stock Modals */}
@@ -676,6 +738,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         isOpen={isAddProductOpen}
         onClose={() => setIsAddProductOpen(false)}
         onProductAdded={fetchProducts}
+        existingProducts={products}
       />
       <EditProductModal
         product={editingProduct}
@@ -732,7 +795,30 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         farmer={viewingFarmer}
         isOpen={Boolean(viewingFarmer)}
         onClose={() => setViewingFarmer(null)}
+        onReprintBill={(saleData) => setActiveReceiptData(saleData)}
       />
+
+      {/* Sales & Bill Modals */}
+      <NewSaleModal
+        isOpen={isNewSaleOpen}
+        onClose={() => setIsNewSaleOpen(false)}
+        products={products}
+        farmers={farmers}
+        onFarmerAdded={() => fetchFarmers()}
+        onSaleCompleted={(completedSaleData) => {
+          fetchProducts()
+          fetchFarmers()
+          setActiveReceiptData(completedSaleData)
+        }}
+      />
+
+      <BillReceiptModal
+        isOpen={Boolean(activeReceiptData)}
+        onClose={() => setActiveReceiptData(null)}
+        saleData={activeReceiptData}
+        shopProfile={profile}
+      />
+
       {deletingFarmer && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 1000,
