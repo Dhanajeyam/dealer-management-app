@@ -313,18 +313,24 @@ export default function LandingPage() {
                 position: 'absolute',
                 top: '1.25rem',
                 left: '1.25rem',
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+                background: 'var(--bg-glass)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '12px',
                 padding: '0.65rem 1rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.08)'
+                boxShadow: 'var(--shadow-card)'
               }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--primary)' }} />
+                <div style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  background: 'var(--primary)',
+                  boxShadow: '0 0 8px var(--primary)'
+                }} />
                 <span style={{ fontSize: '0.82rem', fontWeight: '800', color: 'var(--text-main)' }}>
                   Real-Time Dealer Cloud System
                 </span>
@@ -336,9 +342,9 @@ export default function LandingPage() {
                 bottom: '1.25rem',
                 left: '1.25rem',
                 right: '1.25rem',
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+                background: 'var(--bg-glass)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '14px',
                 padding: '1rem 1.25rem',
@@ -346,7 +352,7 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: '1rem',
-                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)'
+                boxShadow: 'var(--shadow-card)'
               }}>
                 <div>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '600', display: 'block' }}>
@@ -362,7 +368,8 @@ export default function LandingPage() {
                   fontSize: '0.78rem',
                   fontWeight: '800',
                   padding: '0.35rem 0.75rem',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  border: '1px solid var(--primary-glow)'
                 }}>
                   15-Sec POS
                 </span>
