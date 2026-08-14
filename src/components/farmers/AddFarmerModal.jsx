@@ -69,8 +69,8 @@ export default function AddFarmerModal({ isOpen, onClose, onFarmerAdded }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <UserPlus size={22} color="#10b981" />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', margin: 0 }}>Add New Farmer</h3>
+            <UserPlus size={22} color="var(--primary)" />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Add New Farmer</h3>
           </div>
           <button
             onClick={onClose}
@@ -84,9 +84,9 @@ export default function AddFarmerModal({ isOpen, onClose, onFarmerAdded }) {
           <div style={{
             padding: '0.75rem 1rem',
             borderRadius: '10px',
-            background: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            color: '#f87171',
+            background: 'var(--danger-bg)',
+            border: '1px solid var(--danger-border)',
+            color: 'var(--danger)',
             fontSize: '0.85rem',
             marginBottom: '1.25rem',
             display: 'flex',
@@ -117,7 +117,7 @@ export default function AddFarmerModal({ isOpen, onClose, onFarmerAdded }) {
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}
@@ -142,7 +142,7 @@ export default function AddFarmerModal({ isOpen, onClose, onFarmerAdded }) {
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}
@@ -167,7 +167,7 @@ export default function AddFarmerModal({ isOpen, onClose, onFarmerAdded }) {
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}

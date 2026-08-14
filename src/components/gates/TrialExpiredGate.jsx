@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Clock, RefreshCw, LogOut, Store, Phone, Mail } from 'lucide-react'
+import { Hourglass, RefreshCw, LogOut, Store, Mail, Sparkles } from 'lucide-react'
 
-export default function PendingGate({ profile, user, onRefresh, onSignOut }) {
+export default function TrialExpiredGate({ profile, user, onRefresh, onSignOut }) {
   const [refreshing, setRefreshing] = useState(false)
 
   const handleRefresh = async () => {
@@ -9,6 +9,14 @@ export default function PendingGate({ profile, user, onRefresh, onSignOut }) {
     if (onRefresh) await onRefresh()
     setTimeout(() => setRefreshing(false), 500)
   }
+
+  const trialEndDateStr = profile?.trial_ends_at
+    ? new Date(profile.trial_ends_at).toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      })
+    : 'Recently'
 
   return (
     <div style={{
@@ -29,27 +37,27 @@ export default function PendingGate({ profile, user, onRefresh, onSignOut }) {
         border: '1px solid #E2E8F0',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.1)'
       }}>
-        {/* Animated Clock / Pending Icon */}
+        {/* Animated Hourglass / Expired Icon */}
         <div style={{
           width: '72px',
           height: '72px',
           borderRadius: '22px',
-          background: '#FEF3C7',
-          border: '1px solid #FCD34D',
+          background: '#FEF2F2',
+          border: '1px solid #FECACA',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '1.5rem',
-          boxShadow: '0 10px 25px -5px rgba(245, 158, 11, 0.25)'
+          boxShadow: '0 10px 25px -5px rgba(220, 38, 38, 0.25)'
         }}>
-          <Clock size={36} color="#D97706" className="status-pulse" />
+          <Hourglass size={36} color="#DC2626" className="status-pulse" />
         </div>
 
         <h2 style={{ fontSize: '1.65rem', fontWeight: '800', color: '#0F172A', marginBottom: '0.6rem', letterSpacing: '-0.02em' }}>
-          Account Pending Approval
+          Your Free Trial Has Ended
         </h2>
         <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.75rem' }}>
-          Your dealer registration has been submitted successfully. An administrator will review and approve your account within 24 hours.
+          Your 7-day free trial period has concluded. To continue accessing your stock inventory, 15-second billing, and farmer credit ledger, please contact the platform administrator to activate your account.
         </p>
 
         {/* Account Info Details Box */}
@@ -59,26 +67,60 @@ export default function PendingGate({ profile, user, onRefresh, onSignOut }) {
           borderRadius: '16px',
           padding: '1.25rem',
           textAlign: 'left',
-          marginBottom: '1.75rem',
+          marginBottom: '1.5rem',
           display: 'flex',
           flexDirection: 'column',
           gap: '0.75rem',
-          fontSize: '0.9rem'
+          fontSize: '0.88rem'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#0F172A', fontWeight: '700' }}>
-            <Store size={18} color="#16A34A" />
-            <span style={{ fontSize: '0.95rem' }}>{profile?.shop_name || 'Dealer Shop'}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#0F172A', fontWeight: '700' }}>
+              <Store size={18} color="#16A34A" />
+              <span style={{ fontSize: '0.95rem' }}>{profile?.shop_name || 'Dealer Shop'}</span>
+            </div>
+            <span style={{
+              padding: '0.2rem 0.55rem',
+              borderRadius: '6px',
+              background: '#FEE2E2',
+              color: '#DC2626',
+              border: '1px solid #FECACA',
+              fontSize: '0.72rem',
+              fontWeight: '800',
+              textTransform: 'uppercase'
+            }}>
+              Trial Expired
+            </span>
           </div>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#64748B' }}>
-            <Mail size={16} />
+            <Mail size={15} />
             <span>{user?.email}</span>
           </div>
-          {profile?.phone && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#64748B' }}>
-              <Phone size={16} />
-              <span>{profile.phone}</span>
-            </div>
-          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#64748B', fontSize: '0.82rem', borderTop: '1px solid #E2E8F0', paddingTop: '0.5rem', marginTop: '0.25rem' }}>
+            <span>Trial Ended:</span>
+            <strong style={{ color: '#0F172A' }}>{trialEndDateStr}</strong>
+          </div>
+        </div>
+
+        {/* Support Callout */}
+        <div style={{
+          padding: '0.85rem 1rem',
+          borderRadius: '14px',
+          background: '#F0FDF4',
+          border: '1px solid #BBF7D0',
+          color: '#166534',
+          fontSize: '0.85rem',
+          marginBottom: '1.75rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.65rem',
+          textAlign: 'left'
+        }}>
+          <Sparkles size={18} color="#16A34A" style={{ flexShrink: 0 }} />
+          <span>
+            Ready to upgrade? Email <strong>support@chemicalshop.in</strong> or speak with your system administrator to unlock permanent access.
+          </span>
         </div>
 
         {/* Action Buttons */}
@@ -104,7 +146,7 @@ export default function PendingGate({ profile, user, onRefresh, onSignOut }) {
             }}
           >
             <RefreshCw size={16} className={refreshing ? 'status-pulse' : ''} />
-            {refreshing ? 'Checking Approval...' : 'Check Approval Status'}
+            {refreshing ? 'Checking Status...' : 'Check Activation Status'}
           </button>
 
           <button

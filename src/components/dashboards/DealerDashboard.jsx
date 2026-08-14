@@ -5,6 +5,9 @@ import { supabase } from '../../lib/supabase'
 import AddProductModal from '../stock/AddProductModal'
 import EditProductModal from '../stock/EditProductModal'
 import ProductCard from '../stock/ProductCard'
+import BrandStockSection from '../stock/BrandStockSection'
+import BrandListView from '../stock/BrandListView'
+import BrandDetailView from '../stock/BrandDetailView'
 
 // Farmers Module Components
 import AddFarmerModal from '../farmers/AddFarmerModal'
@@ -15,9 +18,13 @@ import FarmerCard from '../farmers/FarmerCard'
 // Sales Module Components
 import NewSaleModal from '../sales/NewSaleModal'
 import BillReceiptModal from '../sales/BillReceiptModal'
+import SalesLogView from '../sales/SalesLogView'
 
-// Analytics Component
 import AnalyticsView from '../analytics/AnalyticsView'
+import DuesCollectionsView from '../dues/DuesCollectionsView'
+import DashboardLayout from '../common/DashboardLayout'
+import SettingsView from '../settings/SettingsView'
+import { getTrialInfo } from '../../lib/trial'
 
 import { 
   Store, 
@@ -36,12 +43,38 @@ import {
   MapPin,
   UserPlus,
   ShoppingCart,
-  TrendingUp
+  TrendingUp,
+  Settings,
+  FileText,
+  ChevronsUpDown,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  Sparkles
 } from 'lucide-react'
 
 export default function DealerDashboard({ profile, user, onSignOut }) {
-  // Navigation State ('stock' | 'farmers' | 'analytics')
+  // Navigation State ('stock' | 'farmers' | 'analytics' | 'settings')
   const [activeTab, setActiveTab] = useState('stock')
+
+  // Profile State
+  const [currentProfile, setCurrentProfile] = useState(profile)
+
+
+
+  useEffect(() => {
+    setCurrentProfile(profile)
+  }, [profile])
+
+  const fetchProfileData = async () => {
+    if (!user?.id) return
+    try {
+      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle()
+      if (data) setCurrentProfile(data)
+    } catch (err) {
+      console.error('Error refreshing profile data:', err)
+    }
+  }
 
   // Sales & Receipts State
   const [isNewSaleOpen, setIsNewSaleOpen] = useState(false)
@@ -52,10 +85,32 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [productSearchQuery, setProductSearchQuery] = useState('')
   const [selectedBrandFilter, setSelectedBrandFilter] = useState('ALL')
+  const [selectedBrandDetail, setSelectedBrandDetail] = useState(null)
+  const [presetAddBrand, setPresetAddBrand] = useState('')
   const [isAddProductOpen, setIsAddProductOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
   const [deletingProduct, setDeletingProduct] = useState(null)
   const [deletingProductStatus, setDeletingProductStatus] = useState(false)
+
+  // Collapsible Brand Section State
+  const [expandedBrands, setExpandedBrands] = useState({})
+
+  const toggleBrandExpand = (brandName) => {
+    setExpandedBrands(prev => ({
+      ...prev,
+      [brandName]: !prev[brandName]
+    }))
+  }
+
+  const expandAllBrands = (brandKeys) => {
+    const next = {}
+    brandKeys.forEach(b => { next[b] = true })
+    setExpandedBrands(next)
+  }
+
+  const collapseAllBrands = () => {
+    setExpandedBrands({})
+  }
 
   // Farmers State
   const [farmers, setFarmers] = useState([])
@@ -182,403 +237,162 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
 
   const totalVillagesCount = Array.from(new Set(farmers.map(f => f.village).filter(Boolean))).length
 
-  return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--bg-primary)' }}>
-      {/* Navbar Header */}
-      <header style={{
-        padding: '1.25rem 2rem',
-        borderBottom: '1px solid var(--border-color)',
-        background: 'rgba(11, 19, 32, 0.8)',
-        backdropFilter: 'blur(12px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '1rem',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: 'var(--shadow-glow)'
-          }}>
-            <Store size={24} color="#ffffff" />
-          </div>
-          <div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff', margin: 0 }}>
-              {profile?.shop_name || 'Dealer Workspace'}
-            </h1>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Stock &amp; Farmer Management Workspace
-            </span>
-          </div>
-        </div>
+  const effectiveProfile = {
+    ...currentProfile,
+    address: currentProfile?.address || user?.user_metadata?.address || '',
+    gstin: currentProfile?.gstin || user?.user_metadata?.gstin || ''
+  }
 
-        {/* Tab Switcher Pills */}
+  const trialInfo = getTrialInfo(effectiveProfile)
+
+  const navItems = [
+    { id: 'stock', label: 'Stock', icon: Package },
+    { id: 'sales', label: 'Sales', icon: FileText },
+    { id: 'farmers', label: 'Farmers', icon: Users },
+    { id: 'dues', label: 'Credit Dues', icon: AlertTriangle, color: activeTab === 'dues' ? 'var(--danger)' : undefined },
+    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+    { id: 'settings', label: 'Settings', icon: Settings }
+  ]
+
+  const getHeaderTitle = () => {
+    switch (activeTab) {
+      case 'stock': return 'Stock Inventory'
+      case 'sales': return 'Sales Log'
+      case 'farmers': return 'Farmer Directory'
+      case 'dues': return 'Credit Dues & Collections'
+      case 'analytics': return 'Analytics & Insights'
+      case 'settings': return 'System & Account Settings'
+      default: return 'Dealer Dashboard'
+    }
+  }
+
+  const headerActions = (
+    <>
+      {trialInfo.isTrial && !trialInfo.isExpired && (
         <div style={{
-          display: 'flex',
+          display: 'inline-flex',
           alignItems: 'center',
-          gap: '0.4rem',
-          padding: '0.35rem',
-          borderRadius: '12px',
-          background: 'rgba(0, 0, 0, 0.3)',
-          border: '1px solid var(--border-color)'
+          gap: '0.35rem',
+          padding: '0.4rem 0.75rem',
+          borderRadius: '8px',
+          background: 'var(--warning-bg)',
+          color: 'var(--warning)',
+          border: '1px solid var(--warning-border)',
+          fontSize: '0.78rem',
+          fontWeight: '800'
         }}>
-          <button
-            onClick={() => setActiveTab('stock')}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'stock' ? 'var(--bg-surface-hover)' : 'transparent',
-              color: activeTab === 'stock' ? '#10b981' : 'var(--text-muted)',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Package size={16} /> Stock Inventory ({products.length})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('farmers')}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'farmers' ? 'var(--bg-surface-hover)' : 'transparent',
-              color: activeTab === 'farmers' ? '#10b981' : 'var(--text-muted)',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Users size={16} /> Farmer Directory ({farmers.length})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('analytics')}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'analytics' ? 'var(--bg-surface-hover)' : 'transparent',
-              color: activeTab === 'analytics' ? '#10b981' : 'var(--text-muted)',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <TrendingUp size={16} /> Analytics &amp; Reports
-          </button>
+          <Clock size={13} /> {trialInfo.text}
         </div>
+      )}
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <button
-            onClick={() => setIsNewSaleOpen(true)}
-            style={{
-              padding: '0.55rem 1.15rem',
-              borderRadius: '10px',
-              background: '#10b981',
-              border: 'none',
-              color: '#fff',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
-            }}
-          >
-            <ShoppingCart size={18} /> + New Sale / Cart
-          </button>
+      <button
+        onClick={() => setIsNewSaleOpen(true)}
+        className="btn-new-sale"
+      >
+        <ShoppingCart size={17} /> + New Sale / Cart
+      </button>
 
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <span style={{ fontWeight: '600', color: '#fff' }}>{user?.email}</span>
-            {profile?.phone && <span style={{ fontSize: '0.78rem' }}>{profile.phone}</span>}
-          </div>
-          <button
-            onClick={onSignOut}
-            style={{
-              padding: '0.5rem 0.9rem',
-              borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
-              border: '1px solid var(--border-color)',
-              color: '#fff',
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem'
-            }}
-          >
-            <LogOut size={15} /> Sign Out
-          </button>
-        </div>
-      </header>
+      <button
+        onClick={onSignOut}
+        className="btn-signout"
+        title={user?.email ? `Signed in as ${user.email}` : 'Sign Out'}
+      >
+        <LogOut size={15} /> Sign Out
+      </button>
+    </>
+  )
 
-      {/* Main Container */}
-      <main className="container" style={{ flex: 1, padding: '2rem 1.5rem' }}>
-        
+  return (
+    <DashboardLayout
+      brandTitle={effectiveProfile?.shop_name || 'Dealer Workspace'}
+      brandSubtitle={effectiveProfile?.gstin ? `GSTIN: ${effectiveProfile.gstin}` : 'Stock & Farmer Workspace'}
+      brandIcon={<Store size={22} color="#ffffff" />}
+      navItems={navItems}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      headerTitle={getHeaderTitle()}
+      headerActions={headerActions}
+    >
+
+
         {/* ============================================================ */}
-        {/* TAB 1: STOCK INVENTORY MODULE                                */}
+        {/* TAB 1: STOCK INVENTORY MODULE (LIST -> DETAIL SCALABLE VIEW) */}
         {/* ============================================================ */}
         {activeTab === 'stock' && (
           <div>
-            {/* Summary Metrics Bar */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '1.25rem',
-              marginBottom: '2rem'
-            }}>
-              <div className="glass-card" style={{ padding: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Total Products</span>
-                  <Package size={18} color="#10b981" />
-                </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff' }}>{totalItems}</div>
-              </div>
+            {selectedBrandDetail ? (
 
-              <div className="glass-card" style={{ padding: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Active Brands</span>
-                  <Tag size={18} color="#3b82f6" />
-                </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff' }}>{totalBrandsCount}</div>
-              </div>
-
-              <div className="glass-card" style={{ padding: '1.25rem', borderColor: outOfStockCount > 0 ? 'rgba(239, 68, 68, 0.3)' : 'var(--border-color)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Out of Stock</span>
-                  <AlertTriangle size={18} color={outOfStockCount > 0 ? '#ef4444' : 'var(--text-muted)'} />
-                </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: outOfStockCount > 0 ? '#ef4444' : '#fff' }}>
-                  {outOfStockCount}
-                </div>
-              </div>
-
-              <div className="glass-card" style={{ padding: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Inventory Value</span>
-                  <IndianRupee size={18} color="#f59e0b" />
-                </div>
-                <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#10b981' }}>
-                  ₹{totalStockValue.toLocaleString('en-IN')}
-                </div>
-              </div>
-            </div>
-
-            {/* Controls Bar: Search, Brand Filter, Add Product Button */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              marginBottom: '2rem'
-            }}>
-              {/* Search Box */}
-              <div style={{ position: 'relative', minWidth: '260px', flex: '1 1 300px' }}>
-                <Search size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
-                <input
-                  type="text"
-                  value={productSearchQuery}
-                  onChange={(e) => setProductSearchQuery(e.target.value)}
-                  placeholder="Search product name or brand..."
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem 0.75rem 2.75rem',
-                    borderRadius: '12px',
-                    background: 'var(--bg-surface-hover)',
-                    border: '1px solid var(--border-color)',
-                    color: '#fff',
-                    fontSize: '0.9rem',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-
-              {/* Add Product Button */}
-              <button
-                onClick={() => setIsAddProductOpen(true)}
-                style={{
-                  padding: '0.75rem 1.4rem',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                  border: 'none',
-                  color: '#fff',
-                  fontSize: '0.95rem',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  boxShadow: 'var(--shadow-glow)'
+              <BrandDetailView
+                brand={selectedBrandDetail}
+                user={user}
+                onBack={() => setSelectedBrandDetail(null)}
+                onEditProduct={(p) => setEditingProduct(p)}
+                onDeleteProduct={(p) => setDeletingProduct(p)}
+                onAddProduct={(brandName) => {
+                  setPresetAddBrand(brandName)
+                  setIsAddProductOpen(true)
                 }}
-              >
-                <Plus size={20} /> Add Stock Item
-              </button>
-            </div>
-
-            {/* Brand Filter Pills */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              overflowX: 'auto',
-              paddingBottom: '0.75rem',
-              marginBottom: '2rem'
-            }}>
-              <button
-                onClick={() => setSelectedBrandFilter('ALL')}
-                style={{
-                  padding: '0.45rem 1rem',
-                  borderRadius: '20px',
-                  border: '1px solid',
-                  borderColor: selectedBrandFilter === 'ALL' ? '#10b981' : 'var(--border-color)',
-                  background: selectedBrandFilter === 'ALL' ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-surface-hover)',
-                  color: selectedBrandFilter === 'ALL' ? '#10b981' : 'var(--text-muted)',
-                  fontSize: '0.85rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                All Brands ({products.length})
-              </button>
-
-              {availableBrands.map(b => {
-                const count = products.filter(p => p.brand === b).length
-                const isSel = selectedBrandFilter.toLowerCase() === b.toLowerCase()
-                return (
-                  <button
-                    key={b}
-                    onClick={() => setSelectedBrandFilter(b)}
-                    style={{
-                      padding: '0.45rem 1rem',
-                      borderRadius: '20px',
-                      border: '1px solid',
-                      borderColor: isSel ? '#10b981' : 'var(--border-color)',
-                      background: isSel ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-surface-hover)',
-                      color: isSel ? '#10b981' : 'var(--text-muted)',
-                      fontSize: '0.85rem',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    {b} ({count})
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Loading State */}
-            {loadingProducts ? (
-              <div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>
-                <RefreshCw size={28} className="status-pulse" style={{ marginBottom: '1rem' }} />
-                <p>Loading inventory items...</p>
-              </div>
-            ) : filteredProducts.length === 0 ? (
-              /* Empty State */
-              <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                <Package size={48} color="var(--text-dim)" style={{ marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>
-                  No Stock Items Found
-                </h3>
-                <p style={{ color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem auto', fontSize: '0.9rem' }}>
-                  {productSearchQuery || selectedBrandFilter !== 'ALL' 
-                    ? 'No products match your current search or brand filter.'
-                    : 'Your inventory is currently empty. Click below to add your first product.'}
-                </p>
-                <button
-                  onClick={() => setIsAddProductOpen(true)}
-                  style={{
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    border: 'none',
-                    color: '#fff',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}
-                >
-                  <Plus size={18} /> Add Stock Item
-                </button>
-              </div>
+                onQuantityChanged={fetchProducts}
+                allProducts={products}
+              />
             ) : (
-              /* Grouped Product List View */
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-                {Object.keys(groupedProducts).map(brandName => (
-                  <div key={brandName}>
-                    {/* Brand Section Header */}
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      marginBottom: '1.25rem',
-                      paddingBottom: '0.5rem',
-                      borderBottom: '1px solid var(--border-color)'
-                    }}>
-                      <Layers size={20} color="#10b981" />
-                      <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#fff', margin: 0 }}>
-                        {brandName}
-                      </h3>
-                      <span style={{
-                        fontSize: '0.8rem',
-                        fontWeight: '600',
-                        color: 'var(--text-muted)',
-                        background: 'var(--bg-surface-hover)',
-                        padding: '0.2rem 0.6rem',
-                        borderRadius: '12px'
-                      }}>
-                        {groupedProducts[brandName].length} {groupedProducts[brandName].length === 1 ? 'item' : 'items'}
-                      </span>
+              <div>
+                {/* Summary Metrics Bar */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '1.25rem',
+                  marginBottom: '2rem'
+                }}>
+                  <div className="glass-card" style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Total Products</span>
+                      <Package size={18} color="var(--primary)" />
                     </div>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{totalItems}</div>
+                  </div>
 
-                    {/* Responsive Grid for Product Cards */}
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                      gap: '1.25rem'
-                    }}>
-                      {groupedProducts[brandName].map(product => (
-                        <ProductCard
-                          key={product.id}
-                          product={product}
-                          onEdit={(p) => setEditingProduct(p)}
-                          onDelete={(p) => setDeletingProduct(p)}
-                          onQuantityChanged={fetchProducts}
-                        />
-                      ))}
+                  <div className="glass-card" style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Active Brands</span>
+                      <Tag size={18} color="var(--accent)" />
+                    </div>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{totalBrandsCount}</div>
+                  </div>
+
+                  <div className="glass-card" style={{ padding: '1.25rem', borderColor: outOfStockCount > 0 ? 'var(--danger-border)' : 'var(--border-color)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Out of Stock</span>
+                      <AlertTriangle size={18} color={outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-muted)'} />
+                    </div>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '800', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
+                      {outOfStockCount}
                     </div>
                   </div>
-                ))}
+
+                  <div className="glass-card" style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Inventory Value</span>
+                      <IndianRupee size={18} color="var(--primary)" />
+                    </div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>
+                      ₹{totalStockValue.toLocaleString('en-IN')}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Brand List Screen */}
+                <BrandListView
+                  user={user}
+                  searchQuery={productSearchQuery}
+                  setSearchQuery={setProductSearchQuery}
+                  onSelectBrand={(b) => setSelectedBrandDetail(b)}
+                  onAddStock={() => {
+                    setPresetAddBrand('')
+                    setIsAddProductOpen(true)
+                  }}
+                  products={products}
+                />
               </div>
             )}
           </div>
@@ -599,17 +413,17 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
               <div className="glass-card" style={{ padding: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Registered Farmers</span>
-                  <Users size={18} color="#10b981" />
+                  <Users size={18} color="var(--primary)" />
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff' }}>{farmers.length}</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{farmers.length}</div>
               </div>
 
               <div className="glass-card" style={{ padding: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Villages Covered</span>
-                  <MapPin size={18} color="#3b82f6" />
+                  <MapPin size={18} color="var(--accent)" />
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff' }}>{totalVillagesCount}</div>
+                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{totalVillagesCount}</div>
               </div>
             </div>
 
@@ -636,7 +450,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                     borderRadius: '12px',
                     background: 'var(--bg-surface-hover)',
                     border: '1px solid var(--border-color)',
-                    color: '#fff',
+                    color: 'var(--text-main)',
                     fontSize: '0.9rem',
                     outline: 'none'
                   }}
@@ -649,7 +463,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                 style={{
                   padding: '0.75rem 1.4rem',
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  background: 'var(--primary)',
                   border: 'none',
                   color: '#fff',
                   fontSize: '0.95rem',
@@ -723,7 +537,29 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         )}
 
         {/* ============================================================ */}
-        {/* TAB 3: ANALYTICS MODULE                                     */}
+        {/* TAB 3: SALES TRANSACTIONS & LOG FEED                         */}
+        {/* ============================================================ */}
+        {activeTab === 'sales' && (
+          <SalesLogView
+            user={user}
+            onReprintBill={(billData) => setActiveReceiptData(billData)}
+            onNewSale={() => setIsNewSaleOpen(true)}
+          />
+        )}
+
+        {/* ============================================================ */}
+        {/* TAB 4: DUES & CREDIT COLLECTIONS WORKLIST                    */}
+        {/* ============================================================ */}
+        {activeTab === 'dues' && (
+          <DuesCollectionsView
+            user={user}
+            shopProfile={effectiveProfile}
+            onReprintBill={(billData) => setActiveReceiptData(billData)}
+          />
+        )}
+
+        {/* ============================================================ */}
+        {/* TAB 5: ANALYTICS & INSIGHTS                                 */}
         {/* ============================================================ */}
         {activeTab === 'analytics' && (
           <AnalyticsView
@@ -731,7 +567,18 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
           />
         )}
 
-      </main>
+
+        {/* ============================================================ */}
+        {/* TAB 6: SETTINGS MODULE                                      */}
+        {/* ============================================================ */}
+        {activeTab === 'settings' && (
+          <SettingsView
+            profile={effectiveProfile}
+            user={user}
+            onProfileUpdated={fetchProfileData}
+          />
+        )}
+
 
       {/* Stock Modals */}
       <AddProductModal
@@ -804,6 +651,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         onClose={() => setIsNewSaleOpen(false)}
         products={products}
         farmers={farmers}
+        shopProfile={effectiveProfile}
         onFarmerAdded={() => fetchFarmers()}
         onSaleCompleted={(completedSaleData) => {
           fetchProducts()
@@ -812,11 +660,12 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         }}
       />
 
+
       <BillReceiptModal
         isOpen={Boolean(activeReceiptData)}
         onClose={() => setActiveReceiptData(null)}
         saleData={activeReceiptData}
-        shopProfile={profile}
+        shopProfile={effectiveProfile}
       />
 
       {deletingFarmer && (
@@ -851,17 +700,9 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
           </div>
         </div>
       )}
-
-      {/* Footer */}
-      <footer style={{
-        padding: '1.25rem',
-        textAlign: 'center',
-        borderTop: '1px solid var(--border-color)',
-        fontSize: '0.8rem',
-        color: 'var(--text-dim)'
-      }}>
-        Agri-Chemical Management App • Stock (Step 5) &amp; Farmers (Step 6) Modules Active
-      </footer>
-    </div>
+    </DashboardLayout>
   )
 }
+
+
+

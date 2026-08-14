@@ -5,18 +5,31 @@ import { LogIn, Mail, Lock, AlertCircle } from 'lucide-react'
 export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignup }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(true)
+  const [rememberMe, setRememberMe] = useState(() => {
+    return localStorage.getItem('chemical_shop_remember_me_pref') === 'true'
+  })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  // Load remembered email from localStorage on mount
+  // Load remembered email on mount if preference was enabled
   useEffect(() => {
+    const isRemembered = localStorage.getItem('chemical_shop_remember_me_pref') === 'true'
     const savedEmail = localStorage.getItem('chemical_shop_remembered_email')
-    if (savedEmail) {
+    if (isRemembered && savedEmail) {
       setEmail(savedEmail)
       setRememberMe(true)
+    } else if (!isRemembered) {
+      setRememberMe(false)
     }
   }, [])
+
+  const handleRememberMeToggle = (checked) => {
+    setRememberMe(checked)
+    localStorage.setItem('chemical_shop_remember_me_pref', checked ? 'true' : 'false')
+    if (!checked) {
+      localStorage.removeItem('chemical_shop_remembered_email')
+    }
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -28,7 +41,8 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
     setLoading(true)
     setError('')
 
-    // Handle Remember Me email persistence
+    // Persist or clear Remember Me state
+    localStorage.setItem('chemical_shop_remember_me_pref', rememberMe ? 'true' : 'false')
     if (rememberMe) {
       localStorage.setItem('chemical_shop_remembered_email', email.trim())
     } else {
@@ -75,9 +89,9 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
         <div style={{
           padding: '0.75rem 1rem',
           borderRadius: '10px',
-          background: 'rgba(239, 68, 68, 0.12)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
-          color: '#f87171',
+          background: 'var(--danger-bg)',
+          border: '1px solid var(--danger-border)',
+          color: 'var(--danger)',
           fontSize: '0.85rem',
           display: 'flex',
           alignItems: 'center',
@@ -107,9 +121,9 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
               width: '100%',
               padding: '0.75rem 1rem 0.75rem 2.75rem',
               borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.95rem',
               outline: 'none',
               transition: 'border-color 0.2s'
@@ -137,9 +151,9 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
               width: '100%',
               padding: '0.75rem 1rem 0.75rem 2.75rem',
               borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.95rem',
               outline: 'none',
               transition: 'border-color 0.2s'
@@ -154,8 +168,8 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
           <input
             type="checkbox"
             checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-            style={{ accentColor: '#10b981', cursor: 'pointer' }}
+            onChange={(e) => handleRememberMeToggle(e.target.checked)}
+            style={{ accentColor: 'var(--primary)', cursor: 'pointer' }}
           />
           Remember me
         </label>
@@ -169,7 +183,7 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
           marginTop: '0.25rem',
           padding: '0.85rem',
           borderRadius: '12px',
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          background: 'var(--primary)',
           border: 'none',
           color: '#fff',
           fontSize: '1rem',
@@ -195,7 +209,7 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
           style={{
             background: 'transparent',
             border: 'none',
-            color: '#10b981',
+            color: 'var(--primary)',
             fontSize: '0.875rem',
             fontWeight: '500',
             cursor: 'pointer'
@@ -221,11 +235,11 @@ export default function LoginForm({ onSuccess, onForgotPassword, onSwitchToSignu
           type="button"
           onClick={onSwitchToSignup}
           style={{
-            background: 'transparent',
+            background: 'var(--bg-surface-hover)',
             border: '1px solid var(--border-color)',
             borderRadius: '10px',
             padding: '0.55rem 1.25rem',
-            color: '#fff',
+            color: 'var(--text-main)',
             fontSize: '0.875rem',
             fontWeight: '600',
             cursor: 'pointer',

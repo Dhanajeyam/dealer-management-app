@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { UserPlus, Mail, Lock, Store, Phone, AlertCircle, Info, ArrowLeft } from 'lucide-react'
+import { isValidGstin } from '../../lib/validation'
+import { UserPlus, Mail, Lock, Store, Phone, MapPin, FileText, AlertCircle, Info, ArrowLeft } from 'lucide-react'
 
 export default function SignupForm({ onSuccess, onSwitchToLogin }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [shopName, setShopName] = useState('')
   const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [gstin, setGstin] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isRateLimited, setIsRateLimited] = useState(false)
@@ -23,11 +26,20 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
       return
     }
 
+    const cleanGstin = gstin.trim().toUpperCase()
+    if (cleanGstin && !isValidGstin(cleanGstin)) {
+      setError('Invalid GSTIN format. GSTIN must be 15 characters (e.g. 33ABCDE1234F1Z5).')
+      return
+    }
+
     setLoading(true)
     setError('')
     setIsRateLimited(false)
 
     try {
+      const cleanAddress = address.trim() || null
+      const finalGstin = cleanGstin || null
+
       const { data, error: authError } = await supabase.auth.signUp({
         email: email.trim(),
         password: password.trim(),
@@ -35,6 +47,8 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
           data: {
             shop_name: shopName.trim(),
             phone: phone.trim(),
+            address: cleanAddress,
+            gstin: finalGstin,
             role: 'dealer'
           }
         }
@@ -50,18 +64,32 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
       const user = data.user
       if (user) {
         // Fallback explicit profile insertion to ensure profile exists
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .upsert({
-            id: user.id,
-            role: 'dealer',
-            shop_name: shopName.trim(),
-            phone: phone.trim(),
-            status: 'pending'
-          }, { onConflict: 'id' })
+        try {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .upsert({
+              id: user.id,
+              role: 'dealer',
+              shop_name: shopName.trim(),
+              phone: phone.trim(),
+              address: cleanAddress,
+              gstin: finalGstin,
+              status: 'pending'
+            }, { onConflict: 'id' })
 
-        if (profileError && !profileError.message?.includes('duplicate key')) {
-          console.warn('Profile upsert fallback warning:', profileError)
+          if (profileError && profileError.message?.includes('schema cache')) {
+            await supabase
+              .from('profiles')
+              .upsert({
+                id: user.id,
+                role: 'dealer',
+                shop_name: shopName.trim(),
+                phone: phone.trim(),
+                status: 'pending'
+              }, { onConflict: 'id' })
+          }
+        } catch (e) {
+          console.warn('Signup profile upsert fallback warning:', e)
         }
       }
 
@@ -122,7 +150,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
 
       <div>
         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
-          Shop / Business Name
+          Shop / Business Name *
         </label>
         <div style={{ position: 'relative' }}>
           <Store size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -136,9 +164,9 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
               width: '100%',
               padding: '0.75rem 1rem 0.75rem 2.75rem',
               borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.95rem',
               outline: 'none'
             }}
@@ -148,7 +176,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
 
       <div>
         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
-          Phone Number
+          Phone Number *
         </label>
         <div style={{ position: 'relative' }}>
           <Phone size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -162,9 +190,9 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
               width: '100%',
               padding: '0.75rem 1rem 0.75rem 2.75rem',
               borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.95rem',
               outline: 'none'
             }}
@@ -174,7 +202,59 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
 
       <div>
         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
-          Email Address
+          Shop Address <span style={{ color: 'var(--text-dim)', fontWeight: 'normal' }}>(Optional)</span>
+        </label>
+        <div style={{ position: 'relative' }}>
+          <MapPin size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="123 Main Road, Erode, Tamil Nadu"
+            style={{
+              width: '100%',
+              padding: '0.75rem 1rem 0.75rem 2.75rem',
+              borderRadius: '10px',
+              background: 'var(--bg-input)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-main)',
+              fontSize: '0.95rem',
+              outline: 'none'
+            }}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+          GSTIN <span style={{ color: 'var(--text-dim)', fontWeight: 'normal' }}>(Optional — 15 chars)</span>
+        </label>
+        <div style={{ position: 'relative' }}>
+          <FileText size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+          <input
+            type="text"
+            value={gstin}
+            onChange={(e) => setGstin(e.target.value.toUpperCase())}
+            placeholder="33ABCDE1234F1Z5"
+            maxLength={15}
+            style={{
+              width: '100%',
+              padding: '0.75rem 1rem 0.75rem 2.75rem',
+              borderRadius: '10px',
+              background: 'var(--bg-input)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-main)',
+              fontSize: '0.95rem',
+              outline: 'none',
+              letterSpacing: '0.05em'
+            }}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+          Email Address *
         </label>
         <div style={{ position: 'relative' }}>
           <Mail size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -188,9 +268,9 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
               width: '100%',
               padding: '0.75rem 1rem 0.75rem 2.75rem',
               borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.95rem',
               outline: 'none'
             }}
@@ -200,7 +280,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
 
       <div>
         <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
-          Password
+          Password *
         </label>
         <div style={{ position: 'relative' }}>
           <Lock size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
@@ -215,9 +295,9 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
               width: '100%',
               padding: '0.75rem 1rem 0.75rem 2.75rem',
               borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.95rem',
               outline: 'none'
             }}

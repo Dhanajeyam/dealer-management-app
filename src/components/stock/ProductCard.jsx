@@ -40,9 +40,9 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
       padding: '1.25rem',
       borderRadius: '16px',
       background: isOutOfStock 
-        ? 'linear-gradient(135deg, rgba(30, 20, 20, 0.85) 0%, rgba(19, 31, 51, 0.95) 100%)' 
-        : 'var(--bg-glass)',
-      borderColor: isOutOfStock ? 'rgba(239, 68, 68, 0.4)' : 'var(--border-color)',
+        ? 'var(--danger-bg)' 
+        : 'var(--bg-surface)',
+      borderColor: isOutOfStock ? 'var(--danger-border)' : 'var(--border-color)',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -58,9 +58,9 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
             letterSpacing: '0.05em',
             padding: '0.25rem 0.65rem',
             borderRadius: '20px',
-            background: 'rgba(16, 185, 129, 0.12)',
-            color: '#10b981',
-            border: '1px solid rgba(16, 185, 129, 0.25)'
+            background: 'var(--highlight-bg)',
+            color: 'var(--highlight-text)',
+            border: '1px solid var(--highlight-border)'
           }}>
             {product.brand}
           </span>
@@ -87,9 +87,9 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               onClick={() => onDelete(product)}
               title="Delete Product"
               style={{
-                background: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                color: '#f87171',
+                background: 'var(--danger-bg)',
+                border: '1px solid var(--danger-border)',
+                color: 'var(--danger)',
                 borderRadius: '8px',
                 padding: '0.35rem',
                 cursor: 'pointer',
@@ -107,7 +107,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
         <h4 style={{
           fontSize: '1.1rem',
           fontWeight: '700',
-          color: '#fff',
+          color: 'var(--text-main)',
           marginBottom: '0.75rem',
           lineHeight: '1.3'
         }}>
@@ -118,7 +118,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
         <div style={{
           fontSize: '1.25rem',
           fontWeight: '800',
-          color: '#10b981',
+          color: 'var(--primary)',
           display: 'flex',
           alignItems: 'center',
           gap: '0.1rem',
@@ -149,15 +149,15 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               fontWeight: '700',
               padding: '0.25rem 0.6rem',
               borderRadius: '8px',
-              background: 'rgba(239, 68, 68, 0.2)',
-              color: '#ef4444',
-              border: '1px solid rgba(239, 68, 68, 0.4)'
+              background: 'var(--danger-bg)',
+              color: 'var(--danger)',
+              border: '1px solid var(--danger-border)'
             }}>
               <AlertTriangle size={13} /> Out of Stock
             </div>
           ) : (
             <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Stock: <strong style={{ color: '#fff', fontSize: '1rem' }}>{Number(product.quantity)}</strong> {product.unit}
+              Stock: <strong style={{ color: 'var(--text-main)', fontSize: '1rem' }}>{Number(product.quantity)}</strong> {product.unit}
             </div>
           )}
         </div>
@@ -167,7 +167,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
           display: 'flex',
           alignItems: 'center',
           gap: '0.4rem',
-          background: 'rgba(0, 0, 0, 0.3)',
+          background: 'var(--bg-surface-hover)',
           padding: '0.25rem',
           borderRadius: '10px',
           border: '1px solid var(--border-color)'
@@ -180,9 +180,9 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               width: '28px',
               height: '28px',
               borderRadius: '7px',
-              background: 'var(--bg-surface-hover)',
-              border: 'none',
-              color: '#fff',
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-main)',
               cursor: (adjusting || Number(product.quantity) <= 0) ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -193,7 +193,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
             <Minus size={14} />
           </button>
 
-          <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#fff', minWidth: '24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-main)', minWidth: '24px', textAlign: 'center' }}>
             {Number(product.quantity)}
           </span>
 
@@ -205,7 +205,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               width: '28px',
               height: '28px',
               borderRadius: '7px',
-              background: '#10b981',
+              background: 'var(--primary)',
               border: 'none',
               color: '#fff',
               cursor: adjusting ? 'wait' : 'pointer',

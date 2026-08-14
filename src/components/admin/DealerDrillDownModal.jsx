@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
+import { getTrialInfo } from '../../lib/trial'
 import { 
   X, 
   Building2, 
@@ -14,7 +15,9 @@ import {
   Phone,
   CheckCircle2,
   Clock,
-  Ban
+  Ban,
+  Sparkles,
+  Hourglass
 } from 'lucide-react'
 
 export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
@@ -117,7 +120,7 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
         }
       }
 
-      // 3. Counts (Products & Farmers)
+      // 3. Counts (Products, Farmers, Sales)
       const [{ count: pCount }, { count: fCount }, { count: sCount }] = await Promise.all([
         supabase.from('products').select('id', { count: 'exact', head: true }).eq('dealer_id', dealerId),
         supabase.from('farmers').select('id', { count: 'exact', head: true }).eq('dealer_id', dealerId),
@@ -129,6 +132,7 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
         farmers: fCount || 0,
         sales: sCount || 0
       })
+
     } catch (err) {
       console.error('Failed to load dealer drill-down details:', err)
     } finally {
@@ -151,6 +155,7 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
     : { text: 'Pending Approval', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)', icon: Clock }
 
   const StatusIcon = statusBadge.icon
+  const trialInfo = getTrialInfo(dealer)
 
   return (
     <div style={{
@@ -182,17 +187,17 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'rgba(15, 23, 42, 0.6)'
+          background: 'var(--bg-surface-hover)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'rgba(59, 130, 246, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Building2 size={22} color="#3b82f6" />
+            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--info-bg)', border: '1px solid var(--info-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Building2 size={22} color="var(--info)" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#fff', margin: 0 }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
                 {dealer.shop_name || 'Dealer Details'}
               </h3>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'var(--text-muted)', flexWrap: 'wrap', marginTop: '0.2rem' }}>
                 {dealer.phone && <span>Ph: {dealer.phone}</span>}
                 <span style={{
                   padding: '0.1rem 0.5rem',
@@ -207,6 +212,41 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
                 }}>
                   <StatusIcon size={12} /> {statusBadge.text}
                 </span>
+
+                {dealer.status === 'approved' && (
+                  dealer.is_trial ? (
+                    <span style={{
+                      padding: '0.1rem 0.5rem',
+                      borderRadius: '4px',
+                      background: trialInfo.badgeBg,
+                      color: trialInfo.badgeColor,
+                      border: `1px solid ${trialInfo.badgeColor}40`,
+                      fontWeight: '800',
+                      fontSize: '0.75rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      {trialInfo.isExpired ? <Hourglass size={12} /> : <Clock size={12} />}
+                      {trialInfo.badgeText}
+                    </span>
+                  ) : (
+                    <span style={{
+                      padding: '0.1rem 0.5rem',
+                      borderRadius: '4px',
+                      background: 'var(--primary-light)',
+                      color: 'var(--primary)',
+                      border: '1px solid rgba(22, 163, 74, 0.25)',
+                      fontWeight: '800',
+                      fontSize: '0.75rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.25rem'
+                    }}>
+                      <Sparkles size={12} /> Paid Account
+                    </span>
+                  )
+                )}
               </div>
             </div>
           </div>
@@ -225,94 +265,93 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
           {/* Quick Metrics Cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
             <div style={{ padding: '0.85rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-              <Package size={18} color="#3b82f6" style={{ marginBottom: '0.3rem' }} />
-              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff' }}>{counts.products}</div>
+              <Package size={18} color="var(--info)" style={{ marginBottom: '0.3rem' }} />
+              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)' }}>{counts.products}</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Stock Items</div>
             </div>
 
             <div style={{ padding: '0.85rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-              <Users size={18} color="#10b981" style={{ marginBottom: '0.3rem' }} />
-              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff' }}>{counts.farmers}</div>
+              <Users size={18} color="var(--primary)" style={{ marginBottom: '0.3rem' }} />
+              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)' }}>{counts.farmers}</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Farmers Registered</div>
             </div>
 
             <div style={{ padding: '0.85rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-              <TrendingUp size={18} color="#f59e0b" style={{ marginBottom: '0.3rem' }} />
-              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff' }}>{counts.sales}</div>
+              <TrendingUp size={18} color="var(--warning)" style={{ marginBottom: '0.3rem' }} />
+              <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)' }}>{counts.sales}</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Total Sales Made</div>
             </div>
           </div>
 
           {/* Revenue Breakdown */}
           <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#fff', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <IndianRupee size={16} color="#10b981" /> Revenue Overview
+            <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <IndianRupee size={16} color="var(--primary)" /> Revenue Overview
             </h4>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-              <div style={{ padding: '1rem', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
-                <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: '700', textTransform: 'uppercase' }}>Today</span>
-                <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#fff', marginTop: '0.2rem' }}>
+              <div style={{ padding: '1rem', borderRadius: '10px', background: 'var(--primary-light)', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '700', textTransform: 'uppercase' }}>Today</span>
+                <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--text-main)', marginTop: '0.2rem' }}>
                   ₹{revenue.today.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div style={{ padding: '1rem', borderRadius: '10px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.25)' }}>
-                <span style={{ fontSize: '0.75rem', color: '#60a5fa', fontWeight: '700', textTransform: 'uppercase' }}>This Week</span>
-                <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#fff', marginTop: '0.2rem' }}>
+              <div style={{ padding: '1rem', borderRadius: '10px', background: 'var(--info-bg)', border: '1px solid var(--info-border)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--info)', fontWeight: '700', textTransform: 'uppercase' }}>This Week</span>
+                <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--text-main)', marginTop: '0.2rem' }}>
                   ₹{revenue.this_week.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div style={{ padding: '1rem', borderRadius: '10px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.25)' }}>
-                <span style={{ fontSize: '0.75rem', color: '#c084fc', fontWeight: '700', textTransform: 'uppercase' }}>This Month</span>
-                <div style={{ fontSize: '1.3rem', fontWeight: '800', color: '#fff', marginTop: '0.2rem' }}>
+              <div style={{ padding: '1rem', borderRadius: '10px', background: 'var(--warning-bg)', border: '1px solid var(--warning-border)' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--warning)', fontWeight: '700', textTransform: 'uppercase' }}>This Month</span>
+                <div style={{ fontSize: '1.3rem', fontWeight: '800', color: 'var(--text-main)', marginTop: '0.2rem' }}>
                   ₹{revenue.this_month.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Top Selling Products List */}
+          {/* Top Products */}
           <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: '#fff', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Award size={16} color="#f59e0b" /> Top Selling Products for this Dealer
+            <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <Award size={16} color="var(--warning)" /> Top 5 Selling Products
             </h4>
 
             {loading ? (
-              <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                Loading top products...
+              <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                <RefreshCw size={20} className="status-pulse" />
               </div>
             ) : topProducts.length === 0 ? (
-              <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', border: '1px dashed var(--border-color)', borderRadius: '10px' }}>
-                No sales yet recorded for this dealer. Top-selling products will appear here once sales transactions are created.
+              <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', background: 'var(--bg-surface-hover)', borderRadius: '8px' }}>
+                No product sale transactions recorded yet for this dealer.
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {topProducts.map((p, idx) => (
                   <div
-                    key={`${p.product_name}_${idx}`}
+                    key={idx}
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '0.65rem 0.85rem',
+                      padding: '0.75rem 1rem',
                       borderRadius: '8px',
                       background: 'var(--bg-surface-hover)',
                       border: '1px solid var(--border-color)',
-                      fontSize: '0.88rem'
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                      <span style={{ fontWeight: '800', color: '#f59e0b', fontSize: '0.8rem' }}>#{idx + 1}</span>
-                      <div>
-                        <span style={{ fontWeight: '700', color: '#fff' }}>{p.product_name}</span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.4rem' }}>({p.product_brand})</span>
+                    <div>
+                      <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.9rem' }}>
+                        {p.product_name}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                        Brand: {p.product_brand || 'N/A'} • Sold: {p.total_qty_sold} units
                       </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontWeight: '700', color: '#10b981' }}>{Number(p.total_qty_sold)} units sold</span>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '0.6rem' }}>₹{Number(p.total_revenue).toFixed(2)}</span>
+                    <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.95rem' }}>
+                      ₹{Number(p.total_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </div>
                   </div>
                 ))}
@@ -322,20 +361,21 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
         </div>
 
         {/* Modal Footer */}
-        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--border-color)', textAlign: 'right' }}>
+        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end', background: 'var(--bg-surface-hover)' }}>
           <button
             onClick={onClose}
             style={{
-              padding: '0.55rem 1.2rem',
+              padding: '0.55rem 1.25rem',
               borderRadius: '8px',
-              background: 'var(--bg-surface-hover)',
+              background: 'var(--bg-surface)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontWeight: '600',
+              fontSize: '0.85rem',
               cursor: 'pointer'
             }}
           >
-            Close Drill-Down
+            Close
           </button>
         </div>
       </div>

@@ -8,46 +8,50 @@ export default function BlockedGate({ user, onSignOut }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1.5rem'
+      padding: '1.5rem',
+      backgroundColor: 'var(--bg-primary)'
     }}>
-      <div className="glass-card" style={{
+      <div style={{
         maxWidth: '480px',
         width: '100%',
-        padding: '2.5rem',
+        padding: '2.5rem 2.25rem',
         textAlign: 'center',
-        background: 'linear-gradient(135deg, rgba(30, 20, 20, 0.95) 0%, rgba(50, 20, 20, 0.8) 100%)',
-        borderColor: 'rgba(239, 68, 68, 0.3)'
+        background: '#FFFFFF',
+        borderRadius: '24px',
+        border: '1px solid #FEE2E2',
+        boxShadow: '0 25px 50px -12px rgba(220, 38, 38, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1)'
       }}>
         <div style={{
           width: '72px',
           height: '72px',
-          borderRadius: '24px',
-          background: 'rgba(239, 68, 68, 0.15)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
+          borderRadius: '22px',
+          background: '#FEE2E2',
+          border: '1px solid #FECACA',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '1.5rem',
-          boxShadow: '0 0 30px rgba(239, 68, 68, 0.2)'
+          boxShadow: '0 10px 25px -5px rgba(239, 68, 68, 0.25)'
         }}>
-          <ShieldX size={36} color="#ef4444" />
+          <ShieldX size={36} color="#DC2626" />
         </div>
 
-        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+        <h2 style={{ fontSize: '1.65rem', fontWeight: '800', color: '#0F172A', marginBottom: '0.6rem', letterSpacing: '-0.02em' }}>
           Account Blocked
         </h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '2rem' }}>
+        <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.75rem' }}>
           Your dealer account ({user?.email}) has been blocked by system administration. You currently do not have access to any platform features.
         </p>
 
         <div style={{
-          padding: '1rem',
-          borderRadius: '12px',
-          background: 'rgba(239, 68, 68, 0.1)',
-          border: '1px solid rgba(239, 68, 68, 0.2)',
-          color: '#fca5a5',
-          fontSize: '0.85rem',
-          marginBottom: '2rem',
+          padding: '0.85rem 1rem',
+          borderRadius: '14px',
+          background: '#FEF2F2',
+          border: '1px solid #FCA5A5',
+          color: '#B91C1C',
+          fontSize: '0.88rem',
+          fontWeight: '600',
+          marginBottom: '1.75rem',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -62,10 +66,11 @@ export default function BlockedGate({ user, onSignOut }) {
             width: '100%',
             padding: '0.85rem',
             borderRadius: '12px',
-            background: 'var(--bg-surface-hover)',
-            border: '1px solid var(--border-color)',
-            color: '#fff',
+            background: '#F1F5F9',
+            border: '1px solid #CBD5E1',
+            color: '#334155',
             fontWeight: '600',
+            fontSize: '0.9rem',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',

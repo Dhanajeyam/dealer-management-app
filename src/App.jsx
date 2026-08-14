@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { isSupabaseConfigured, supabase } from './lib/supabase'
+import { initThemeListener } from './lib/theme'
+import { isTrialExpired } from './lib/trial'
 import AuthCard from './components/auth/AuthCard'
 import PendingGate from './components/gates/PendingGate'
 import BlockedGate from './components/gates/BlockedGate'
+import TrialExpiredGate from './components/gates/TrialExpiredGate'
 import DealerDashboard from './components/dashboards/DealerDashboard'
 import AdminDashboard from './components/dashboards/AdminDashboard'
+import LandingPage from './components/landing/LandingPage'
 import { Sparkles, Loader2 } from 'lucide-react'
 
-export default function App() {
+// Internal Core Application (runs under /app)
+function AppMain() {
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
@@ -91,14 +97,14 @@ export default function App() {
         alignItems: 'center',
         justifyContent: 'center',
         background: 'var(--bg-primary)',
-        color: '#fff',
+        color: 'var(--text-main)',
         gap: '1rem'
       }}>
         <div style={{
           width: '50px',
           height: '50px',
           borderRadius: '14px',
-          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          background: 'var(--primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -114,7 +120,98 @@ export default function App() {
     )
   }
 
-  // 2. Unauthenticated State -> Render Auth Card (Login / Signup)
+  // 2. Dev Preview / Visual Testing Support
+  const urlParams = new URLSearchParams(window.location.search)
+  const isDealerPreview = urlParams.get('preview') === 'dealer'
+  const isDealerTrialPreview = urlParams.get('preview') === 'dealer_trial'
+  const isDealerExpiredTrialPreview = urlParams.get('preview') === 'dealer_expired_trial'
+  const isDealerNoUpiPreview = urlParams.get('preview') === 'dealer_no_upi'
+  const isAdminPreview = urlParams.get('preview') === 'admin'
+
+  if (isDealerExpiredTrialPreview && !session) {
+    return (
+      <TrialExpiredGate
+        profile={{
+          shop_name: 'Dharani Agro Store',
+          phone: '9360530134',
+          status: 'approved',
+          role: 'dealer',
+          is_trial: true,
+          trial_ends_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+        }}
+        user={{ email: 'dharanidharan48@gmail.com' }}
+        onRefresh={() => {}}
+        onSignOut={() => { window.location.href = '/' }}
+      />
+    )
+  }
+
+  if (isDealerTrialPreview && !session) {
+    return (
+      <DealerDashboard
+        profile={{
+          shop_name: 'Dharani Agro Store',
+          phone: '9360530134',
+          status: 'approved',
+          role: 'dealer',
+          is_trial: true,
+          trial_ends_at: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+          gstin: '33AAAAA0000A1Z5',
+          upi_id: 'dharaniagro@okicici'
+        }}
+        user={{ email: 'dharanidharan48@gmail.com' }}
+        onSignOut={() => { window.location.href = '/' }}
+      />
+    )
+  }
+
+  if (isDealerPreview && !session) {
+    return (
+      <DealerDashboard
+        profile={{
+          shop_name: 'Dharani Agro Store',
+          phone: '9360530134',
+          status: 'approved',
+          role: 'dealer',
+          is_trial: false,
+          gstin: '33AAAAA0000A1Z5',
+          upi_id: 'dharaniagro@okicici'
+        }}
+        user={{ email: 'dharanidharan48@gmail.com' }}
+        onSignOut={() => { window.location.href = '/' }}
+      />
+    )
+  }
+
+  if (isDealerNoUpiPreview && !session) {
+    return (
+      <DealerDashboard
+        profile={{
+          shop_name: 'Dharani Agro Store',
+          phone: '9360530134',
+          status: 'approved',
+          role: 'dealer',
+          is_trial: false,
+          gstin: '33AAAAA0000A1Z5',
+          upi_id: ''
+        }}
+        user={{ email: 'dharanidharan48@gmail.com' }}
+        onSignOut={() => { window.location.href = '/' }}
+      />
+    )
+  }
+
+  if (isAdminPreview && !session) {
+    return (
+      <AdminDashboard
+        profile={{ shop_name: 'System Administration', role: 'admin' }}
+        user={{ email: 'admin@chemicalshop.com' }}
+        onSignOut={() => { window.location.href = '/' }}
+      />
+    )
+  }
+
+  // 3. Unauthenticated State -> Render Auth Card (Login / Signup)
   if (!session) {
     return (
       <div style={{
@@ -130,7 +227,7 @@ export default function App() {
     )
   }
 
-  // 3. Authenticated Admin -> Render Admin Workspace Dashboard
+  // 4. Authenticated Admin -> Render Admin Workspace Dashboard
   if (profile?.role === 'admin') {
     return (
       <AdminDashboard
@@ -141,7 +238,7 @@ export default function App() {
     )
   }
 
-  // 4. Authenticated Dealer States
+  // 5. Authenticated Dealer States
   if (profile?.role === 'dealer' || !profile) {
     const status = profile?.status || 'pending'
 
@@ -166,6 +263,18 @@ export default function App() {
     }
 
     if (status === 'approved') {
+      // Strict Gate Enforcement: Check if 7-day free trial has expired
+      if (isTrialExpired(profile)) {
+        return (
+          <TrialExpiredGate
+            profile={profile}
+            user={user}
+            onRefresh={handleRefreshProfile}
+            onSignOut={handleSignOut}
+          />
+        )
+      }
+
       return (
         <DealerDashboard
           profile={profile}
@@ -184,5 +293,31 @@ export default function App() {
       onRefresh={handleRefreshProfile}
       onSignOut={handleSignOut}
     />
+  )
+}
+
+// Top-Level Router Application
+export default function App() {
+  // Initialize theme listener and clean up on unmount
+  useEffect(() => {
+    const cleanupTheme = initThemeListener()
+    return () => cleanupTheme()
+  }, [])
+
+  return (
+    <Routes>
+      {/* Public Marketing Landing Page */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* Main Dealer / Admin Application */}
+      <Route path="/app/*" element={<AppMain />} />
+
+      {/* Aliases for direct authentication deep-links */}
+      <Route path="/login" element={<Navigate to="/app" replace />} />
+      <Route path="/signup" element={<Navigate to="/app?mode=signup" replace />} />
+
+      {/* Catch-all route -> redirect to landing page */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }

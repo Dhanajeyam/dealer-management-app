@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { supabase } from '../../lib/supabase'
-import { X, Package, Plus, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { X, Package, Plus, AlertCircle, CheckCircle2, Zap } from 'lucide-react'
+
 
 const PRESET_BRANDS = [
   'Bayer',
@@ -14,7 +15,7 @@ const PRESET_BRANDS = [
 
 const UNITS = ['kg', 'litre', 'ml', 'packet', 'bag', 'units']
 
-export default function AddProductModal({ isOpen, onClose, onProductAdded, existingProducts = [] }) {
+export default function AddProductModal({ isOpen, onClose, onProductAdded, existingProducts = [], presetBrand = '' }) {
   const [selectedBrand, setSelectedBrand] = useState('')
   const [customBrand, setCustomBrand] = useState('')
   const [isCustomBrand, setIsCustomBrand] = useState(false)
@@ -36,16 +37,21 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
   // Reset all state when modal opens or closes
   React.useEffect(() => {
     if (isOpen) {
-      setSelectedBrand('')
+      if (presetBrand) {
+        setSelectedBrand(presetBrand)
+        setIsCustomBrand(false)
+      } else {
+        setSelectedBrand('')
+        setIsCustomBrand(false)
+      }
       setCustomBrand('')
-      setIsCustomBrand(false)
       setName('')
       setQuantity('')
       setUnit('kg')
       setPrice('')
       setError('')
     }
-  }, [isOpen])
+  }, [isOpen, presetBrand])
 
   if (!isOpen) return null
 
@@ -103,13 +109,31 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
         const user = (await supabase.auth.getUser()).data.user
         if (!user) throw new Error('Not authenticated')
 
-        // Search existing
+        // Resolve or create brand in brands table
+        const { data: bRow } = await supabase
+          .from('brands')
+          .select('id')
+          .eq('dealer_id', user.id)
+          .ilike('name', finalBrand)
+          .maybeSingle()
+
+        let brandId = bRow?.id
+        if (!brandId) {
+          const { data: newB } = await supabase
+            .from('brands')
+            .insert({ dealer_id: user.id, name: finalBrand })
+            .select('id')
+            .single()
+          brandId = newB?.id
+        }
+
+        // Search existing product
         const { data: existing } = await supabase
           .from('products')
           .select('*')
           .eq('dealer_id', user.id)
-          .ilike('brand', finalBrand)
           .ilike('name', finalName)
+          .or(`brand_id.eq.${brandId},brand.ilike.${finalBrand}`)
           .maybeSingle()
 
         if (existing) {
@@ -117,6 +141,8 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
           const { error: updateErr } = await supabase
             .from('products')
             .update({
+              brand_id: brandId,
+              brand: finalBrand,
               quantity: parseFloat(existing.quantity) + numQty,
               price: numPrice > 0 ? numPrice : existing.price,
               unit: unit,
@@ -125,11 +151,12 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
             .eq('id', existing.id)
           if (updateErr) throw updateErr
         } else {
-          // Insert
+          // Insert new
           const { error: insertErr } = await supabase
             .from('products')
             .insert({
               dealer_id: user.id,
+              brand_id: brandId,
               brand: finalBrand,
               name: finalName,
               quantity: numQty,
@@ -139,6 +166,8 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
           if (insertErr) throw insertErr
         }
       }
+
+      // Reset Form & Close
 
       // Reset Form & Close
       setName('')
@@ -179,8 +208,8 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <Package size={22} color="#10b981" />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', margin: 0 }}>Add Product Stock</h3>
+            <Package size={22} color="var(--primary)" />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Add Product Stock</h3>
           </div>
           <button
             onClick={onClose}
@@ -201,9 +230,9 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
           <div style={{
             padding: '0.75rem 1rem',
             borderRadius: '10px',
-            background: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            color: '#f87171',
+            background: 'var(--danger-bg)',
+            border: '1px solid var(--danger-border)',
+            color: 'var(--danger)',
             fontSize: '0.85rem',
             marginBottom: '1.25rem',
             display: 'flex',
@@ -231,19 +260,19 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: selectedBrand || isCustomBrand ? '#fff' : 'var(--text-muted)',
+                color: selectedBrand || isCustomBrand ? 'var(--text-main)' : 'var(--text-muted)',
                 fontSize: '0.95rem',
                 outline: 'none',
                 cursor: 'pointer'
               }}
             >
-              <option value="" disabled style={{ background: '#131f33', color: '#94a3b8' }}>
+              <option value="" disabled style={{ background: 'var(--bg-surface)', color: 'var(--text-muted)' }}>
                 -- Select Brand --
               </option>
               {availableBrands.map(b => (
-                <option key={b} value={b} style={{ background: '#131f33', color: '#fff' }}>{b}</option>
+                <option key={b} value={b} style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>{b}</option>
               ))}
-              <option value="CUSTOM" style={{ background: '#131f33', color: '#10b981' }}>+ Add Custom Brand</option>
+              <option value="CUSTOM" style={{ background: 'var(--bg-surface)', color: 'var(--primary)' }}>+ Add Custom Brand</option>
             </select>
 
             {isCustomBrand && (
@@ -259,8 +288,8 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                   padding: '0.75rem 1rem',
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
-                  border: '1px solid #10b981',
-                  color: '#fff',
+                  border: '1px solid var(--primary)',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}
@@ -285,7 +314,7 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: '#fff',
+                color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 outline: 'none'
               }}
@@ -312,7 +341,7 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}
@@ -332,14 +361,14 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none',
                   cursor: 'pointer'
                 }}
               >
                 {UNITS.map(u => (
-                  <option key={u} value={u} style={{ background: '#131f33', color: '#fff' }}>{u}</option>
+                  <option key={u} value={u} style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>{u}</option>
                 ))}
               </select>
             </div>
@@ -364,7 +393,7 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: '#fff',
+                color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 outline: 'none'
               }}
@@ -375,12 +404,13 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
           <div style={{
             fontSize: '0.78rem',
             color: 'var(--text-muted)',
-            background: 'rgba(0, 0, 0, 0.2)',
+            background: 'var(--bg-surface-hover)',
             padding: '0.65rem 0.85rem',
             borderRadius: '8px',
             lineHeight: '1.4'
           }}>
-            ⚡ <strong>Smart Add:</strong> Adding an existing product brand + name will automatically merge its stock and update the selling price.
+            <Zap size={14} color="var(--warning)" style={{ display: 'inline', verticalAlign: '-2px', marginRight: '0.25rem' }} /> <strong>Smart Add:</strong> Adding an existing product brand + name will automatically merge its stock and update the selling price.
+
           </div>
 
           {/* Action Buttons */}
@@ -408,7 +438,7 @@ export default function AddProductModal({ isOpen, onClose, onProductAdded, exist
                 flex: 2,
                 padding: '0.8rem',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                background: 'var(--primary)',
                 border: 'none',
                 color: '#fff',
                 fontWeight: '600',

@@ -54,10 +54,35 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
     setError('')
 
     try {
+      const user = (await supabase.auth.getUser()).data.user
+      const cleanBrand = brand.trim()
+      let brandId = product.brand_id
+
+      if (user) {
+        const { data: bRow } = await supabase
+          .from('brands')
+          .select('id')
+          .eq('dealer_id', user.id)
+          .ilike('name', cleanBrand)
+          .maybeSingle()
+
+        if (bRow) {
+          brandId = bRow.id
+        } else {
+          const { data: newB } = await supabase
+            .from('brands')
+            .insert({ dealer_id: user.id, name: cleanBrand })
+            .select('id')
+            .single()
+          brandId = newB?.id
+        }
+      }
+
       const { error: updateErr } = await supabase
         .from('products')
         .update({
-          brand: brand.trim(),
+          brand_id: brandId,
+          brand: cleanBrand,
           name: name.trim(),
           quantity: numQty,
           unit: unit,
@@ -97,8 +122,8 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <Edit3 size={20} color="#3b82f6" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#fff', margin: 0 }}>Edit Product Details</h3>
+            <Edit3 size={20} color="var(--primary)" />
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Edit Product Details</h3>
           </div>
           <button
             onClick={onClose}
@@ -112,9 +137,9 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
           <div style={{
             padding: '0.75rem 1rem',
             borderRadius: '10px',
-            background: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            color: '#f87171',
+            background: 'var(--danger-bg)',
+            border: '1px solid var(--danger-border)',
+            color: 'var(--danger)',
             fontSize: '0.85rem',
             marginBottom: '1.25rem',
             display: 'flex',
@@ -142,7 +167,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: '#fff',
+                color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 outline: 'none'
               }}
@@ -164,7 +189,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: '#fff',
+                color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 outline: 'none'
               }}
@@ -189,7 +214,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}
@@ -209,14 +234,14 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none',
                   cursor: 'pointer'
                 }}
               >
                 {UNITS.map(u => (
-                  <option key={u} value={u} style={{ background: '#131f33', color: '#fff' }}>{u}</option>
+                  <option key={u} value={u} style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>{u}</option>
                 ))}
               </select>
             </div>
@@ -239,7 +264,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: '#fff',
+                color: 'var(--text-main)',
                 fontSize: '0.95rem',
                 outline: 'none'
               }}
@@ -270,7 +295,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                 flex: 2,
                 padding: '0.8rem',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                background: 'var(--primary)',
                 border: 'none',
                 color: '#fff',
                 fontWeight: '600',

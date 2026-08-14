@@ -57,9 +57,9 @@ export default function ForgotPasswordForm({ onBackToLogin }) {
           alignItems: 'center',
           gap: '0.75rem'
         }}>
-          <CheckCircle2 size={32} color="#10b981" />
+          <CheckCircle2 size={32} color="var(--primary)" />
           <div>
-            <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: '600', marginBottom: '0.2rem' }}>Check Your Email</h4>
+            <h4 style={{ color: 'var(--text-main)', fontSize: '1rem', fontWeight: '600', marginBottom: '0.2rem' }}>Check Your Email</h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: '1.5' }}>
               We have sent password reset instructions to <strong>{email}</strong>.
             </p>
@@ -72,7 +72,7 @@ export default function ForgotPasswordForm({ onBackToLogin }) {
               borderRadius: '8px',
               background: 'var(--bg-surface-hover)',
               border: '1px solid var(--border-color)',
-              color: '#fff',
+              color: 'var(--text-main)',
               fontSize: '0.85rem',
               cursor: 'pointer',
               display: 'inline-flex',
@@ -89,9 +89,9 @@ export default function ForgotPasswordForm({ onBackToLogin }) {
             <div style={{
               padding: '0.75rem 1rem',
               borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.12)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#f87171',
+              background: 'var(--danger-bg)',
+              border: '1px solid var(--danger-border)',
+              color: 'var(--danger)',
               fontSize: '0.85rem',
               display: 'flex',
               alignItems: 'center',
@@ -118,9 +118,9 @@ export default function ForgotPasswordForm({ onBackToLogin }) {
                   width: '100%',
                   padding: '0.75rem 1rem 0.75rem 2.75rem',
                   borderRadius: '10px',
-                  background: 'var(--bg-surface-hover)',
+                  background: 'var(--bg-input)',
                   border: '1px solid var(--border-color)',
-                  color: '#fff',
+                  color: 'var(--text-main)',
                   fontSize: '0.95rem',
                   outline: 'none'
                 }}

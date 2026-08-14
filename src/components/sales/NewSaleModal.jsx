@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
+import { QRCodeSVG } from 'qrcode.react'
 import { 
   ShoppingCart, 
   X, 
@@ -12,10 +13,13 @@ import {
   AlertCircle, 
   CheckCircle2, 
   IndianRupee,
-  ChevronRight
+  ChevronRight,
+  QrCode,
+  Info
 } from 'lucide-react'
 
-export default function NewSaleModal({ isOpen, onClose, products = [], farmers = [], onSaleCompleted, onFarmerAdded }) {
+export default function NewSaleModal({ isOpen, onClose, products = [], farmers = [], shopProfile, onSaleCompleted, onFarmerAdded }) {
+
   // Step 1: Farmer state
   const [selectedFarmer, setSelectedFarmer] = useState(null)
   const [farmerSearch, setFarmerSearch] = useState('')
@@ -30,8 +34,12 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
   const [selectedProductId, setSelectedProductId] = useState('')
   const [itemQty, setItemQty] = useState('')
   
-  // Step 3: Cart state
+  // Step 3: Cart & Payment state
   const [cart, setCart] = useState([])
+  const [paymentType, setPaymentType] = useState('full') // 'full' | 'partial' | 'credit'
+  const [customPaidAmount, setCustomPaidAmount] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState('cash')
+  const [paymentNotes, setPaymentNotes] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -45,6 +53,10 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
       setSelectedProductId('')
       setItemQty('')
       setCart([])
+      setPaymentType('full')
+      setCustomPaidAmount('')
+      setPaymentMethod('cash')
+      setPaymentNotes('')
       setError('')
     }
   }, [isOpen])
@@ -176,10 +188,57 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
       return
     }
 
+    // Calculate initial paid amount
+    let initialPaid = 0
+    if (paymentType === 'full') {
+      initialPaid = grandTotal
+    } else if (paymentType === 'credit') {
+      initialPaid = 0
+    } else if (paymentType === 'partial') {
+      initialPaid = parseFloat(customPaidAmount)
+      if (isNaN(initialPaid) || initialPaid < 0) {
+        setError('Please enter a valid initial payment amount.')
+        return
+      }
+      if (initialPaid > grandTotal) {
+        setError(`Initial payment amount (₹${initialPaid.toFixed(2)}) cannot exceed total bill amount (₹${grandTotal.toFixed(2)}).`)
+        return
+      }
+    }
+
     setSubmitting(true)
     setError('')
 
     try {
+      let activeFarmerId = selectedFarmer ? selectedFarmer.id : null
+
+      // If inline farmer form is currently active and name is filled, auto-save farmer record first
+      if (showInlineFarmerForm && inlineName.trim()) {
+        const user = (await supabase.auth.getUser()).data.user
+        if (!user) throw new Error('Not authenticated')
+
+        const { data: newFarmer, error: insertErr } = await supabase
+          .from('farmers')
+          .insert({
+            dealer_id: user.id,
+            name: inlineName.trim(),
+            phone: inlinePhone.trim() || null,
+            village: inlineVillage.trim() || null
+          })
+          .select()
+          .single()
+
+        if (insertErr) throw insertErr
+
+        activeFarmerId = newFarmer.id
+        setSelectedFarmer(newFarmer)
+        setShowInlineFarmerForm(false)
+        setInlineName('')
+        setInlinePhone('')
+        setInlineVillage('')
+        if (onFarmerAdded) onFarmerAdded()
+      }
+
       // Prepare payload for RPC confirm_sale
       const itemsPayload = cart.map(item => ({
         product_id: item.product_id,
@@ -188,13 +247,16 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
       }))
 
       const { data, error: rpcError } = await supabase.rpc('confirm_sale', {
-        p_farmer_id: selectedFarmer ? selectedFarmer.id : null,
-        p_items: itemsPayload
+        p_farmer_id: activeFarmerId,
+        p_items: itemsPayload,
+        p_initial_payment: initialPaid,
+        p_payment_method: paymentMethod,
+        p_notes: paymentNotes.trim() || null
       })
 
       if (rpcError) throw rpcError
 
-      // Fetch full sale detail for receipt preview
+      // Fetch full sale detail for receipt preview (including payments)
       const { data: fullSale, error: fetchErr } = await supabase
         .from('sales')
         .select(`
@@ -202,7 +264,8 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
           created_at,
           total_amount,
           farmer:farmers (name, phone, village),
-          sale_items (*)
+          sale_items (*),
+          payments (*)
         `)
         .eq('id', data.sale_id)
         .single()
@@ -249,11 +312,11 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'rgba(15, 23, 42, 0.6)'
+          background: 'var(--bg-surface-hover)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <ShoppingCart size={22} color="#10b981" />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', margin: 0 }}>
+            <ShoppingCart size={22} color="var(--primary)" />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
               Create New Sale / Checkout
             </h3>
           </div>
@@ -302,7 +365,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
               border: '1px solid var(--border-color, rgba(255,255,255,0.08))'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#10b981', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--primary)', textTransform: 'uppercase' }}>
                   1. Select Farmer / Customer
                 </span>
                 {!showInlineFarmerForm && (
@@ -339,7 +402,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       background: 'var(--bg-surface-hover)',
                       border: '1px solid var(--border-color)',
-                      color: '#fff',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem'
                     }}
                   />
@@ -354,7 +417,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                         borderRadius: '8px',
                         background: 'var(--bg-surface-hover)',
                         border: '1px solid var(--border-color)',
-                        color: '#fff',
+                        color: 'var(--text-main)',
                         fontSize: '0.85rem'
                       }}
                     />
@@ -368,7 +431,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                         borderRadius: '8px',
                         background: 'var(--bg-surface-hover)',
                         border: '1px solid var(--border-color)',
-                        color: '#fff',
+                        color: 'var(--text-main)',
                         fontSize: '0.85rem'
                       }}
                     />
@@ -381,7 +444,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                         flex: 1,
                         padding: '0.5rem',
                         borderRadius: '8px',
-                        background: '#10b981',
+                        background: 'var(--primary)',
                         color: '#fff',
                         border: 'none',
                         fontWeight: '600',
@@ -397,9 +460,9 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       style={{
                         padding: '0.5rem 0.8rem',
                         borderRadius: '8px',
-                        background: 'rgba(255,255,255,0.1)',
+                        background: 'var(--bg-surface)',
                         color: 'var(--text-muted)',
-                        border: 'none',
+                        border: '1px solid var(--border-color)',
                         fontSize: '0.8rem',
                         cursor: 'pointer'
                       }}
@@ -413,23 +476,23 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: 'rgba(16, 185, 129, 0.12)',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  background: 'var(--primary-light)',
+                  border: '1px solid var(--border-color)',
                   padding: '0.75rem 1rem',
                   borderRadius: '10px'
                 }}>
                   <div>
-                    <div style={{ fontWeight: '700', color: '#fff', fontSize: '0.95rem' }}>
+                    <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.95rem' }}>
                       {selectedFarmer.name}
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#a7f3d0' }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                       {selectedFarmer.village || 'No village'} • {selectedFarmer.phone || 'No phone'}
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setSelectedFarmer(null)}
-                    style={{ background: 'transparent', border: 'none', color: '#f87171', fontSize: '0.8rem', cursor: 'pointer' }}
+                    style={{ background: 'transparent', border: 'none', color: 'var(--danger)', fontSize: '0.8rem', cursor: 'pointer' }}
                   >
                     Change
                   </button>
@@ -449,7 +512,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                         borderRadius: '8px',
                         background: 'var(--bg-surface-hover)',
                         border: '1px solid var(--border-color)',
-                        color: '#fff',
+                        color: 'var(--text-main)',
                         fontSize: '0.85rem'
                       }}
                     />
@@ -472,7 +535,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                           onClick={() => setSelectedFarmer(f)}
                           style={{
                             padding: '0.5rem 0.8rem',
-                            borderBottom: '1px solid rgba(255,255,255,0.05)',
+                            borderBottom: '1px solid var(--border-color)',
                             cursor: 'pointer',
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -480,7 +543,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                             fontSize: '0.85rem'
                           }}
                         >
-                          <span style={{ color: '#fff', fontWeight: '600' }}>{f.name}</span>
+                          <span style={{ color: 'var(--text-main)', fontWeight: '600' }}>{f.name}</span>
                           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                             {f.village ? f.village : f.phone || ''}
                           </span>
@@ -494,12 +557,12 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
 
             {/* Section 2: Add Product to Cart */}
             <div style={{
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: 'var(--bg-surface)',
               borderRadius: '12px',
               padding: '1rem',
-              border: '1px solid var(--border-color, rgba(255,255,255,0.08))'
+              border: '1px solid var(--border-color)'
             }}>
-              <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#10b981', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--primary)', textTransform: 'uppercase', display: 'block', marginBottom: '0.75rem' }}>
                 2. Select Product & Quantity
               </span>
 
@@ -521,7 +584,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       background: 'var(--bg-surface-hover)',
                       border: '1px solid var(--border-color)',
-                      color: '#fff',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem'
                     }}
                   >
@@ -546,7 +609,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       background: 'var(--bg-surface-hover)',
                       border: '1px solid var(--border-color)',
-                      color: '#fff',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem'
                     }}
                   >
@@ -564,8 +627,8 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                   <div style={{
                     padding: '0.75rem',
                     borderRadius: '8px',
-                    background: 'rgba(16, 185, 129, 0.08)',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    background: 'var(--primary-light)',
+                    border: '1px solid var(--border-color)',
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
                     gap: '0.5rem',
@@ -573,13 +636,13 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                   }}>
                     <div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Available Stock:</div>
-                      <div style={{ fontWeight: '700', color: '#10b981', fontSize: '0.95rem' }}>
+                      <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.95rem' }}>
                         {selectedProduct.quantity} {selectedProduct.unit}
                       </div>
                     </div>
                     <div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Unit Price:</div>
-                      <div style={{ fontWeight: '700', color: '#fff', fontSize: '0.95rem' }}>
+                      <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.95rem' }}>
                         ₹{Number(selectedProduct.price).toFixed(2)}
                       </div>
                     </div>
@@ -601,7 +664,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       background: 'var(--bg-surface-hover)',
                       border: '1px solid var(--border-color)',
-                      color: '#fff',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem'
                     }}
                   />
@@ -611,9 +674,9 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                     style={{
                       padding: '0.55rem 1.2rem',
                       borderRadius: '8px',
-                      background: selectedProduct && itemQty ? '#10b981' : 'rgba(255,255,255,0.1)',
-                      color: '#fff',
-                      border: 'none',
+                      background: selectedProduct && itemQty ? 'var(--primary)' : 'var(--bg-surface-hover)',
+                      color: selectedProduct && itemQty ? '#fff' : 'var(--text-muted)',
+                      border: selectedProduct && itemQty ? 'none' : '1px solid var(--border-color)',
                       fontWeight: '600',
                       fontSize: '0.85rem',
                       cursor: selectedProduct && itemQty ? 'pointer' : 'not-allowed',
@@ -633,12 +696,12 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            background: 'rgba(255, 255, 255, 0.02)',
+            background: 'var(--bg-surface)',
             borderRadius: '12px',
             padding: '1.25rem',
-            border: '1px solid var(--border-color, rgba(255,255,255,0.08))'
+            border: '1px solid var(--border-color)'
           }}>
-            <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#fff', margin: '0 0 1rem 0' }}>
+            <h4 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--text-main)', margin: '0 0 1rem 0' }}>
               Cart Summary ({cart.length} items)
             </h4>
 
@@ -680,7 +743,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       }}
                     >
                       <div style={{ flex: 1, minWidth: 0, paddingRight: '0.5rem' }}>
-                        <div style={{ fontWeight: '600', color: '#fff', fontSize: '0.88rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '0.88rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {item.product_name}
                         </div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -688,13 +751,13 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                         </div>
                       </div>
                       <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <span style={{ fontWeight: '700', color: '#10b981', fontSize: '0.9rem' }}>
+                        <span style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.9rem' }}>
                           ₹{lineTotal.toFixed(2)}
                         </span>
                         <button
                           type="button"
                           onClick={() => handleRemoveFromCart(item.product_id)}
-                          style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', padding: '0.2rem' }}
+                          style={{ background: 'transparent', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '0.2rem' }}
                         >
                           <Trash2 size={16} />
                         </button>
@@ -705,22 +768,266 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
               )}
             </div>
 
-            {/* Grand Total Footer */}
+            {/* Grand Total & Payment Section */}
             <div style={{
               borderTop: '1px solid var(--border-color)',
               paddingTop: '1rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem'
+              gap: '0.85rem'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-muted)' }}>
-                  Total Amount:
+                  Total Bill Amount:
                 </span>
-                <span style={{ fontSize: '1.4rem', fontWeight: '800', color: '#10b981' }}>
+                <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--primary)' }}>
                   ₹{grandTotal.toFixed(2)}
                 </span>
               </div>
+
+              {/* Payment Type Pills */}
+              <div>
+                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem', fontWeight: '600' }}>
+                  Payment Mode at Checkout:
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.4rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentType('full')}
+                    style={{
+                      padding: '0.45rem 0.2rem',
+                      borderRadius: '8px',
+                      border: '1px solid',
+                      borderColor: paymentType === 'full' ? 'var(--primary)' : 'var(--border-color)',
+                      background: paymentType === 'full' ? 'var(--primary-light)' : 'var(--bg-surface)',
+                      color: paymentType === 'full' ? 'var(--primary)' : 'var(--text-muted)',
+                      fontSize: '0.78rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      textAlign: 'center'
+                    }}
+                  >
+                    Full Payment
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentType('partial')}
+                    style={{
+                      padding: '0.45rem 0.2rem',
+                      borderRadius: '8px',
+                      border: '1px solid',
+                      borderColor: paymentType === 'partial' ? 'var(--warning)' : 'var(--border-color)',
+                      background: paymentType === 'partial' ? 'var(--warning-bg)' : 'var(--bg-surface)',
+                      color: paymentType === 'partial' ? 'var(--warning)' : 'var(--text-muted)',
+                      fontSize: '0.78rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      textAlign: 'center'
+                    }}
+                  >
+                    Partial Paid
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentType('credit')}
+                    style={{
+                      padding: '0.45rem 0.2rem',
+                      borderRadius: '8px',
+                      border: '1px solid',
+                      borderColor: paymentType === 'credit' ? 'var(--credit)' : 'var(--border-color)',
+                      background: paymentType === 'credit' ? 'var(--credit-bg)' : 'var(--bg-surface)',
+                      color: paymentType === 'credit' ? 'var(--credit)' : 'var(--text-muted)',
+                      fontSize: '0.78rem',
+                      fontWeight: '700',
+                      cursor: 'pointer',
+                      textAlign: 'center'
+                    }}
+                  >
+                    Full Credit
+                  </button>
+                </div>
+              </div>
+
+              {/* Partial Payment Input */}
+              {paymentType === 'partial' && (
+                <div style={{ background: 'var(--warning-bg)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--warning-border)' }}>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--warning)', display: 'block', marginBottom: '0.3rem', fontWeight: '700' }}>
+                    Initial Amount Paid Now (₹):
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={grandTotal}
+                    value={customPaidAmount}
+                    onChange={(e) => setCustomPaidAmount(e.target.value)}
+                    placeholder={`e.g. ₹500 (Max ₹${grandTotal.toFixed(2)})`}
+                    style={{
+                      width: '100%',
+                      padding: '0.45rem 0.75rem',
+                      borderRadius: '6px',
+                      background: 'var(--bg-input)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-main)',
+                      fontSize: '0.88rem',
+                      fontWeight: '700',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  {customPaidAmount && parseFloat(customPaidAmount) >= 0 && (
+                    <div style={{ fontSize: '0.75rem', color: 'var(--danger)', marginTop: '0.3rem', fontWeight: '600' }}>
+                      Remaining Balance Due: ₹{Math.max(0, grandTotal - (parseFloat(customPaidAmount) || 0)).toFixed(2)}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {paymentType === 'credit' && (
+                <div style={{ fontSize: '0.78rem', color: 'var(--credit)', background: 'var(--credit-bg)', padding: '0.5rem 0.75rem', borderRadius: '6px', border: '1px solid var(--credit-border)' }}>
+                  Full bill amount of <strong>₹{grandTotal.toFixed(2)}</strong> will be added to {selectedFarmer ? selectedFarmer.name : 'the customer'}'s pending credit balance.
+                </div>
+              )}
+
+              {/* Payment Method Selector & Notes (Shown if paymentType is full or partial) */}
+              {paymentType !== 'credit' && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                  <div>
+                    <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+                      Payment Method
+                    </label>
+                    <select
+                      value={paymentMethod}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.45rem',
+                        borderRadius: '6px',
+                        background: 'var(--bg-surface-hover)',
+                        border: '1px solid var(--border-color)',
+                        color: 'var(--text-main)',
+                        fontSize: '0.8rem'
+                      }}
+                    >
+                      <option value="cash">Cash</option>
+                      <option value="upi">UPI / GPay / PhonePe</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+                      Ref / Notes
+                    </label>
+                    <input
+                      type="text"
+                      value={paymentNotes}
+                      onChange={(e) => setPaymentNotes(e.target.value)}
+                      placeholder="Optional notes"
+                      style={{
+                        width: '100%',
+                        padding: '0.45rem',
+                        borderRadius: '6px',
+                        background: 'var(--bg-surface-hover)',
+                        border: '1px solid var(--border-color)',
+                        color: 'var(--text-main)',
+                        fontSize: '0.8rem',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Dynamic In-Browser UPI QR Code Box */}
+              {paymentType !== 'credit' && paymentMethod === 'upi' && (() => {
+                const payAmount = paymentType === 'full' ? grandTotal : (parseFloat(customPaidAmount) || 0)
+                const dealerUpi = shopProfile?.upi_id?.trim() || ''
+                const dealerName = shopProfile?.shop_name?.trim() || 'Agri Store'
+
+                if (!dealerUpi) {
+                  return (
+                    <div style={{
+                      background: 'var(--warning-bg)',
+                      border: '1px solid var(--warning-border)',
+                      borderRadius: '10px',
+                      padding: '0.85rem 1rem',
+                      color: 'var(--warning)',
+                      fontSize: '0.82rem',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '0.65rem',
+                      marginTop: '1rem',
+                      marginBottom: '1rem'
+                    }}>
+                      <AlertCircle size={20} style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <div>
+                        <strong style={{ display: 'block', marginBottom: '0.2rem', color: 'var(--text-main)' }}>
+                          UPI QR Payments Disabled
+                        </strong>
+                        Add your Store UPI ID in <strong>Settings &gt; Business Profile</strong> to generate scannable QR codes for customers.
+                      </div>
+                    </div>
+                  )
+                }
+
+                const upiDeepLink = `upi://pay?pa=${dealerUpi}&pn=${encodeURIComponent(dealerName)}&am=${payAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent('Bill Payment')}`
+
+                return (
+                  <div style={{
+                    background: 'var(--bg-surface-hover)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '12px',
+                    padding: '1.25rem',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    marginTop: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <QrCode size={18} color="var(--primary)" /> Scan QR to Pay via UPI / GPay
+                    </div>
+
+                    <div style={{
+                      background: '#ffffff',
+                      padding: '12px',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      display: 'inline-block'
+                    }}>
+                      <QRCodeSVG value={upiDeepLink} size={180} level="M" />
+                    </div>
+
+                    <div style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--primary)' }}>
+                      Amount: ₹{payAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    </div>
+
+                    <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                      Payee UPI ID: <strong style={{ color: 'var(--text-main)' }}>{dealerUpi}</strong>
+                    </div>
+
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: 'var(--warning)',
+                      background: 'var(--warning-bg)',
+                      border: '1px solid var(--warning-border)',
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      textAlign: 'left'
+                    }}>
+                      <Info size={14} style={{ flexShrink: 0 }} />
+                      <span>Convenience QR: Visually confirm payment receipt in your UPI app before completing sale.</span>
+                    </div>
+                  </div>
+                )
+              })()}
+
 
               <button
                 type="button"
@@ -730,13 +1037,13 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                   width: '100%',
                   padding: '0.85rem',
                   borderRadius: '10px',
-                  background: cart.length > 0 ? '#10b981' : 'rgba(255,255,255,0.1)',
+                  background: cart.length > 0 ? 'var(--primary)' : 'var(--bg-surface-hover)',
                   color: '#fff',
                   fontWeight: '700',
                   fontSize: '0.95rem',
                   border: 'none',
                   cursor: cart.length > 0 ? 'pointer' : 'not-allowed',
-                  boxShadow: cart.length > 0 ? '0 4px 14px rgba(16, 185, 129, 0.4)' : 'none',
+                  boxShadow: cart.length > 0 ? 'var(--shadow-glow)' : 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

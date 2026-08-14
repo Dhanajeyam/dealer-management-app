@@ -97,7 +97,7 @@ export default function DealerPlaceholder({ profile, user, onSignOut }) {
         }}>
           <div className="glass-card" style={{ padding: '1.75rem', opacity: 0.7 }}>
             <Package size={28} color="#10b981" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Step 5: Stock Module</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Stock Inventory</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
               Add/edit agri-chemical inventory grouped by brand, with quantity adjustments.
             </p>
@@ -105,7 +105,7 @@ export default function DealerPlaceholder({ profile, user, onSignOut }) {
 
           <div className="glass-card" style={{ padding: '1.75rem', opacity: 0.7 }}>
             <Users size={28} color="#3b82f6" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Step 6: Farmer Module</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Farmer Directory</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
               Manage customer farmer profiles, contact info, and village purchase histories.
             </p>
@@ -113,7 +113,7 @@ export default function DealerPlaceholder({ profile, user, onSignOut }) {
 
           <div className="glass-card" style={{ padding: '1.75rem', opacity: 0.7 }}>
             <ShoppingCart size={28} color="#f59e0b" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Step 7: Sales & Billing</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Sales & Billing</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
               Quick cart checkout with automatic stock deduction and WiFi bill printing.
             </p>
@@ -121,7 +121,7 @@ export default function DealerPlaceholder({ profile, user, onSignOut }) {
 
           <div className="glass-card" style={{ padding: '1.75rem', opacity: 0.7 }}>
             <BarChart3 size={28} color="#a855f7" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Step 8: Analytics</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Analytics Dashboard</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
               Revenue totals (day/week/month), top selling products, and low stock warnings.
             </p>

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import EditDealerModal from '../admin/EditDealerModal'
 import DealerDrillDownModal from '../admin/DealerDrillDownModal'
+import DashboardLayout from '../common/DashboardLayout'
+import SettingsView from '../settings/SettingsView'
+import { getTrialInfo } from '../../lib/trial'
 
 import { 
   ShieldCheck, 
@@ -22,12 +25,20 @@ import {
   RefreshCw, 
   IndianRupee, 
   AlertCircle,
-  Award
+  Award,
+  Settings,
+  Sparkles,
+  Hourglass,
+  CalendarPlus,
+  X,
+  Loader2
 } from 'lucide-react'
 
 export default function AdminDashboard({ profile, user, onSignOut }) {
-  // Navigation State ('pending' | 'dealers' | 'leaderboard')
+  // Navigation State ('pending' | 'dealers' | 'leaderboard' | 'settings')
   const [activeTab, setActiveTab] = useState('pending')
+
+
 
   // Dealers State
   const [dealers, setDealers] = useState([])
@@ -44,6 +55,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
   const [editingDealer, setEditingDealer] = useState(null)
   const [drillDownDealer, setDrillDownDealer] = useState(null)
   const [actionStatus, setActionStatus] = useState({ id: null, type: null })
+  const [notice, setNotice] = useState(null)
 
   // Fetch all dealer profiles
   const fetchDealers = async () => {
@@ -134,21 +146,114 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
     fetchLeaderboard()
   }, [])
 
-  // Approve / Block Dealer Status Action
+  // Approve / Block Dealer Status Action with Defensive Schema Fallback
   const handleUpdateDealerStatus = async (dealerId, newStatus) => {
     setActionStatus({ id: dealerId, type: newStatus })
+    setNotice(null)
     try {
-      const { error } = await supabase
+      const updatePayload = { status: newStatus }
+      if (newStatus === 'approved') {
+        updatePayload.is_trial = true
+        updatePayload.trial_ends_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      }
+
+      let { error } = await supabase
         .from('profiles')
-        .update({ status: newStatus })
+        .update(updatePayload)
         .eq('id', dealerId)
 
+      // Fallback if is_trial or trial_ends_at column is not yet present in remote Supabase schema
+      if (error) {
+        console.warn('Full update failed (schema might lack trial columns), trying basic status update:', error)
+        const fallbackRes = await supabase
+          .from('profiles')
+          .update({ status: newStatus })
+          .eq('id', dealerId)
+        error = fallbackRes.error
+      }
+
       if (error) throw error
+
+      // Optimistic local state update
+      setDealers(prev => prev.map(d => d.id === dealerId ? { ...d, status: newStatus } : d))
+      setNotice({
+        type: 'success',
+        message: `Dealer has been successfully ${newStatus === 'approved' ? 'approved' : newStatus === 'blocked' ? 'blocked' : 'updated'}.`
+      })
 
       fetchDealers()
       fetchLeaderboard()
     } catch (err) {
       console.error(`Failed to update dealer status to ${newStatus}:`, err)
+      setNotice({
+        type: 'error',
+        message: `Failed to update dealer: ${err.message || 'Database update error'}`
+      })
+    } finally {
+      setActionStatus({ id: null, type: null })
+    }
+  }
+
+  // Convert Dealer to Paid Account (Removes trial restrictions)
+  const handleConvertToPaid = async (dealerId) => {
+    setActionStatus({ id: dealerId, type: 'convert_paid' })
+    setNotice(null)
+    try {
+      let { error } = await supabase
+        .from('profiles')
+        .update({
+          is_trial: false,
+          trial_ends_at: null
+        })
+        .eq('id', dealerId)
+
+      if (error) throw error
+
+      setDealers(prev => prev.map(d => d.id === dealerId ? { ...d, is_trial: false, trial_ends_at: null } : d))
+      setNotice({ type: 'success', message: 'Dealer converted to permanent Paid account successfully.' })
+
+      fetchDealers()
+      fetchLeaderboard()
+    } catch (err) {
+      console.error('Failed to convert dealer to paid:', err)
+      setNotice({ type: 'error', message: `Failed to convert dealer: ${err.message || 'Database error'}` })
+    } finally {
+      setActionStatus({ id: null, type: null })
+    }
+  }
+
+  // Extend Dealer Trial by specified days
+  const handleExtendTrial = async (dealer, additionalDays = 7) => {
+    setActionStatus({ id: dealer.id, type: 'extend_trial' })
+    setNotice(null)
+    try {
+      let baseTime = Date.now()
+      if (dealer.trial_ends_at) {
+        const currentEnd = new Date(dealer.trial_ends_at).getTime()
+        if (currentEnd > baseTime) {
+          baseTime = currentEnd
+        }
+      }
+      const newTrialEndsAt = new Date(baseTime + additionalDays * 24 * 60 * 60 * 1000).toISOString()
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          is_trial: true,
+          trial_ends_at: newTrialEndsAt
+        })
+        .eq('id', dealer.id)
+
+      if (error) throw error
+
+      setDealers(prev => prev.map(d => d.id === dealer.id ? { ...d, is_trial: true, trial_ends_at: newTrialEndsAt } : d))
+      setNotice({ type: 'success', message: `Extended trial by +${additionalDays} days successfully.` })
+
+      fetchDealers()
+      fetchLeaderboard()
+    } catch (err) {
+      console.error('Failed to extend trial:', err)
+      setNotice({ type: 'error', message: `Failed to extend trial: ${err.message || 'Database error'}` })
     } finally {
       setActionStatus({ id: null, type: null })
     }
@@ -176,298 +281,250 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
     }
   })
 
-  return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--bg-primary)' }}>
-      {/* Top Navbar */}
-      <header style={{
-        padding: '1.25rem 2rem',
-        borderBottom: '1px solid var(--border-color)',
-        background: 'rgba(11, 19, 32, 0.85)',
-        backdropFilter: 'blur(12px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '1rem',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(59, 130, 246, 0.35)'
-          }}>
-            <ShieldCheck size={24} color="#ffffff" />
-          </div>
-          <div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff', margin: 0 }}>
-              System Administration
-            </h1>
-            <span style={{ fontSize: '0.8rem', color: '#60a5fa', fontWeight: '600' }}>
-              Global Admin Dashboard &amp; Dealer Oversight
-            </span>
-          </div>
-        </div>
+  const navItems = [
+    { id: 'pending', label: 'Pending Signups', icon: Clock, color: activeTab === 'pending' ? 'var(--warning)' : undefined },
+    { id: 'dealers', label: 'Dealer Directory', icon: Building2 },
+    { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
+    { id: 'settings', label: 'Settings', icon: Settings }
+  ]
 
-        {/* Tab Switcher Pills */}
+  const getHeaderTitle = () => {
+    switch (activeTab) {
+      case 'pending': return 'Pending Dealer Approvals'
+      case 'dealers': return 'Dealer Management Directory'
+      case 'leaderboard': return 'Platform Performance Leaderboard'
+      case 'settings': return 'System & Account Settings'
+      default: return 'System Administration'
+    }
+  }
+
+  const headerActions = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+        <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{user?.email}</span>
+        <span style={{ fontSize: '0.78rem', color: 'var(--primary)' }}>Role: Admin</span>
+      </div>
+      <button
+        onClick={onSignOut}
+        className="btn-signout"
+        title="Sign Out"
+      >
+        <LogOut size={15} /> Sign Out
+      </button>
+    </div>
+  )
+
+  return (
+    <DashboardLayout
+      brandTitle="System Administration"
+      brandSubtitle="Global Admin Dashboard & Dealer Oversight"
+      brandIcon={<ShieldCheck size={24} color="#ffffff" />}
+      navItems={navItems}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      headerTitle={getHeaderTitle()}
+      headerActions={headerActions}
+    >
+      {/* Toast Notification Banner */}
+      {notice && (
         <div style={{
+          marginBottom: '1.25rem',
+          padding: '0.85rem 1.25rem',
+          borderRadius: '12px',
+          background: notice.type === 'success' ? 'var(--primary-light)' : 'var(--danger-bg)',
+          border: `1px solid ${notice.type === 'success' ? 'rgba(22, 163, 74, 0.3)' : 'var(--danger-border)'}`,
+          color: notice.type === 'success' ? 'var(--primary)' : 'var(--danger)',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.4rem',
-          padding: '0.35rem',
-          borderRadius: '12px',
-          background: 'rgba(0, 0, 0, 0.3)',
-          border: '1px solid var(--border-color)'
+          justifyContent: 'space-between',
+          fontSize: '0.9rem',
+          fontWeight: '600',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
         }}>
-          <button
-            onClick={() => setActiveTab('pending')}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'pending' ? 'rgba(245, 158, 11, 0.18)' : 'transparent',
-              color: activeTab === 'pending' ? '#f59e0b' : 'var(--text-muted)',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Clock size={16} /> Pending Signups ({pendingDealers.length})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('dealers')}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'dealers' ? 'rgba(59, 130, 246, 0.18)' : 'transparent',
-              color: activeTab === 'dealers' ? '#60a5fa' : 'var(--text-muted)',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Users size={16} /> Dealers Directory ({dealers.length})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('leaderboard')}
-            style={{
-              padding: '0.55rem 1.1rem',
-              borderRadius: '9px',
-              border: 'none',
-              background: activeTab === 'leaderboard' ? 'rgba(16, 185, 129, 0.18)' : 'transparent',
-              color: activeTab === 'leaderboard' ? '#34d399' : 'var(--text-muted)',
-              fontSize: '0.875rem',
-              fontWeight: '700',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Trophy size={16} /> Leaderboard
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <span style={{ fontWeight: '600', color: '#fff' }}>{user?.email}</span>
-            <span style={{ fontSize: '0.78rem', color: '#60a5fa' }}>Role: Admin</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            {notice.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+            <span>{notice.message}</span>
           </div>
           <button
-            onClick={onSignOut}
-            style={{
-              padding: '0.5rem 0.9rem',
-              borderRadius: '10px',
-              background: 'var(--bg-surface-hover)',
-              border: '1px solid var(--border-color)',
-              color: '#fff',
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem'
-            }}
+            onClick={() => setNotice(null)}
+            style={{ background: 'transparent', border: 'none', color: 'inherit', cursor: 'pointer', padding: '0.2rem' }}
           >
-            <LogOut size={15} /> Sign Out
+            <X size={16} />
           </button>
         </div>
-      </header>
+      )}
 
-      {/* Main Area */}
-      <main className="container" style={{ flex: 1, padding: '2rem 1.5rem' }}>
-        
-        {/* ============================================================ */}
-        {/* TAB 1: PENDING DEALER SIGNUPS                                */}
-        {/* ============================================================ */}
-        {activeTab === 'pending' && (
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-              <div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#fff', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Clock size={22} color="#f59e0b" />
-                  Pending Dealer Approvals ({pendingDealers.length})
-                </h2>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0.2rem 0 0 0' }}>
-                  New dealer signups awaiting platform admin approval to access stock and billing features.
-                </p>
-              </div>
-
-              <button
-                onClick={fetchDealers}
-                style={{
-                  padding: '0.5rem 0.9rem',
-                  borderRadius: '10px',
-                  background: 'var(--bg-surface-hover)',
-                  border: '1px solid var(--border-color)',
-                  color: '#fff',
-                  fontSize: '0.85rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem'
-                }}
-              >
-                <RefreshCw size={15} /> Refresh List
-              </button>
+      {/* ============================================================ */}
+      {/* TAB 1: PENDING DEALER SIGNUPS                                */}
+      {/* ============================================================ */}
+      {activeTab === 'pending' && (
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#fff', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Clock size={22} color="#f59e0b" />
+                Pending Dealer Approvals ({pendingDealers.length})
+              </h2>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0.2rem 0 0 0' }}>
+                New dealer signups awaiting platform admin approval to access stock and billing features.
+              </p>
             </div>
 
-            {loadingDealers ? (
-              <div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>
-                <RefreshCw size={28} className="status-pulse" style={{ marginBottom: '1rem' }} />
-                <p>Checking pending dealer applications...</p>
-              </div>
-            ) : pendingDealers.length === 0 ? (
-              <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                <CheckCircle2 size={48} color="#10b981" style={{ marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>
-                  All Clear! No Pending Approvals
-                </h3>
-                <p style={{ color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto', fontSize: '0.9rem' }}>
-                  There are currently no new dealer signups waiting for approval.
-                </p>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
-                {pendingDealers.map(d => {
-                  const createdDate = d.created_at
-                    ? new Date(d.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
-                    : 'Recently requested'
-                  const isProcessing = actionStatus.id === d.id
+            <button
+              onClick={fetchDealers}
+              style={{
+                padding: '0.5rem 0.9rem',
+                borderRadius: '10px',
+                background: 'var(--bg-surface-hover)',
+                border: '1px solid var(--border-color)',
+                color: 'var(--text-main)',
+                fontSize: '0.85rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              <RefreshCw size={15} /> Refresh List
+            </button>
+          </div>
 
-                  return (
-                    <div
-                      key={d.id}
-                      className="glass-card"
-                      style={{
-                        padding: '1.5rem',
-                        border: '1px solid rgba(245, 158, 11, 0.3)',
-                        background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between'
-                      }}
-                    >
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                          <span style={{
-                            padding: '0.2rem 0.6rem',
-                            borderRadius: '6px',
-                            background: 'rgba(245, 158, 11, 0.2)',
-                            color: '#f59e0b',
-                            fontSize: '0.75rem',
-                            fontWeight: '700',
-                            textTransform: 'uppercase'
-                          }}>
-                            Pending Review
-                          </span>
-                          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                            {createdDate}
-                          </span>
-                        </div>
+          {loadingDealers ? (
+            <div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>
+              <RefreshCw size={28} className="status-pulse" style={{ marginBottom: '1rem' }} />
+              <p>Checking pending dealer applications...</p>
+            </div>
+          ) : pendingDealers.length === 0 ? (
+            <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+              <CheckCircle2 size={48} color="var(--primary)" style={{ marginBottom: '1rem' }} />
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                All Clear! No Pending Approvals
+              </h3>
+              <p style={{ color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto', fontSize: '0.9rem' }}>
+                There are currently no new dealer signups waiting for approval.
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+              {pendingDealers.map(d => {
+                const createdDate = d.created_at
+                  ? new Date(d.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+                  : 'Recently requested'
+                const isProcessing = actionStatus.id === d.id
 
-                        <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#fff', margin: '0 0 0.4rem 0' }}>
-                          {d.shop_name || 'Unnamed Business'}
-                        </h3>
-
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '1.25rem' }}>
-                          <div><strong>Phone:</strong> {d.phone || 'Not provided'}</div>
-                          <div><strong>User ID:</strong> {d.id.substring(0, 13)}...</div>
-                        </div>
+                return (
+                  <div
+                    key={d.id}
+                    className="glass-card"
+                    style={{
+                      padding: '1.5rem',
+                      border: '1px solid rgba(245, 158, 11, 0.3)',
+                      background: 'var(--bg-surface)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                        <span style={{
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: '6px',
+                          background: 'var(--warning-bg)',
+                          color: 'var(--warning)',
+                          border: '1px solid var(--warning-border)',
+                          fontSize: '0.75rem',
+                          fontWeight: '700',
+                          textTransform: 'uppercase'
+                        }}>
+                          Pending Review
+                        </span>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                          {createdDate}
+                        </span>
                       </div>
 
-                      <div style={{ display: 'flex', gap: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1rem' }}>
-                        <button
-                          type="button"
-                          disabled={isProcessing}
-                          onClick={() => handleUpdateDealerStatus(d.id, 'approved')}
-                          style={{
-                            flex: 1,
-                            padding: '0.65rem',
-                            borderRadius: '10px',
-                            background: '#10b981',
-                            border: 'none',
-                            color: '#fff',
-                            fontWeight: '700',
-                            fontSize: '0.85rem',
-                            cursor: isProcessing ? 'wait' : 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.4rem',
-                            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
-                          }}
-                        >
-                          <CheckCircle2 size={16} /> Approve Access
-                        </button>
+                      <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 0.4rem 0' }}>
+                        {d.shop_name || 'Unnamed Business'}
+                      </h3>
 
-                        <button
-                          type="button"
-                          disabled={isProcessing}
-                          onClick={() => handleUpdateDealerStatus(d.id, 'blocked')}
-                          style={{
-                            padding: '0.65rem 0.9rem',
-                            borderRadius: '10px',
-                            background: 'rgba(239, 68, 68, 0.15)',
-                            border: '1px solid rgba(239, 68, 68, 0.3)',
-                            color: '#f87171',
-                            fontWeight: '600',
-                            fontSize: '0.85rem',
-                            cursor: isProcessing ? 'wait' : 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.3rem'
-                          }}
-                        >
-                          <Ban size={16} /> Reject
-                        </button>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '1.25rem' }}>
+                        <div><strong>Phone:</strong> {d.phone || 'Not provided'}</div>
+                        <div><strong>User ID:</strong> {d.id.substring(0, 13)}...</div>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )}
+
+                    <div style={{ display: 'flex', gap: '0.75rem', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
+                      <button
+                        type="button"
+                        disabled={isProcessing}
+                        onClick={() => handleUpdateDealerStatus(d.id, 'approved')}
+                        style={{
+                          flex: 1,
+                          padding: '0.65rem',
+                          borderRadius: '10px',
+                          background: 'var(--primary)',
+                          border: 'none',
+                          color: '#fff',
+                          fontWeight: '700',
+                          fontSize: '0.85rem',
+                          cursor: isProcessing ? 'wait' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.4rem',
+                          boxShadow: 'var(--shadow-glow)'
+                        }}
+                      >
+                        {isProcessing && actionStatus.type === 'approved' ? (
+                          <>
+                            <Loader2 size={16} className="status-pulse" /> Approving...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle2 size={16} /> Approve Access
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={isProcessing}
+                        onClick={() => handleUpdateDealerStatus(d.id, 'blocked')}
+                        style={{
+                          padding: '0.65rem 0.9rem',
+                          borderRadius: '10px',
+                          background: 'var(--danger-bg)',
+                          border: '1px solid var(--danger-border)',
+                          color: 'var(--danger)',
+                          fontWeight: '700',
+                          fontSize: '0.85rem',
+                          cursor: isProcessing ? 'wait' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.35rem'
+                        }}
+                        title="Reject signup and block access"
+                      >
+                        {isProcessing && actionStatus.type === 'blocked' ? (
+                          <>
+                            <Loader2 size={15} className="status-pulse" /> Blocking...
+                          </>
+                        ) : (
+                          <>
+                            <Ban size={15} /> Block / Reject
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
 
         {/* ============================================================ */}
         {/* TAB 2: ALL DEALERS DIRECTORY                                 */}
@@ -554,13 +611,17 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                 </p>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1.25rem' }}>
                 {filteredDealers.map(d => {
                   const statusBadge = d.status === 'approved' 
                     ? { text: 'Approved', color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)' }
                     : d.status === 'blocked'
                     ? { text: 'Blocked', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' }
                     : { text: 'Pending', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)' }
+
+                  const trialInfo = getTrialInfo(d)
+                  const isApproved = d.status === 'approved'
+                  const isActionLoading = actionStatus.id === d.id
 
                   return (
                     <div
@@ -571,27 +632,67 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        gap: '1rem'
+                        gap: '1rem',
+                        border: isApproved && d.is_trial && trialInfo.isExpired ? '1px solid var(--danger-border)' : '1px solid var(--border-color)'
                       }}
                     >
                       <div>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
-                          <span style={{
-                            padding: '0.2rem 0.6rem',
-                            borderRadius: '6px',
-                            background: statusBadge.bg,
-                            color: statusBadge.color,
-                            fontSize: '0.75rem',
-                            fontWeight: '700'
-                          }}>
-                            {statusBadge.text}
-                          </span>
+                        {/* Status Badges Row */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem', flexWrap: 'wrap', gap: '0.4rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <span style={{
+                              padding: '0.2rem 0.6rem',
+                              borderRadius: '6px',
+                              background: statusBadge.bg,
+                              color: statusBadge.color,
+                              fontSize: '0.75rem',
+                              fontWeight: '700'
+                            }}>
+                              {statusBadge.text}
+                            </span>
+
+                            {isApproved && (
+                              d.is_trial ? (
+                                <span style={{
+                                  padding: '0.2rem 0.6rem',
+                                  borderRadius: '6px',
+                                  background: trialInfo.badgeBg,
+                                  color: trialInfo.badgeColor,
+                                  border: `1px solid ${trialInfo.badgeColor}40`,
+                                  fontSize: '0.75rem',
+                                  fontWeight: '800',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.3rem'
+                                }}>
+                                  {trialInfo.isExpired ? <Hourglass size={12} /> : <Clock size={12} />}
+                                  {trialInfo.badgeText}
+                                </span>
+                              ) : (
+                                <span style={{
+                                  padding: '0.2rem 0.6rem',
+                                  borderRadius: '6px',
+                                  background: 'var(--primary-light)',
+                                  color: 'var(--primary)',
+                                  border: '1px solid rgba(22, 163, 74, 0.25)',
+                                  fontSize: '0.75rem',
+                                  fontWeight: '800',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '0.3rem'
+                                }}>
+                                  <Sparkles size={12} /> Paid Account
+                                </span>
+                              )
+                            )}
+                          </div>
+
                           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                             ID: {d.id.substring(0, 8)}...
                           </span>
                         </div>
 
-                        <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#fff', margin: '0 0 0.4rem 0' }}>
+                        <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 0.4rem 0' }}>
                           {d.shop_name || 'Unnamed Business'}
                         </h3>
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -599,49 +700,220 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         </div>
                       </div>
 
-                      {/* Action Buttons */}
-                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                        <button
-                          type="button"
-                          onClick={() => setDrillDownDealer(d)}
-                          style={{
-                            flex: '1 1 auto',
-                            padding: '0.55rem 0.85rem',
-                            borderRadius: '8px',
-                            background: 'rgba(59, 130, 246, 0.15)',
-                            border: '1px solid rgba(59, 130, 246, 0.3)',
-                            color: '#60a5fa',
-                            fontWeight: '600',
-                            fontSize: '0.8rem',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.3rem'
-                          }}
-                        >
-                          <Eye size={14} /> View Sales &amp; Metrics
-                        </button>
+                      {/* Main Action Buttons */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <button
+                            type="button"
+                            onClick={() => setDrillDownDealer(d)}
+                            style={{
+                              flex: 1,
+                              padding: '0.55rem 0.85rem',
+                              borderRadius: '8px',
+                              background: 'var(--info-bg)',
+                              border: '1px solid var(--info-border)',
+                              color: 'var(--info)',
+                              fontWeight: '600',
+                              fontSize: '0.8rem',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '0.3rem'
+                            }}
+                          >
+                            <Eye size={14} /> View Details
+                          </button>
 
-                        <button
-                          type="button"
-                          onClick={() => setEditingDealer(d)}
-                          style={{
-                            padding: '0.55rem 0.75rem',
-                            borderRadius: '8px',
-                            background: 'var(--bg-surface-hover)',
-                            border: '1px solid var(--border-color)',
-                            color: '#fff',
-                            fontWeight: '600',
-                            fontSize: '0.8rem',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.3rem'
-                          }}
-                        >
-                          <Edit3 size={14} /> Edit
-                        </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingDealer(d)}
+                            style={{
+                              padding: '0.55rem 0.75rem',
+                              borderRadius: '8px',
+                              background: 'var(--bg-surface-hover)',
+                              border: '1px solid var(--border-color)',
+                              color: 'var(--text-main)',
+                              fontWeight: '600',
+                              fontSize: '0.8rem',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.3rem'
+                            }}
+                          >
+                            <Edit3 size={14} /> Edit
+                          </button>
+                        </div>
+
+                        {/* Actions for Approved Dealers */}
+                        {isApproved && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.65rem' }}>
+                            {d.is_trial ? (
+                              <div style={{ display: 'flex', gap: '0.45rem' }}>
+                                <button
+                                  type="button"
+                                  disabled={isActionLoading}
+                                  onClick={() => handleConvertToPaid(d.id)}
+                                  style={{
+                                    flex: 1,
+                                    padding: '0.48rem 0.65rem',
+                                    borderRadius: '8px',
+                                    background: 'var(--primary)',
+                                    color: '#FFFFFF',
+                                    border: 'none',
+                                    fontWeight: '700',
+                                    fontSize: '0.78rem',
+                                    cursor: isActionLoading ? 'wait' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.35rem',
+                                    boxShadow: 'var(--shadow-glow)'
+                                  }}
+                                  title="Activate permanent subscription"
+                                >
+                                  <Sparkles size={13} /> Convert to Paid
+                                </button>
+
+                                <button
+                                  type="button"
+                                  disabled={isActionLoading}
+                                  onClick={() => handleExtendTrial(d, 7)}
+                                  style={{
+                                    padding: '0.48rem 0.65rem',
+                                    borderRadius: '8px',
+                                    background: 'var(--warning-bg)',
+                                    border: '1px solid var(--warning-border)',
+                                    color: 'var(--warning)',
+                                    fontWeight: '700',
+                                    fontSize: '0.78rem',
+                                    cursor: isActionLoading ? 'wait' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.3rem'
+                                  }}
+                                  title="Extend trial by +7 days"
+                                >
+                                  <CalendarPlus size={13} /> +7 Days
+                                </button>
+                              </div>
+                            ) : (
+                              <div style={{ fontSize: '0.76rem', color: 'var(--primary)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                <CheckCircle2 size={13} /> Permanent Access (No Expiry)
+                              </div>
+                            )}
+
+                            {/* Block Access Button */}
+                            <button
+                              type="button"
+                              disabled={isActionLoading}
+                              onClick={() => {
+                                if (window.confirm(`Are you sure you want to BLOCK ${d.shop_name || 'this dealer'}? They will be immediately locked out.`)) {
+                                  handleUpdateDealerStatus(d.id, 'blocked')
+                                }
+                              }}
+                              style={{
+                                width: '100%',
+                                padding: '0.45rem 0.65rem',
+                                borderRadius: '8px',
+                                background: 'transparent',
+                                border: '1px solid var(--danger-border)',
+                                color: 'var(--danger)',
+                                fontWeight: '700',
+                                fontSize: '0.78rem',
+                                cursor: isActionLoading ? 'wait' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.35rem'
+                              }}
+                              title="Revoke access and block dealer"
+                            >
+                              <Ban size={13} /> Block Dealer Access
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Actions for Blocked Dealers */}
+                        {d.status === 'blocked' && (
+                          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.65rem' }}>
+                            <button
+                              type="button"
+                              disabled={isActionLoading}
+                              onClick={() => handleUpdateDealerStatus(d.id, 'approved')}
+                              style={{
+                                width: '100%',
+                                padding: '0.55rem 0.85rem',
+                                borderRadius: '8px',
+                                background: 'var(--primary)',
+                                color: '#FFFFFF',
+                                border: 'none',
+                                fontWeight: '700',
+                                fontSize: '0.82rem',
+                                cursor: isActionLoading ? 'wait' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.4rem',
+                                boxShadow: 'var(--shadow-glow)'
+                              }}
+                              title="Unblock dealer and restore account access"
+                            >
+                              <CheckCircle2 size={15} /> Unblock Dealer (Restore Access)
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Actions for Pending Dealers in Directory */}
+                        {d.status === 'pending' && (
+                          <div style={{ display: 'flex', gap: '0.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.65rem' }}>
+                            <button
+                              type="button"
+                              disabled={isActionLoading}
+                              onClick={() => handleUpdateDealerStatus(d.id, 'approved')}
+                              style={{
+                                flex: 1,
+                                padding: '0.5rem 0.75rem',
+                                borderRadius: '8px',
+                                background: 'var(--primary)',
+                                color: '#FFFFFF',
+                                border: 'none',
+                                fontWeight: '700',
+                                fontSize: '0.8rem',
+                                cursor: isActionLoading ? 'wait' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.35rem',
+                                boxShadow: 'var(--shadow-glow)'
+                              }}
+                            >
+                              <CheckCircle2 size={14} /> Approve Access
+                            </button>
+
+                            <button
+                              type="button"
+                              disabled={isActionLoading}
+                              onClick={() => handleUpdateDealerStatus(d.id, 'blocked')}
+                              style={{
+                                padding: '0.5rem 0.75rem',
+                                borderRadius: '8px',
+                                background: 'var(--danger-bg)',
+                                border: '1px solid var(--danger-border)',
+                                color: 'var(--danger)',
+                                fontWeight: '700',
+                                fontSize: '0.8rem',
+                                cursor: isActionLoading ? 'wait' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.3rem'
+                              }}
+                            >
+                              <Ban size={14} /> Block / Reject
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )
@@ -658,8 +930,8 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#fff', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <Trophy size={24} color="#f59e0b" />
+                <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <Trophy size={24} color="var(--warning)" />
                   Dealer Revenue Leaderboard
                 </h2>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0.2rem 0 0 0' }}>
@@ -668,7 +940,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
               </div>
 
               {/* Sort Switcher */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(0,0,0,0.3)', padding: '0.3rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'var(--bg-surface-hover)', padding: '0.3rem', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
                 <button
                   type="button"
                   onClick={() => setLeaderboardSort('month')}
@@ -676,7 +948,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                     padding: '0.45rem 0.9rem',
                     borderRadius: '8px',
                     border: 'none',
-                    background: leaderboardSort === 'month' ? '#10b981' : 'transparent',
+                    background: leaderboardSort === 'month' ? 'var(--primary)' : 'transparent',
                     color: leaderboardSort === 'month' ? '#fff' : 'var(--text-muted)',
                     fontWeight: '700',
                     fontSize: '0.8rem',
@@ -692,7 +964,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                     padding: '0.45rem 0.9rem',
                     borderRadius: '8px',
                     border: 'none',
-                    background: leaderboardSort === 'alltime' ? '#10b981' : 'transparent',
+                    background: leaderboardSort === 'alltime' ? 'var(--primary)' : 'transparent',
                     color: leaderboardSort === 'alltime' ? '#fff' : 'var(--text-muted)',
                     fontWeight: '700',
                     fontSize: '0.8rem',
@@ -712,7 +984,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
             ) : sortedLeaderboard.length === 0 ? (
               <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
                 <Award size={48} color="var(--text-dim)" style={{ marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                   No Leaderboard Data Yet
                 </h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
@@ -735,7 +1007,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         border: rank === 1 ? '1px solid rgba(245, 158, 11, 0.4)' : '1px solid var(--border-color)',
-                        background: rank === 1 ? 'linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.02) 100%)' : 'var(--bg-surface)'
+                        background: rank === 1 ? 'var(--warning-bg)' : 'var(--bg-surface)'
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -756,7 +1028,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         </div>
 
                         <div>
-                          <div style={{ fontWeight: '800', color: '#fff', fontSize: '1.05rem' }}>
+                          <div style={{ fontWeight: '800', color: 'var(--text-main)', fontSize: '1.05rem' }}>
                             {lb.shop_name}
                           </div>
                           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -768,14 +1040,14 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                       <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                         <div>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>This Month</div>
-                          <div style={{ fontWeight: '800', color: '#10b981', fontSize: '1.1rem' }}>
+                          <div style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '1.1rem' }}>
                             ₹{Number(lb.this_month_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </div>
                         </div>
 
                         <div style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: '1.25rem' }}>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>All-Time</div>
-                          <div style={{ fontWeight: '700', color: '#38bdf8', fontSize: '1rem' }}>
+                          <div style={{ fontWeight: '700', color: 'var(--info)', fontSize: '1rem' }}>
                             ₹{Number(lb.all_time_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </div>
                         </div>
@@ -787,7 +1059,21 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
             )}
           </div>
         )}
-      </main>
+
+        {/* ============================================================ */}
+        {/* TAB 4: SETTINGS MODULE                                      */}
+        {/* ============================================================ */}
+        {activeTab === 'settings' && (
+          <SettingsView
+            profile={profile}
+            user={user}
+            onProfileUpdated={() => {
+              fetchDealers()
+              fetchLeaderboard()
+            }}
+          />
+        )}
+
 
       {/* Admin Modals */}
       <EditDealerModal
@@ -805,6 +1091,9 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
         isOpen={Boolean(drillDownDealer)}
         onClose={() => setDrillDownDealer(null)}
       />
-    </div>
+    </DashboardLayout>
   )
 }
+
+
+
