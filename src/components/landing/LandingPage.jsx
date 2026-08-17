@@ -37,7 +37,7 @@ export default function LandingPage() {
       minHeight: '100vh',
       background: 'var(--bg-primary)', // #F5F8F6
       color: 'var(--text-main)', // #17201A
-      fontFamily: 'var(--font-body)',
+      fontFamily: 'var(--font-family)',
       display: 'flex',
       flexDirection: 'column'
     }}>
@@ -77,10 +77,10 @@ export default function LandingPage() {
               <Store size={22} color="#FFFFFF" />
             </div>
             <div>
-              <span style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em', display: 'block', lineHeight: 1.1 }}>
+              <span style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.015em', display: 'block', lineHeight: 1.1 }}>
                 ChemicalShop
               </span>
-              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '600' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '400' }}>
                 Agri-Dealer Retail Platform
               </span>
             </div>
@@ -92,7 +92,7 @@ export default function LandingPage() {
             alignItems: 'center',
             gap: '0.5rem',
             fontSize: '0.88rem',
-            fontWeight: '600'
+            fontWeight: '500'
           }} className="landing-desktop-nav">
             <a href="#features" className="landing-nav-link">Features</a>
             <a href="#showcase" className="landing-nav-link">Core Highlights</a>
@@ -112,7 +112,7 @@ export default function LandingPage() {
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
                 fontSize: '0.85rem',
-                fontWeight: '700',
+                fontWeight: '500',
                 textDecoration: 'none',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
                 transition: 'all 0.2s'
@@ -130,7 +130,7 @@ export default function LandingPage() {
                 background: 'var(--primary)',
                 color: '#FFFFFF',
                 fontSize: '0.85rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -189,7 +189,7 @@ export default function LandingPage() {
               border: '1px solid rgba(22, 163, 74, 0.25)',
               color: 'var(--primary)',
               fontSize: '0.82rem',
-              fontWeight: '700',
+              fontWeight: '500',
               marginBottom: '1.25rem',
               boxShadow: '0 2px 8px rgba(22, 163, 74, 0.08)'
             }}>
@@ -200,9 +200,9 @@ export default function LandingPage() {
             {/* Main Headline */}
             <h1 style={{
               fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)',
-              fontWeight: '900',
+              fontWeight: '700',
               lineHeight: 1.18,
-              letterSpacing: '-0.03em',
+              letterSpacing: '-0.02em',
               color: 'var(--text-main)',
               marginBottom: '1.25rem'
             }}>
@@ -235,7 +235,7 @@ export default function LandingPage() {
                   background: 'var(--primary)',
                   color: '#FFFFFF',
                   fontSize: '1rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -256,7 +256,7 @@ export default function LandingPage() {
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
                   fontSize: '1rem',
-                  fontWeight: '700',
+                  fontWeight: '500',
                   textDecoration: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -276,7 +276,7 @@ export default function LandingPage() {
               gap: '0.75rem',
               fontSize: '0.85rem',
               color: 'var(--text-main)',
-              fontWeight: '600',
+              fontWeight: '500',
               paddingTop: '1.25rem',
               borderTop: '1px solid var(--border-color)'
             }}>
@@ -331,7 +331,7 @@ export default function LandingPage() {
                   background: 'var(--primary)',
                   boxShadow: '0 0 8px var(--primary)'
                 }} />
-                <span style={{ fontSize: '0.82rem', fontWeight: '800', color: 'var(--text-main)' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: '600', color: 'var(--text-main)' }}>
                   Real-Time Dealer Cloud System
                 </span>
               </div>
@@ -355,10 +355,10 @@ export default function LandingPage() {
                 boxShadow: 'var(--shadow-card)'
               }}>
                 <div>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '600', display: 'block' }}>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '500', display: 'block' }}>
                     Multi-Brand Inventory & Billing
                   </span>
-                  <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)' }}>
+                  <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600' }}>
                     Bayer • Syngenta • UPL • Tata
                   </strong>
                 </div>
@@ -366,7 +366,7 @@ export default function LandingPage() {
                   background: 'var(--primary-light)',
                   color: 'var(--primary)',
                   fontSize: '0.78rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.35rem 0.75rem',
                   borderRadius: '8px',
                   border: '1px solid var(--primary-glow)'
@@ -390,10 +390,10 @@ export default function LandingPage() {
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--primary)' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Core Dealership Pillars
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '900', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
               Engineered for Speed, Accuracy & Zero Lost Revenue
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
@@ -428,7 +428,7 @@ export default function LandingPage() {
                   background: 'rgba(0, 0, 0, 0.65)',
                   color: '#FFFFFF',
                   fontSize: '0.78rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.3rem 0.7rem',
                   borderRadius: '6px',
                   backdropFilter: 'blur(6px)',
@@ -449,14 +449,14 @@ export default function LandingPage() {
                 justifyContent: 'space-between'
               }}>
                 <div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.6rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#FFFFFF', marginBottom: '0.6rem' }}>
                     Farmer Accounts & Seasonal Credit
                   </h3>
                   <p style={{ fontSize: '0.88rem', color: '#DCFCE7', lineHeight: '1.55', marginBottom: '1.25rem' }}>
                     Maintain transparent, bill-by-bill ledgers for every farmer. Record partial payments during weeding, top-dressing, and harvest without missing a single rupee.
                   </p>
                 </div>
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '0.85rem', fontSize: '0.8rem', color: '#DCFCE7', fontWeight: '700' }}>
+                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '0.85rem', fontSize: '0.8rem', color: '#DCFCE7', fontWeight: '500' }}>
                   ✓ Dedicated "Credit Sale" blue badges & audit trails
                 </div>
               </div>
@@ -483,7 +483,7 @@ export default function LandingPage() {
                   background: 'rgba(0, 0, 0, 0.65)',
                   color: '#FFFFFF',
                   fontSize: '0.78rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.3rem 0.7rem',
                   borderRadius: '6px',
                   backdropFilter: 'blur(6px)',
@@ -504,14 +504,14 @@ export default function LandingPage() {
                 justifyContent: 'space-between'
               }}>
                 <div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.6rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#FFFFFF', marginBottom: '0.6rem' }}>
                     15-Sec Billing & Dynamic Shop UPI QR
                   </h3>
                   <p style={{ fontSize: '0.88rem', color: '#DCFCE7', lineHeight: '1.55', marginBottom: '1.25rem' }}>
                     Speed through the morning sowing queue. Select customer, pick chemical formulations, and print a thermal receipt with an exact UPI payment QR code in 15 seconds.
                   </p>
                 </div>
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '0.85rem', fontSize: '0.8rem', color: '#DCFCE7', fontWeight: '700' }}>
+                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '0.85rem', fontSize: '0.8rem', color: '#DCFCE7', fontWeight: '500' }}>
                   ✓ 58mm/80mm thermal print & invoice receipts
                 </div>
               </div>
@@ -538,7 +538,7 @@ export default function LandingPage() {
                   background: 'rgba(0, 0, 0, 0.65)',
                   color: '#FFFFFF',
                   fontSize: '0.78rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.3rem 0.7rem',
                   borderRadius: '6px',
                   backdropFilter: 'blur(6px)',
@@ -559,14 +559,14 @@ export default function LandingPage() {
                 justifyContent: 'space-between'
               }}>
                 <div>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#FFFFFF', marginBottom: '0.6rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#FFFFFF', marginBottom: '0.6rem' }}>
                     Brand Catalogs & Real-Time Valuation
                   </h3>
                   <p style={{ fontSize: '0.88rem', color: '#DCFCE7', lineHeight: '1.55', marginBottom: '1.25rem' }}>
                     Organize your store by Bayer, Syngenta, UPL, and Tata Rallis. Know exactly how many bottles are on shelves and your live inventory valuation in real time.
                   </p>
                 </div>
-                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '0.85rem', fontSize: '0.8rem', color: '#DCFCE7', fontWeight: '700' }}>
+                <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: '0.85rem', fontSize: '0.8rem', color: '#DCFCE7', fontWeight: '500' }}>
                   ✓ Automatic valuation computed as SUM(Qty × Price)
                 </div>
               </div>
@@ -581,10 +581,10 @@ export default function LandingPage() {
       <section id="features" style={{ padding: '5.5rem 1.5rem', background: 'var(--bg-primary)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--primary)' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Complete Feature Suite
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '900', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
               Everything Required to Run a High-Volume Agri Store
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
@@ -618,11 +618,11 @@ export default function LandingPage() {
                 <Package size={24} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Brand-Based Stock Management
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
-                  Categorize insecticides, fungicides, and fertilizers by manufacturer (Bayer, Syngenta, UPL, Tata). Automatic inventory valuation computed as <code style={{ color: 'var(--primary)', fontWeight: '700' }}>SUM(Qty × Price)</code>.
+                  Categorize insecticides, fungicides, and fertilizers by manufacturer (Bayer, Syngenta, UPL, Tata). Automatic inventory valuation computed as <code style={{ color: 'var(--primary)', fontWeight: '600' }}>SUM(Qty × Price)</code>.
                 </p>
               </div>
             </div>
@@ -648,7 +648,7 @@ export default function LandingPage() {
                 <Users size={24} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Farmer Purchase History & Ledger
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -678,7 +678,7 @@ export default function LandingPage() {
                 <Printer size={24} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   15-Second Billing & WiFi Print
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -708,11 +708,11 @@ export default function LandingPage() {
                 <AlertTriangle size={24} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Partial Payment & Credit Tracking
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
-                  Split any sale between cash paid upfront and credit owed. Clear visual status tags: <span style={{ color: 'var(--credit)', fontWeight: '700' }}>Credit Sale</span>, <span style={{ color: 'var(--warning)', fontWeight: '700' }}>Partial Due</span>, and <span style={{ color: 'var(--success)', fontWeight: '700' }}>Paid</span>.
+                  Split any sale between cash paid upfront and credit owed. Clear visual status tags: <span style={{ color: 'var(--credit)', fontWeight: '600' }}>Credit Sale</span>, <span style={{ color: 'var(--warning)', fontWeight: '600' }}>Partial Due</span>, and <span style={{ color: 'var(--success)', fontWeight: '600' }}>Paid</span>.
                 </p>
               </div>
             </div>
@@ -738,7 +738,7 @@ export default function LandingPage() {
                 <QrCode size={24} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Dynamic Shop UPI QR Payments
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -768,7 +768,7 @@ export default function LandingPage() {
                 <TrendingUp size={24} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Revenue & Sales Analytics
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -791,10 +791,10 @@ export default function LandingPage() {
       }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--primary)' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Solving Everyday Dealer Bottlenecks
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '900', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
               Built to Eliminate Retail Friction & Lost Revenue
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
@@ -821,7 +821,7 @@ export default function LandingPage() {
                   border: '1px solid var(--danger-border)',
                   color: 'var(--danger)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -829,7 +829,7 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Lost Farmer Credit & Disputed Dues
                 </h4>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -850,7 +850,7 @@ export default function LandingPage() {
                   border: '1px solid rgba(22, 163, 74, 0.25)',
                   color: 'var(--primary)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -858,7 +858,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '600', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   Transparent farmer ledgers with bill-by-bill purchase history and one-click partial payment recording.
                 </p>
               </div>
@@ -882,7 +882,7 @@ export default function LandingPage() {
                   border: '1px solid var(--danger-border)',
                   color: 'var(--danger)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -890,7 +890,7 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Blind Stock Across 50+ Brands
                 </h4>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -911,7 +911,7 @@ export default function LandingPage() {
                   border: '1px solid rgba(22, 163, 74, 0.25)',
                   color: 'var(--primary)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -919,7 +919,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '600', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   Real-time stock catalog organized by brand (Bayer, Syngenta, UPL) with automatic valuation and out-of-stock badges.
                 </p>
               </div>
@@ -943,7 +943,7 @@ export default function LandingPage() {
                   border: '1px solid var(--danger-border)',
                   color: 'var(--danger)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -951,7 +951,7 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Slow Paper Bills & Math Errors
                 </h4>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -972,7 +972,7 @@ export default function LandingPage() {
                   border: '1px solid rgba(22, 163, 74, 0.25)',
                   color: 'var(--primary)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -980,7 +980,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '600', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   15-second fast checkout with instant thermal receipt generation and automatic stock deduction.
                 </p>
               </div>
@@ -1004,7 +1004,7 @@ export default function LandingPage() {
                   border: '1px solid var(--danger-border)',
                   color: 'var(--danger)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -1012,7 +1012,7 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
                   Messy Cash vs. UPI Reconciliation
                 </h4>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -1033,7 +1033,7 @@ export default function LandingPage() {
                   border: '1px solid rgba(22, 163, 74, 0.25)',
                   color: 'var(--primary)',
                   fontSize: '0.74rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   padding: '0.25rem 0.6rem',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
@@ -1041,7 +1041,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '600', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   Live revenue analytics separating Cash, UPI, and Credit sales automatically with exact payment audit trails.
                 </p>
               </div>
@@ -1066,13 +1066,13 @@ export default function LandingPage() {
                 background: 'var(--primary-light)',
                 color: 'var(--primary)',
                 fontSize: '0.78rem',
-                fontWeight: '700',
+                fontWeight: '500',
                 marginBottom: '1rem',
                 boxShadow: '0 2px 8px rgba(22, 163, 74, 0.08)'
               }}>
                 <Leaf size={14} /> Domain Specialized Software
               </div>
-              <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', fontWeight: '900', color: 'var(--text-main)', lineHeight: 1.2, marginBottom: '1.25rem' }}>
+              <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', lineHeight: 1.2, marginBottom: '1.25rem' }}>
                 Why Generic Supermarket Billing Software Fails Agri-Stores
               </h2>
               <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
@@ -1085,7 +1085,7 @@ export default function LandingPage() {
                     <Check size={16} />
                   </div>
                   <div>
-                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', display: 'block' }}>Brand-First Inventory Architecture</strong>
+                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>Brand-First Inventory Architecture</strong>
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Group chemicals by Bayer, Syngenta, UPL, Dhanuka, and Tata Rallis with pack sizes and active ingredients.</span>
                   </div>
                 </div>
@@ -1095,7 +1095,7 @@ export default function LandingPage() {
                     <Check size={16} />
                   </div>
                   <div>
-                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', display: 'block' }}>Harvest-Cycle Credit Management</strong>
+                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>Harvest-Cycle Credit Management</strong>
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Designed around partial advances and crop cycles (Paddy, Cotton, Sugarcane, Chilli) so no balance is lost.</span>
                   </div>
                 </div>
@@ -1105,7 +1105,7 @@ export default function LandingPage() {
                     <Check size={16} />
                   </div>
                   <div>
-                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', display: 'block' }}>GST & Invoice Compliance</strong>
+                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>GST & Invoice Compliance</strong>
                     <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Generate clean GSTIN-compliant thermal bills and PDF invoices with your shop details and contact numbers.</span>
                   </div>
                 </div>
@@ -1134,7 +1134,7 @@ export default function LandingPage() {
                   left: '1rem',
                   color: '#FFFFFF',
                   fontSize: '0.88rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.4rem'
@@ -1151,7 +1151,7 @@ export default function LandingPage() {
                     border: '1px solid var(--border-color)',
                     borderRadius: '10px',
                     fontSize: '0.82rem',
-                    fontWeight: '700',
+                    fontWeight: '500',
                     color: 'var(--text-main)',
                     display: 'flex',
                     alignItems: 'center',
@@ -1163,7 +1163,7 @@ export default function LandingPage() {
                 ))}
               </div>
 
-              <div style={{ marginTop: '1.5rem', padding: '0.85rem', background: 'var(--primary-light)', borderRadius: '10px', fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '700', textAlign: 'center' }}>
+              <div style={{ marginTop: '1.5rem', padding: '0.85rem', background: 'var(--primary-light)', borderRadius: '10px', fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', textAlign: 'center' }}>
                 + Add custom local brands and fertilizer batches in 1-click
               </div>
             </div>
@@ -1182,10 +1182,10 @@ export default function LandingPage() {
       }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span style={{ fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--primary)' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Simple 4-Step Workflow
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '900', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
               How ChemicalShop Works in Your Store
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '580px', margin: '0.5rem auto 0 auto' }}>
@@ -1206,7 +1206,7 @@ export default function LandingPage() {
                   display: 'inline-block',
                   background: 'var(--primary-light)',
                   color: 'var(--primary)',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   fontSize: '0.82rem',
                   padding: '0.25rem 0.65rem',
                   borderRadius: '6px',
@@ -1214,7 +1214,7 @@ export default function LandingPage() {
                 }}>
                   Step 01
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                   Add Stock by Brand
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -1235,7 +1235,7 @@ export default function LandingPage() {
                   display: 'inline-block',
                   background: 'rgba(37, 99, 235, 0.1)',
                   color: 'var(--credit)',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   fontSize: '0.82rem',
                   padding: '0.25rem 0.65rem',
                   borderRadius: '6px',
@@ -1243,7 +1243,7 @@ export default function LandingPage() {
                 }}>
                   Step 02
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                   Farmer Select & Cart
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -1264,7 +1264,7 @@ export default function LandingPage() {
                   display: 'inline-block',
                   background: 'rgba(217, 119, 6, 0.1)',
                   color: 'var(--warning)',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   fontSize: '0.82rem',
                   padding: '0.25rem 0.65rem',
                   borderRadius: '6px',
@@ -1272,7 +1272,7 @@ export default function LandingPage() {
                 }}>
                   Step 03
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                   Instant Bill & QR Pay
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -1293,7 +1293,7 @@ export default function LandingPage() {
                   display: 'inline-block',
                   background: 'var(--primary-light)',
                   color: 'var(--primary)',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   fontSize: '0.82rem',
                   padding: '0.25rem 0.65rem',
                   borderRadius: '6px',
@@ -1301,7 +1301,7 @@ export default function LandingPage() {
                 }}>
                   Step 04
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                   Track Dues & Settle
                 </h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
@@ -1329,10 +1329,10 @@ export default function LandingPage() {
           position: 'relative',
           overflow: 'hidden'
         }}>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: '900', letterSpacing: '-0.02em', marginBottom: '1rem', color: '#FFFFFF' }}>
+          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: '700', letterSpacing: '-0.015em', marginBottom: '1rem', color: '#FFFFFF' }}>
             Ready to Modernize Your Agri-Chemical Store?
           </h2>
-          <p style={{ fontSize: '1.05rem', color: '#DCFCE7', maxWidth: '650px', margin: '0 auto 2.5rem auto', lineHeight: '1.6', fontWeight: '500' }}>
+          <p style={{ fontSize: '1.05rem', color: '#DCFCE7', maxWidth: '650px', margin: '0 auto 2.5rem auto', lineHeight: '1.6', fontWeight: '400' }}>
             Join smart pesticide and fertilizer dealers simplifying their daily billing, brand stock tracking, and farmer credit collections.
           </p>
 
@@ -1345,7 +1345,7 @@ export default function LandingPage() {
                 background: '#FFFFFF',
                 color: '#15803D',
                 fontSize: '1.05rem',
-                fontWeight: '800',
+                fontWeight: '600',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1366,7 +1366,7 @@ export default function LandingPage() {
                 border: '1px solid rgba(255, 255, 255, 0.3)',
                 color: '#FFFFFF',
                 fontSize: '1.05rem',
-                fontWeight: '700',
+                fontWeight: '500',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1429,10 +1429,10 @@ export default function LandingPage() {
                 <Store size={20} color="#FFFFFF" />
               </div>
               <div>
-                <span style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)', display: 'block', lineHeight: 1.1 }}>
+                <span style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.015em', display: 'block', lineHeight: 1.1 }}>
                   ChemicalShop
                 </span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '600' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '400' }}>
                   Agri-Dealer Management System
                 </span>
               </div>
@@ -1452,7 +1452,7 @@ export default function LandingPage() {
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
                   fontSize: '0.85rem',
-                  fontWeight: '700',
+                  fontWeight: '500',
                   textDecoration: 'none',
                   transition: 'border-color 0.2s'
                 }}
@@ -1472,7 +1472,7 @@ export default function LandingPage() {
                   border: '1px solid rgba(22, 163, 74, 0.25)',
                   color: 'var(--primary)',
                   fontSize: '0.85rem',
-                  fontWeight: '700',
+                  fontWeight: '600',
                   textDecoration: 'none'
                 }}
               >
@@ -1491,7 +1491,7 @@ export default function LandingPage() {
           }}>
             {/* Col 1: Summary */}
             <div style={{ maxWidth: '280px' }}>
-              <span style={{ fontSize: '0.88rem', fontWeight: '800', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
                 About the Platform
               </span>
               <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.6' }}>
@@ -1501,7 +1501,7 @@ export default function LandingPage() {
 
             {/* Col 2: Retail Features */}
             <div>
-              <span style={{ fontSize: '0.88rem', fontWeight: '800', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
                 Retail Capabilities
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', fontSize: '0.85rem' }}>
@@ -1514,7 +1514,7 @@ export default function LandingPage() {
 
             {/* Col 3: Farmer & Credit Solutions */}
             <div>
-              <span style={{ fontSize: '0.88rem', fontWeight: '800', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
                 Farmer & Credit Ledger
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', fontSize: '0.85rem' }}>
@@ -1527,11 +1527,11 @@ export default function LandingPage() {
 
             {/* Col 4: Platform Access */}
             <div>
-              <span style={{ fontSize: '0.88rem', fontWeight: '800', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-main)', display: 'block', marginBottom: '0.75rem' }}>
                 Dealer Portal Access
               </span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', fontSize: '0.85rem' }}>
-                <Link to="/app" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>Existing Dealer Login →</Link>
+                <Link to="/app" style={{ color: 'var(--primary)', fontWeight: '500', textDecoration: 'none' }}>Existing Dealer Login →</Link>
                 <Link to="/app?mode=signup" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Register New Dealership</Link>
                 <span style={{ color: 'var(--text-muted)' }}>GSTIN & Thermal Print Ready</span>
                 <span style={{ color: 'var(--text-muted)' }}>Cloud Synced & Encrypted</span>

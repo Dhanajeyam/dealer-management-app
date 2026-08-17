@@ -165,7 +165,7 @@ export default function BrandListView({
             border: 'none',
             color: '#fff',
             fontSize: '0.95rem',
-            fontWeight: '700',
+            fontWeight: '600',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -187,7 +187,7 @@ export default function BrandListView({
         /* Empty State */
         <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
           <FolderOpen size={48} color="var(--text-dim)" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
             No Brands Found
           </h3>
           <p style={{ color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto 1.5rem auto', fontSize: '0.9rem' }}>
@@ -214,19 +214,19 @@ export default function BrandListView({
           </button>
         </div>
       ) : (
-        /* Brands Grid */
+        /* Brand Cards Grid */
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
-          gap: '1.25rem'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gap: '1.5rem'
         }}>
-          {brandsSummary.map(brand => (
+          {brandsSummary.map((brand) => (
             <div
               key={brand.id || brand.name}
               className="glass-card"
               onClick={() => onSelectBrand(brand)}
               style={{
-                padding: '1.35rem',
+                padding: '1.5rem',
                 borderRadius: '16px',
                 background: 'var(--bg-glass)',
                 border: '1px solid var(--border-color)',
@@ -263,14 +263,14 @@ export default function BrandListView({
                     }}>
                       <Layers size={18} />
                     </div>
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
                       {brand.name}
                     </h3>
                   </div>
 
                   <span style={{
                     fontSize: '0.75rem',
-                    fontWeight: '700',
+                    fontWeight: '500',
                     color: 'var(--primary)',
                     background: 'var(--primary-light)',
                     padding: '0.2rem 0.6rem',
@@ -284,10 +284,10 @@ export default function BrandListView({
                 {/* Subtotal Valuation & Warnings */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', marginBottom: '1.25rem' }}>
                   <div>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase' }}>
                       Inventory Subtotal
                     </span>
-                    <span style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--primary)' }}>
+                    <span style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--primary)' }}>
                       ₹{brand.totalValue.toLocaleString('en-IN')}
                     </span>
                   </div>
@@ -295,7 +295,7 @@ export default function BrandListView({
                   {brand.outOfStockCount > 0 && (
                     <span style={{
                       fontSize: '0.75rem',
-                      fontWeight: '600',
+                      fontWeight: '500',
                       color: 'var(--danger)',
                       background: 'var(--danger-bg)',
                       padding: '0.25rem 0.65rem',
@@ -316,7 +316,7 @@ export default function BrandListView({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                paddingTop: '0.85rem',
+                paddingTop: '1rem',
                 borderTop: '1px solid var(--border-color)',
                 fontSize: '0.85rem',
                 fontWeight: '600',

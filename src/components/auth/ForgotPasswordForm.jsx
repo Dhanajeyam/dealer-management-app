@@ -37,7 +37,7 @@ export default function ForgotPasswordForm({ onBackToLogin }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: '#fff', marginBottom: '0.35rem' }}>
+        <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
           Reset Password
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>

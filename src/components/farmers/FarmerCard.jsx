@@ -67,8 +67,8 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
 
         {/* Farmer Name */}
         <h4 style={{
-          fontSize: '1.15rem',
-          fontWeight: '800',
+          fontSize: '1.1rem',
+          fontWeight: '600',
           color: 'var(--text-main)',
           marginBottom: '0.65rem',
           lineHeight: '1.3'
@@ -81,7 +81,7 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
           {farmer.village ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
               <MapPin size={14} color="var(--accent)" />
-              <span>Village: <strong style={{ color: 'var(--text-main)' }}>{farmer.village}</strong></span>
+              <span>Village: <strong style={{ color: 'var(--text-main)', fontWeight: '500' }}>{farmer.village}</strong></span>
             </div>
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-dim)' }}>
@@ -93,7 +93,7 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
           {farmer.phone ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
               <Phone size={14} color="var(--primary)" />
-              <span>Phone: <strong style={{ color: 'var(--text-main)' }}>{farmer.phone}</strong></span>
+              <span>Phone: <strong style={{ color: 'var(--text-main)', fontWeight: '500' }}>{farmer.phone}</strong></span>
             </div>
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-dim)' }}>
@@ -111,7 +111,7 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
               border: '1px solid var(--danger-border)',
               color: 'var(--danger)',
               fontSize: '0.78rem',
-              fontWeight: '700',
+              fontWeight: '600',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.35rem',
@@ -134,7 +134,7 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
           border: '1px solid var(--border-color)',
           color: 'var(--text-main)',
           fontSize: '0.85rem',
-          fontWeight: '700',
+          fontWeight: '500',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',

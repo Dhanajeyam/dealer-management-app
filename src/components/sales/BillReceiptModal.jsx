@@ -94,6 +94,7 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
             padding: 20px !important;
             background: #ffffff !important;
             color: #000000 !important;
+            font-family: var(--font-family, 'Inter', sans-serif) !important;
             box-shadow: none !important;
             border: none !important;
           }
@@ -199,7 +200,7 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
               padding: '1.75rem',
               borderRadius: '12px',
               border: '1px solid var(--border-color)',
-              fontFamily: 'system-ui, -apple-system, sans-serif'
+              fontFamily: 'var(--font-family)'
             }}>
               {/* Receipt Header */}
               {(() => {
@@ -214,7 +215,7 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                     marginBottom: '1.25rem'
                   }}>
                     <div>
-                      <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--primary)', margin: 0, letterSpacing: '-0.02em' }}>
+                      <h2 style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--primary)', margin: 0, letterSpacing: '-0.01em' }}>
                         {shopProfile?.shop_name || 'Agri-Chemical Distribution'}
                       </h2>
                       <p style={{ fontSize: '0.85rem', color: '#475569', margin: '0.2rem 0 0 0' }}>
@@ -350,13 +351,13 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                 gap: '0.5rem'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#475569' }}>Total Bill Amount:</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a' }}>₹{grandTotal.toFixed(2)}</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#475569' }}>Total Bill Amount:</span>
+                  <span style={{ fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>₹{grandTotal.toFixed(2)}</span>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#475569' }}>Total Amount Paid:</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#047857' }}>₹{totalPaid.toFixed(2)}</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: '500', color: '#475569' }}>Total Amount Paid:</span>
+                  <span style={{ fontSize: '1.1rem', fontWeight: '700', color: '#047857' }}>₹{totalPaid.toFixed(2)}</span>
                 </div>
 
                 <div style={{
@@ -368,12 +369,12 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                   marginTop: '0.25rem'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '0.95rem', fontWeight: '700', color: '#0f172a' }}>Balance Due:</span>
+                    <span style={{ fontSize: '0.95rem', fontWeight: '600', color: '#0f172a' }}>Balance Due:</span>
                     <span style={{
                       padding: '0.15rem 0.5rem',
                       borderRadius: '4px',
                       fontSize: '0.72rem',
-                      fontWeight: '800',
+                      fontWeight: '600',
                       background: statusBg,
                       color: statusColor,
                       border: `1px solid ${statusBorder}`
@@ -381,7 +382,7 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                       {paymentStatusLabel}
                     </span>
                   </div>
-                  <span style={{ fontSize: '1.25rem', fontWeight: '800', color: balanceDue > 0 ? '#b91c1c' : '#047857' }}>
+                  <span style={{ fontSize: '1.2rem', fontWeight: '700', color: balanceDue > 0 ? '#b91c1c' : '#047857' }}>
                     ₹{balanceDue.toFixed(2)}
                   </span>
                 </div>

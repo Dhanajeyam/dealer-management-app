@@ -53,7 +53,7 @@ export default function TrialExpiredGate({ profile, user, onRefresh, onSignOut }
           <Hourglass size={36} color="#DC2626" className="status-pulse" />
         </div>
 
-        <h2 style={{ fontSize: '1.65rem', fontWeight: '800', color: '#0F172A', marginBottom: '0.6rem', letterSpacing: '-0.02em' }}>
+        <h2 style={{ fontSize: '1.65rem', fontWeight: '700', color: '#0F172A', marginBottom: '0.6rem', letterSpacing: '-0.015em' }}>
           Your Free Trial Has Ended
         </h2>
         <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.75rem' }}>
@@ -74,7 +74,7 @@ export default function TrialExpiredGate({ profile, user, onRefresh, onSignOut }
           fontSize: '0.88rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#0F172A', fontWeight: '700' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', color: '#0F172A', fontWeight: '600' }}>
               <Store size={18} color="#16A34A" />
               <span style={{ fontSize: '0.95rem' }}>{profile?.shop_name || 'Dealer Shop'}</span>
             </div>
@@ -85,7 +85,7 @@ export default function TrialExpiredGate({ profile, user, onRefresh, onSignOut }
               color: '#DC2626',
               border: '1px solid #FECACA',
               fontSize: '0.72rem',
-              fontWeight: '800',
+              fontWeight: '600',
               textTransform: 'uppercase'
             }}>
               Trial Expired

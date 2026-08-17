@@ -36,7 +36,7 @@ export default function BlockedGate({ user, onSignOut }) {
           <ShieldX size={36} color="#DC2626" />
         </div>
 
-        <h2 style={{ fontSize: '1.65rem', fontWeight: '800', color: '#0F172A', marginBottom: '0.6rem', letterSpacing: '-0.02em' }}>
+        <h2 style={{ fontSize: '1.65rem', fontWeight: '700', color: '#0F172A', marginBottom: '0.6rem', letterSpacing: '-0.015em' }}>
           Account Blocked
         </h2>
         <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.75rem' }}>

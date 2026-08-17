@@ -123,7 +123,7 @@ export default function DealerProfileModal({ profile, isOpen, onClose, onProfile
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Store size={22} color="var(--primary)" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Shop Profile Settings
             </h3>
           </div>
@@ -245,8 +245,7 @@ export default function DealerProfileModal({ profile, isOpen, onClose, onProfile
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.9rem',
-                  letterSpacing: '0.05em'
+                  fontSize: '0.9rem'
                 }}
               />
             </div>
@@ -263,7 +262,7 @@ export default function DealerProfileModal({ profile, isOpen, onClose, onProfile
                 background: 'transparent',
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-muted)',
-                fontWeight: '600',
+                fontWeight: '500',
                 fontSize: '0.88rem',
                 cursor: 'pointer'
               }}

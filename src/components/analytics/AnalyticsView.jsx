@@ -179,7 +179,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
         padding: '1.25rem 1.5rem'
       }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <TrendingUp size={24} color="var(--primary)" />
             Dealer Performance &amp; Analytics
           </h2>
@@ -207,7 +207,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
               background: 'var(--bg-surface-hover)',
               border: '1px solid var(--border-color)',
               color: 'var(--text-main)',
-              fontWeight: '600',
+              fontWeight: '500',
               fontSize: '0.85rem',
               cursor: loading ? 'wait' : 'pointer'
             }}
@@ -235,7 +235,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
           justifyContent: 'space-between'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase' }}>
               Today's Revenue
             </span>
             <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -243,10 +243,10 @@ export default function AnalyticsView({ onNavigateToStock }) {
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
               ₹{revenue.today_billed.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '700', marginTop: '0.3rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', marginTop: '0.3rem' }}>
               Cash Collected: ₹{revenue.today_collected.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
@@ -266,7 +266,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
           justifyContent: 'space-between'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--accent)', textTransform: 'uppercase' }}>
               This Week's Revenue
             </span>
             <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--accent-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -274,10 +274,10 @@ export default function AnalyticsView({ onNavigateToStock }) {
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
               ₹{revenue.this_week_billed.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: '700', marginTop: '0.3rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: '500', marginTop: '0.3rem' }}>
               Cash Collected: ₹{revenue.this_week_collected.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
@@ -297,7 +297,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
           justifyContent: 'space-between'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase' }}>
               This Month's Revenue
             </span>
             <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -305,10 +305,10 @@ export default function AnalyticsView({ onNavigateToStock }) {
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
               ₹{revenue.this_month_billed.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '700', marginTop: '0.3rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', marginTop: '0.3rem' }}>
               Cash Collected: ₹{revenue.this_month_collected.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
@@ -329,7 +329,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Award size={22} color="var(--warning)" />
-              <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
                 Top 5 Best-Selling Products
               </h3>
             </div>
@@ -377,7 +377,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
                         borderRadius: '8px',
                         background: `${badgeColor}20`,
                         color: badgeColor,
-                        fontWeight: '800',
+                        fontWeight: '600',
                         fontSize: '0.85rem',
                         display: 'flex',
                         alignItems: 'center',
@@ -387,7 +387,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
                         #{idx + 1}
                       </div>
                       <div>
-                        <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.9rem' }}>
+                        <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '0.9rem' }}>
                           {p.product_name}
                         </div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -397,7 +397,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
                     </div>
 
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '0.92rem' }}>
+                      <div style={{ fontWeight: '600', color: 'var(--primary)', fontSize: '0.92rem' }}>
                         {Number(p.total_qty_sold).toLocaleString('en-IN')} units
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -416,7 +416,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <AlertTriangle size={22} color="var(--danger)" />
-              <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
                 Low-Stock Reorder List
               </h3>
             </div>
@@ -435,7 +435,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
                   fontSize: '0.78rem',
-                  fontWeight: '600'
+                  fontWeight: '500'
                 }}
               >
                 <option value={5}>&lt; 5 units</option>
@@ -461,7 +461,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
               background: 'var(--success-bg)'
             }}>
               <CheckCircle2 size={32} color="var(--success)" style={{ marginBottom: '0.5rem' }} />
-              <div style={{ fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.2rem' }}>
+              <div style={{ fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>
                 All Stock Levels Healthy
               </div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
@@ -488,7 +488,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
                     }}
                   >
                     <div>
-                      <div style={{ fontWeight: '700', color: 'var(--text-main)', fontSize: '0.9rem' }}>
+                      <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '0.9rem' }}>
                         {prod.name}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -503,7 +503,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
                           padding: '0.15rem 0.5rem',
                           borderRadius: '4px',
                           fontSize: '0.72rem',
-                          fontWeight: '800',
+                          fontWeight: '500',
                           background: isOutOfStock ? 'var(--danger)' : 'var(--warning)',
                           color: '#fff',
                           marginBottom: '0.2rem'

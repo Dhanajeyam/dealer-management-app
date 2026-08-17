@@ -279,7 +279,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
           color: 'var(--warning)',
           border: '1px solid var(--warning-border)',
           fontSize: '0.78rem',
-          fontWeight: '800'
+          fontWeight: '600'
         }}>
           <Clock size={13} /> {trialInfo.text}
         </div>
@@ -349,7 +349,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                       <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Total Products</span>
                       <Package size={18} color="var(--primary)" />
                     </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{totalItems}</div>
+                    <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)' }}>{totalItems}</div>
                   </div>
 
                   <div className="glass-card" style={{ padding: '1.25rem' }}>
@@ -357,7 +357,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                       <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Active Brands</span>
                       <Tag size={18} color="var(--accent)" />
                     </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{totalBrandsCount}</div>
+                    <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)' }}>{totalBrandsCount}</div>
                   </div>
 
                   <div className="glass-card" style={{ padding: '1.25rem', borderColor: outOfStockCount > 0 ? 'var(--danger-border)' : 'var(--border-color)' }}>
@@ -365,7 +365,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                       <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Out of Stock</span>
                       <AlertTriangle size={18} color={outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-muted)'} />
                     </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: '800', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
+                    <div style={{ fontSize: '1.65rem', fontWeight: '700', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
                       {outOfStockCount}
                     </div>
                   </div>
@@ -375,7 +375,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                       <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Inventory Value</span>
                       <IndianRupee size={18} color="var(--primary)" />
                     </div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--primary)' }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--primary)' }}>
                       ₹{totalStockValue.toLocaleString('en-IN')}
                     </div>
                   </div>
@@ -415,7 +415,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                   <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Registered Farmers</span>
                   <Users size={18} color="var(--primary)" />
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{farmers.length}</div>
+                <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)' }}>{farmers.length}</div>
               </div>
 
               <div className="glass-card" style={{ padding: '1.25rem' }}>
@@ -423,7 +423,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                   <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Villages Covered</span>
                   <MapPin size={18} color="var(--accent)" />
                 </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)' }}>{totalVillagesCount}</div>
+                <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)' }}>{totalVillagesCount}</div>
               </div>
             </div>
 
@@ -542,6 +542,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         {activeTab === 'sales' && (
           <SalesLogView
             user={user}
+            shopProfile={effectiveProfile}
             onReprintBill={(billData) => setActiveReceiptData(billData)}
             onNewSale={() => setIsNewSaleOpen(true)}
           />
@@ -601,7 +602,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         }}>
           <div className="glass-card" style={{ maxWidth: '420px', width: '100%', padding: '2rem', textAlign: 'center' }}>
             <Trash2 size={36} color="#ef4444" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
               Delete Product?
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.5' }}>
@@ -610,14 +611,14 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button
                 onClick={() => setDeletingProduct(null)}
-                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-muted)', fontWeight: '600', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-muted)', fontWeight: '500', cursor: 'pointer' }}
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteProductConfirm}
                 disabled={deletingProductStatus}
-                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: '#ef4444', border: 'none', color: '#fff', fontWeight: '600', cursor: deletingProductStatus ? 'wait' : 'pointer' }}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: '#ef4444', border: 'none', color: '#fff', fontWeight: '500', cursor: deletingProductStatus ? 'wait' : 'pointer' }}
               >
                 {deletingProductStatus ? 'Deleting...' : 'Confirm Delete'}
               </button>
@@ -642,6 +643,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         farmer={viewingFarmer}
         isOpen={Boolean(viewingFarmer)}
         onClose={() => setViewingFarmer(null)}
+        shopProfile={effectiveProfile}
         onReprintBill={(saleData) => setActiveReceiptData(saleData)}
       />
 
@@ -676,7 +678,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         }}>
           <div className="glass-card" style={{ maxWidth: '420px', width: '100%', padding: '2rem', textAlign: 'center' }}>
             <Trash2 size={36} color="#ef4444" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
               Delete Farmer Record?
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.5' }}>
@@ -685,14 +687,14 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button
                 onClick={() => setDeletingFarmer(null)}
-                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-muted)', fontWeight: '600', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-muted)', fontWeight: '500', cursor: 'pointer' }}
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteFarmerConfirm}
                 disabled={deletingFarmerStatus}
-                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: '#ef4444', border: 'none', color: '#fff', fontWeight: '600', cursor: deletingFarmerStatus ? 'wait' : 'pointer' }}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '10px', background: '#ef4444', border: 'none', color: '#fff', fontWeight: '500', cursor: deletingFarmerStatus ? 'wait' : 'pointer' }}
               >
                 {deletingFarmerStatus ? 'Deleting...' : 'Confirm Delete'}
               </button>

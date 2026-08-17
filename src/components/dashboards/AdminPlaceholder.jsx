@@ -81,7 +81,7 @@ export default function AdminPlaceholder({ profile, user, onSignOut }) {
           }}>
             <ShieldCheck size={16} /> Admin Authenticated
           </div>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '800', color: '#fff', marginBottom: '0.75rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.75rem', letterSpacing: '-0.015em' }}>
             Admin Dashboard (Coming in Step 9)
           </h2>
           <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1rem', lineHeight: '1.6' }}>
@@ -97,7 +97,7 @@ export default function AdminPlaceholder({ profile, user, onSignOut }) {
         }}>
           <div className="glass-card" style={{ padding: '1.75rem', opacity: 0.7 }}>
             <Users size={28} color="#3b82f6" style={{ marginBottom: '1rem' }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem' }}>Dealer Management</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>Dealer Management</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
               Approve pending dealer signups, edit dealer details, or block compromised accounts.
             </p>

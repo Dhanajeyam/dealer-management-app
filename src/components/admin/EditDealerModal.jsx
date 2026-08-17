@@ -139,7 +139,7 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Building2 size={22} color="var(--info)" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Edit Dealer & Subscription
             </h3>
           </div>
@@ -229,8 +229,7 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.9rem',
-                  letterSpacing: '0.05em'
+                  fontSize: '0.9rem'
                 }}
               />
             </div>
@@ -291,7 +290,7 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
             gap: '0.85rem'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.88rem', fontWeight: '800', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Clock size={16} color={isTrial ? 'var(--warning)' : 'var(--primary)'} /> Subscription Model
               </span>
               <button
@@ -304,7 +303,7 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
                   background: isTrial ? 'var(--warning-bg)' : 'var(--primary-light)',
                   color: isTrial ? 'var(--warning)' : 'var(--primary)',
                   fontSize: '0.78rem',
-                  fontWeight: '800',
+                  fontWeight: '600',
                   cursor: 'pointer'
                 }}
               >
@@ -359,14 +358,14 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
                   <button
                     type="button"
                     onClick={() => setIsTrial(false)}
-                    style={{ padding: '0.25rem 0.55rem', borderRadius: '6px', background: 'var(--primary-light)', border: '1px solid rgba(22,163,74,0.3)', color: 'var(--primary)', fontSize: '0.75rem', fontWeight: '800', cursor: 'pointer', marginLeft: 'auto' }}
+                    style={{ padding: '0.25rem 0.55rem', borderRadius: '6px', background: 'var(--primary-light)', border: '1px solid rgba(22,163,74,0.3)', color: 'var(--primary)', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer', marginLeft: 'auto' }}
                   >
                     Make Paid
                   </button>
                 </div>
               </div>
             ) : (
-              <div style={{ fontSize: '0.82rem', color: 'var(--primary)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <div style={{ fontSize: '0.82rem', color: 'var(--primary)', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Sparkles size={15} /> Permanent account with no expiration or access restrictions.
               </div>
             )}
@@ -383,7 +382,7 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
                 background: 'transparent',
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-muted)',
-                fontWeight: '600',
+                fontWeight: '500',
                 fontSize: '0.88rem',
                 cursor: 'pointer'
               }}
@@ -400,7 +399,7 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
                 background: 'var(--primary)',
                 color: '#fff',
                 border: 'none',
-                fontWeight: '700',
+                fontWeight: '600',
                 fontSize: '0.88rem',
                 cursor: loading ? 'wait' : 'pointer',
                 display: 'flex',

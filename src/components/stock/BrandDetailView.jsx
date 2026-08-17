@@ -138,7 +138,7 @@ export default function BrandDetailView({
               border: '1px solid var(--border-color)',
               color: 'var(--text-muted)',
               fontSize: '0.85rem',
-              fontWeight: '600',
+              fontWeight: '500',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
             }}
@@ -148,7 +148,7 @@ export default function BrandDetailView({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <Layers size={22} color="var(--primary)" />
-            <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
               {brand.name}
             </h2>
           </div>
@@ -166,7 +166,7 @@ export default function BrandDetailView({
                 border: '1px solid var(--danger-border)',
                 color: 'var(--danger)',
                 fontSize: '0.85rem',
-                fontWeight: '600',
+                fontWeight: '500',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -187,7 +187,7 @@ export default function BrandDetailView({
               border: 'none',
               color: '#fff',
               fontSize: '0.9rem',
-              fontWeight: '700',
+              fontWeight: '600',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
@@ -230,7 +230,7 @@ export default function BrandDetailView({
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
             Total Brand Products
           </span>
-          <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-main)' }}>
+          <span style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--text-main)' }}>
             {totalCount}
           </span>
         </div>
@@ -239,7 +239,7 @@ export default function BrandDetailView({
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
             Current Page Value
           </span>
-          <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--primary)' }}>
+          <span style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--primary)' }}>
             ₹{brandValuation.toLocaleString('en-IN')}
           </span>
         </div>
@@ -248,7 +248,7 @@ export default function BrandDetailView({
           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
             Out of Stock on Page
           </span>
-          <span style={{ fontSize: '1.4rem', fontWeight: '800', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
+          <span style={{ fontSize: '1.35rem', fontWeight: '700', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
             {outOfStockCount}
           </span>
         </div>
@@ -287,7 +287,7 @@ export default function BrandDetailView({
       ) : products.length === 0 ? (
         <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
           <Package size={48} color="var(--text-dim)" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
             No Products Found
           </h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.5rem' }}>
@@ -348,7 +348,7 @@ export default function BrandDetailView({
               border: '1px solid var(--border-color)'
             }}>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Showing page <strong style={{ color: 'var(--text-main)' }}>{page + 1}</strong> of <strong style={{ color: 'var(--text-main)' }}>{totalPages}</strong> ({totalCount} total items)
+                Showing page <strong style={{ color: 'var(--text-main)', fontWeight: '600' }}>{page + 1}</strong> of <strong style={{ color: 'var(--text-main)', fontWeight: '600' }}>{totalPages}</strong> ({totalCount} total items)
               </span>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -360,9 +360,9 @@ export default function BrandDetailView({
                     borderRadius: '8px',
                     background: 'var(--bg-glass)',
                     border: '1px solid var(--border-color)',
-                    color: page === 0 ? 'var(--text-dim)' : '#fff',
+                    color: page === 0 ? 'var(--text-dim)' : 'var(--text-main)',
                     fontSize: '0.82rem',
-                    fontWeight: '600',
+                    fontWeight: '500',
                     cursor: page === 0 ? 'not-allowed' : 'pointer',
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -380,9 +380,9 @@ export default function BrandDetailView({
                     borderRadius: '8px',
                     background: 'var(--bg-glass)',
                     border: '1px solid var(--border-color)',
-                    color: page >= totalPages - 1 ? 'var(--text-dim)' : '#fff',
+                    color: page >= totalPages - 1 ? 'var(--text-dim)' : 'var(--text-main)',
                     fontSize: '0.82rem',
-                    fontWeight: '600',
+                    fontWeight: '500',
                     cursor: page >= totalPages - 1 ? 'not-allowed' : 'pointer',
                     display: 'inline-flex',
                     alignItems: 'center',

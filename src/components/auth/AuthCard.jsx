@@ -35,7 +35,7 @@ export default function AuthCard({ onAuthSuccess, initialView }) {
             gap: '0.4rem',
             color: 'var(--text-muted)',
             fontSize: '0.85rem',
-            fontWeight: '600',
+            fontWeight: '500',
             textDecoration: 'none',
             padding: '0.35rem 0.75rem',
             borderRadius: '8px',
@@ -63,7 +63,7 @@ export default function AuthCard({ onAuthSuccess, initialView }) {
         }}>
           <Sparkles size={28} color="#ffffff" />
         </div>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+        <h2 style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.35rem', letterSpacing: '-0.015em' }}>
           Agri-Chemical Portal
         </h2>
         <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>

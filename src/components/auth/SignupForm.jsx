@@ -104,7 +104,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
   return (
     <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#fff', marginBottom: '0.2rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.2rem' }}>
           Create Dealer Account
         </h3>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -245,8 +245,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }) {
               border: '1px solid var(--border-color)',
               color: 'var(--text-main)',
               fontSize: '0.95rem',
-              outline: 'none',
-              letterSpacing: '0.05em'
+              outline: 'none'
             }}
           />
         </div>

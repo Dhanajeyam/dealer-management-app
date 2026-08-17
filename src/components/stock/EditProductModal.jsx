@@ -123,7 +123,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Edit3 size={20} color="var(--primary)" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Edit Product Details</h3>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>Edit Product Details</h3>
           </div>
           <button
             onClick={onClose}

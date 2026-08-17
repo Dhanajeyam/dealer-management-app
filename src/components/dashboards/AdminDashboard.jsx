@@ -361,7 +361,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: '#fff', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <h2 style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Clock size={22} color="#f59e0b" />
                 Pending Dealer Approvals ({pendingDealers.length})
               </h2>
@@ -379,7 +379,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-main)',
                 fontSize: '0.85rem',
-                fontWeight: '600',
+                fontWeight: '500',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -398,7 +398,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
           ) : pendingDealers.length === 0 ? (
             <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
               <CheckCircle2 size={48} color="var(--primary)" style={{ marginBottom: '1rem' }} />
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                 All Clear! No Pending Approvals
               </h3>
               <p style={{ color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto', fontSize: '0.9rem' }}>
@@ -435,7 +435,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                           color: 'var(--warning)',
                           border: '1px solid var(--warning-border)',
                           fontSize: '0.75rem',
-                          fontWeight: '700',
+                          fontWeight: '500',
                           textTransform: 'uppercase'
                         }}>
                           Pending Review
@@ -445,7 +445,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         </span>
                       </div>
 
-                      <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 0.4rem 0' }}>
+                      <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.4rem 0' }}>
                         {d.shop_name || 'Unnamed Business'}
                       </h3>
 
@@ -462,12 +462,12 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         onClick={() => handleUpdateDealerStatus(d.id, 'approved')}
                         style={{
                           flex: 1,
-                          padding: '0.65rem',
-                          borderRadius: '10px',
+                          padding: '0.55rem 0.85rem',
+                          borderRadius: '8px',
                           background: 'var(--primary)',
                           border: 'none',
-                          color: '#fff',
-                          fontWeight: '700',
+                          color: '#FFFFFF',
+                          fontWeight: '600',
                           fontSize: '0.85rem',
                           cursor: isProcessing ? 'wait' : 'pointer',
                           display: 'flex',
@@ -476,14 +476,15 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                           gap: '0.4rem',
                           boxShadow: 'var(--shadow-glow)'
                         }}
+                        title="Approve access and grant 7-day trial"
                       >
                         {isProcessing && actionStatus.type === 'approved' ? (
                           <>
-                            <Loader2 size={16} className="status-pulse" /> Approving...
+                            <Loader2 size={15} className="status-pulse" /> Approving...
                           </>
                         ) : (
                           <>
-                            <CheckCircle2 size={16} /> Approve Access
+                            <CheckCircle2 size={15} /> Approve Access
                           </>
                         )}
                       </button>
@@ -493,12 +494,12 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         disabled={isProcessing}
                         onClick={() => handleUpdateDealerStatus(d.id, 'blocked')}
                         style={{
-                          padding: '0.65rem 0.9rem',
-                          borderRadius: '10px',
+                          padding: '0.55rem 0.85rem',
+                          borderRadius: '8px',
                           background: 'var(--danger-bg)',
                           border: '1px solid var(--danger-border)',
                           color: 'var(--danger)',
-                          fontWeight: '700',
+                          fontWeight: '500',
                           fontSize: '0.85rem',
                           cursor: isProcessing ? 'wait' : 'pointer',
                           display: 'flex',
@@ -554,7 +555,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                     borderRadius: '12px',
                     background: 'var(--bg-surface-hover)',
                     border: '1px solid var(--border-color)',
-                    color: '#fff',
+                    color: 'var(--text-main)',
                     fontSize: '0.9rem',
                     outline: 'none'
                   }}
@@ -581,7 +582,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         background: isSel ? 'rgba(59, 130, 246, 0.18)' : 'var(--bg-surface-hover)',
                         color: isSel ? '#60a5fa' : 'var(--text-muted)',
                         fontSize: '0.85rem',
-                        fontWeight: '600',
+                        fontWeight: '500',
                         cursor: 'pointer',
                         whiteSpace: 'nowrap',
                         textTransform: 'capitalize'
@@ -646,7 +647,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                               background: statusBadge.bg,
                               color: statusBadge.color,
                               fontSize: '0.75rem',
-                              fontWeight: '700'
+                              fontWeight: '500'
                             }}>
                               {statusBadge.text}
                             </span>
@@ -660,7 +661,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                   color: trialInfo.badgeColor,
                                   border: `1px solid ${trialInfo.badgeColor}40`,
                                   fontSize: '0.75rem',
-                                  fontWeight: '800',
+                                  fontWeight: '600',
                                   display: 'inline-flex',
                                   alignItems: 'center',
                                   gap: '0.3rem'
@@ -676,7 +677,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                   color: 'var(--primary)',
                                   border: '1px solid rgba(22, 163, 74, 0.25)',
                                   fontSize: '0.75rem',
-                                  fontWeight: '800',
+                                  fontWeight: '600',
                                   display: 'inline-flex',
                                   alignItems: 'center',
                                   gap: '0.3rem'
@@ -692,7 +693,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                           </span>
                         </div>
 
-                        <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 0.4rem 0' }}>
+                        <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: '0 0 0.4rem 0' }}>
                           {d.shop_name || 'Unnamed Business'}
                         </h3>
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -713,7 +714,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                               background: 'var(--info-bg)',
                               border: '1px solid var(--info-border)',
                               color: 'var(--info)',
-                              fontWeight: '600',
+                              fontWeight: '500',
                               fontSize: '0.8rem',
                               cursor: 'pointer',
                               display: 'flex',
@@ -734,7 +735,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                               background: 'var(--bg-surface-hover)',
                               border: '1px solid var(--border-color)',
                               color: 'var(--text-main)',
-                              fontWeight: '600',
+                              fontWeight: '500',
                               fontSize: '0.8rem',
                               cursor: 'pointer',
                               display: 'flex',
@@ -762,7 +763,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                     background: 'var(--primary)',
                                     color: '#FFFFFF',
                                     border: 'none',
-                                    fontWeight: '700',
+                                    fontWeight: '600',
                                     fontSize: '0.78rem',
                                     cursor: isActionLoading ? 'wait' : 'pointer',
                                     display: 'flex',
@@ -786,7 +787,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                     background: 'var(--warning-bg)',
                                     border: '1px solid var(--warning-border)',
                                     color: 'var(--warning)',
-                                    fontWeight: '700',
+                                    fontWeight: '500',
                                     fontSize: '0.78rem',
                                     cursor: isActionLoading ? 'wait' : 'pointer',
                                     display: 'flex',
@@ -799,7 +800,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                 </button>
                               </div>
                             ) : (
-                              <div style={{ fontSize: '0.76rem', color: 'var(--primary)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                              <div style={{ fontSize: '0.76rem', color: 'var(--primary)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                                 <CheckCircle2 size={13} /> Permanent Access (No Expiry)
                               </div>
                             )}
@@ -820,7 +821,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                 background: 'transparent',
                                 border: '1px solid var(--danger-border)',
                                 color: 'var(--danger)',
-                                fontWeight: '700',
+                                fontWeight: '500',
                                 fontSize: '0.78rem',
                                 cursor: isActionLoading ? 'wait' : 'pointer',
                                 display: 'flex',
@@ -849,7 +850,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                 background: 'var(--primary)',
                                 color: '#FFFFFF',
                                 border: 'none',
-                                fontWeight: '700',
+                                fontWeight: '600',
                                 fontSize: '0.82rem',
                                 cursor: isActionLoading ? 'wait' : 'pointer',
                                 display: 'flex',
@@ -879,7 +880,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                 background: 'var(--primary)',
                                 color: '#FFFFFF',
                                 border: 'none',
-                                fontWeight: '700',
+                                fontWeight: '600',
                                 fontSize: '0.8rem',
                                 cursor: isActionLoading ? 'wait' : 'pointer',
                                 display: 'flex',
@@ -902,7 +903,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                                 background: 'var(--danger-bg)',
                                 border: '1px solid var(--danger-border)',
                                 color: 'var(--danger)',
-                                fontWeight: '700',
+                                fontWeight: '500',
                                 fontSize: '0.8rem',
                                 cursor: isActionLoading ? 'wait' : 'pointer',
                                 display: 'flex',
@@ -930,7 +931,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: '800', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <h2 style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                   <Trophy size={24} color="var(--warning)" />
                   Dealer Revenue Leaderboard
                 </h2>
@@ -950,7 +951,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                     border: 'none',
                     background: leaderboardSort === 'month' ? 'var(--primary)' : 'transparent',
                     color: leaderboardSort === 'month' ? '#fff' : 'var(--text-muted)',
-                    fontWeight: '700',
+                    fontWeight: '500',
                     fontSize: '0.8rem',
                     cursor: 'pointer'
                   }}
@@ -966,7 +967,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                     border: 'none',
                     background: leaderboardSort === 'alltime' ? 'var(--primary)' : 'transparent',
                     color: leaderboardSort === 'alltime' ? '#fff' : 'var(--text-muted)',
-                    fontWeight: '700',
+                    fontWeight: '500',
                     fontSize: '0.8rem',
                     cursor: 'pointer'
                   }}
@@ -984,7 +985,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
             ) : sortedLeaderboard.length === 0 ? (
               <div className="glass-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
                 <Award size={48} color="var(--text-dim)" style={{ marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
                   No Leaderboard Data Yet
                 </h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
@@ -1017,7 +1018,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                           borderRadius: '10px',
                           background: `${badgeColor}25`,
                           color: badgeColor,
-                          fontWeight: '800',
+                          fontWeight: '600',
                           fontSize: '1rem',
                           display: 'flex',
                           alignItems: 'center',
@@ -1028,7 +1029,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                         </div>
 
                         <div>
-                          <div style={{ fontWeight: '800', color: 'var(--text-main)', fontSize: '1.05rem' }}>
+                          <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1.05rem' }}>
                             {lb.shop_name}
                           </div>
                           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -1040,14 +1041,14 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                       <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                         <div>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>This Month</div>
-                          <div style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '1.1rem' }}>
+                          <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.1rem' }}>
                             ₹{Number(lb.this_month_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </div>
                         </div>
 
                         <div style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: '1.25rem' }}>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>All-Time</div>
-                          <div style={{ fontWeight: '700', color: 'var(--info)', fontSize: '1rem' }}>
+                          <div style={{ fontWeight: '600', color: 'var(--info)', fontSize: '1rem' }}>
                             ₹{Number(lb.all_time_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </div>
                         </div>

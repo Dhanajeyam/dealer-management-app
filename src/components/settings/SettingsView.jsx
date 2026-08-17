@@ -189,7 +189,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
             <Store size={22} color="var(--primary)" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Business Profile
             </h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
@@ -214,7 +214,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
 
         <form onSubmit={handleSaveProfile} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Shop / Store Name <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -241,7 +241,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Contact Phone Number
             </label>
             <div style={{ position: 'relative' }}>
@@ -267,7 +267,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               GSTIN Registration Number
             </label>
             <div style={{ position: 'relative' }}>
@@ -294,7 +294,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Store UPI ID (For QR Payments)
             </label>
             <div style={{ position: 'relative' }}>
@@ -321,7 +321,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
 
 
           <div style={{ gridColumn: '1 / -1' }}>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Shop Address (Printed on Bills)
             </label>
             <div style={{ position: 'relative' }}>
@@ -352,7 +352,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
               type="submit"
               disabled={savingProfile}
               className="btn-new-sale"
-              style={{ padding: '0.75rem 1.75rem', fontSize: '0.9rem' }}
+              style={{ padding: '0.75rem 1.75rem', fontSize: '0.9rem', fontWeight: '600' }}
             >
               <Save size={18} />
               {savingProfile ? 'Saving...' : 'Save Business Profile'}
@@ -377,7 +377,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
             <ShieldCheck size={22} color="var(--primary)" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Account &amp; Security
             </h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
@@ -402,7 +402,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
 
         {/* Read-Only Account Email */}
         <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+          <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
             Registered Account Email (Display Only)
           </label>
           <div style={{
@@ -415,7 +415,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
             border: '1px solid var(--border-color)',
             color: 'var(--text-main)',
             fontSize: '0.9rem',
-            fontWeight: '600'
+            fontWeight: '500'
           }}>
             <Mail size={18} color="var(--primary)" />
             <span>{user?.email || 'N/A'}</span>
@@ -425,7 +425,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
         {/* Password Update Form */}
         <form onSubmit={handleUpdatePassword} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Current Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -459,7 +459,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               New Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -493,7 +493,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Confirm New Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -529,7 +529,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
                 background: 'var(--primary)',
                 border: 'none',
                 color: '#fff',
-                fontWeight: '700',
+                fontWeight: '600',
                 fontSize: '0.875rem',
                 cursor: updatingPassword ? 'wait' : 'pointer',
                 boxShadow: '0 4px 14px rgba(50, 214, 107, 0.28)',
@@ -561,7 +561,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
             <Palette size={22} color="var(--primary)" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Theme &amp; Appearance
             </h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
@@ -604,7 +604,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
               <Sun size={20} color={themeSetting === 'light' ? '#ffffff' : 'var(--text-muted)'} />
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontWeight: '800', fontSize: '0.95rem' }}>Light Mode</div>
+              <div style={{ fontWeight: '600', fontSize: '0.95rem' }}>Light Mode</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Fresh high-contrast green</div>
             </div>
           </button>
@@ -640,7 +640,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
               <Moon size={20} color={themeSetting === 'dark' ? '#ffffff' : 'var(--text-muted)'} />
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontWeight: '800', fontSize: '0.95rem' }}>Dark Mode</div>
+              <div style={{ fontWeight: '600', fontSize: '0.95rem' }}>Dark Mode</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Deep forest night theme</div>
             </div>
           </button>
@@ -676,7 +676,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
               <Laptop size={20} color={themeSetting === 'system' ? '#ffffff' : 'var(--text-muted)'} />
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontWeight: '800', fontSize: '0.95rem' }}>System Auto</div>
+              <div style={{ fontWeight: '600', fontSize: '0.95rem' }}>System Auto</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>Follow OS preference ({effectiveTheme})</div>
             </div>
           </button>

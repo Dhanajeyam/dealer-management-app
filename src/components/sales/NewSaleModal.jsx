@@ -777,17 +777,17 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
               gap: '0.85rem'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-muted)' }}>
+                <span style={{ fontSize: '0.95rem', fontWeight: '500', color: 'var(--text-muted)' }}>
                   Total Bill Amount:
                 </span>
-                <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--primary)' }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--primary)' }}>
                   ₹{grandTotal.toFixed(2)}
                 </span>
               </div>
 
               {/* Payment Type Pills */}
               <div>
-                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem', fontWeight: '600' }}>
+                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.35rem', fontWeight: '500' }}>
                   Payment Mode at Checkout:
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.4rem' }}>
@@ -799,15 +799,14 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       border: '1px solid',
                       borderColor: paymentType === 'full' ? 'var(--primary)' : 'var(--border-color)',
-                      background: paymentType === 'full' ? 'var(--primary-light)' : 'var(--bg-surface)',
+                      background: paymentType === 'full' ? 'var(--primary-light)' : 'var(--bg-surface-hover)',
                       color: paymentType === 'full' ? 'var(--primary)' : 'var(--text-muted)',
                       fontSize: '0.78rem',
-                      fontWeight: '700',
-                      cursor: 'pointer',
-                      textAlign: 'center'
+                      fontWeight: '500',
+                      cursor: 'pointer'
                     }}
                   >
-                    Full Payment
+                    Full (₹{grandTotal.toFixed(0)})
                   </button>
 
                   <button
@@ -818,15 +817,14 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       border: '1px solid',
                       borderColor: paymentType === 'partial' ? 'var(--warning)' : 'var(--border-color)',
-                      background: paymentType === 'partial' ? 'var(--warning-bg)' : 'var(--bg-surface)',
+                      background: paymentType === 'partial' ? 'var(--warning-bg)' : 'var(--bg-surface-hover)',
                       color: paymentType === 'partial' ? 'var(--warning)' : 'var(--text-muted)',
                       fontSize: '0.78rem',
-                      fontWeight: '700',
-                      cursor: 'pointer',
-                      textAlign: 'center'
+                      fontWeight: '500',
+                      cursor: 'pointer'
                     }}
                   >
-                    Partial Paid
+                    Partial
                   </button>
 
                   <button
@@ -837,15 +835,14 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       borderRadius: '8px',
                       border: '1px solid',
                       borderColor: paymentType === 'credit' ? 'var(--credit)' : 'var(--border-color)',
-                      background: paymentType === 'credit' ? 'var(--credit-bg)' : 'var(--bg-surface)',
+                      background: paymentType === 'credit' ? 'var(--credit-bg)' : 'var(--bg-surface-hover)',
                       color: paymentType === 'credit' ? 'var(--credit)' : 'var(--text-muted)',
                       fontSize: '0.78rem',
-                      fontWeight: '700',
-                      cursor: 'pointer',
-                      textAlign: 'center'
+                      fontWeight: '500',
+                      cursor: 'pointer'
                     }}
                   >
-                    Full Credit
+                    Credit (₹0)
                   </button>
                 </div>
               </div>
@@ -987,7 +984,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                     marginTop: '1rem',
                     marginBottom: '1rem'
                   }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <QrCode size={18} color="var(--primary)" /> Scan QR to Pay via UPI / GPay
                     </div>
 
@@ -1001,7 +998,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       <QRCodeSVG value={upiDeepLink} size={180} level="M" />
                     </div>
 
-                    <div style={{ fontSize: '0.9rem', fontWeight: '800', color: 'var(--primary)' }}>
+                    <div style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--primary)' }}>
                       Amount: ₹{payAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                     </div>
 

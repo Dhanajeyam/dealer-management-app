@@ -40,7 +40,7 @@ export default class ErrorBoundary extends React.Component {
           padding: '2rem',
           background: 'var(--bg-primary, #0b1320)',
           color: '#fff',
-          fontFamily: 'system-ui, -apple-system, sans-serif'
+          fontFamily: "var(--font-family, 'Inter', sans-serif)"
         }}>
           <div className="glass-card" style={{
             maxWidth: '560px',
@@ -66,7 +66,7 @@ export default class ErrorBoundary extends React.Component {
               <AlertTriangle size={32} color="#ef4444" />
             </div>
 
-            <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: '#fff', marginBottom: '0.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#fff', marginBottom: '0.5rem', letterSpacing: '-0.015em' }}>
               Application Encountered an Error
             </h2>
 
@@ -83,7 +83,7 @@ export default class ErrorBoundary extends React.Component {
                 background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                 border: 'none',
                 color: '#fff',
-                fontWeight: '700',
+                fontWeight: '600',
                 fontSize: '0.95rem',
                 cursor: 'pointer',
                 display: 'flex',

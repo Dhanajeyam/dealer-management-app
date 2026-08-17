@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import RecordPaymentModal from './RecordPaymentModal'
 
-export default function SalesLogView({ user, onReprintBill, onNewSale }) {
+export default function SalesLogView({ user, shopProfile, onReprintBill, onNewSale }) {
   const [sales, setSales] = useState([])
   const [loading, setLoading] = useState(true)
   const [expandedSales, setExpandedSales] = useState({})
@@ -177,7 +177,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
       {/* Header Bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <FileText size={26} color="var(--primary)" /> Sales Transactions & History
           </h2>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
@@ -195,7 +195,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
               border: '1px solid var(--border-color)',
               color: 'var(--text-muted)',
               fontSize: '0.82rem',
-              fontWeight: '600',
+              fontWeight: '500',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -216,7 +216,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
                 border: 'none',
                 color: '#fff',
                 fontSize: '0.85rem',
-                fontWeight: '700',
+                fontWeight: '600',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -377,10 +377,10 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
           <Sparkles size={18} color="var(--primary)" />
-          <span style={{ fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: '600' }}>
+          <span style={{ fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: '500' }}>
             {isFilterActive ? getFilterLabel() : 'All-Time Revenue Total'}:
           </span>
-          <span style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--primary)' }}>
+          <span style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--primary)' }}>
             ₹{filteredSalesAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
           <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -403,7 +403,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
               border: 'none',
               color: '#f87171',
               fontSize: '0.82rem',
-              fontWeight: '700',
+              fontWeight: '500',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
@@ -427,7 +427,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
           background: 'var(--bg-surface)'
         }}>
           <Clock size={36} color="var(--text-dim)" style={{ marginBottom: '0.85rem' }} />
-          <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
             {isFilterActive ? 'No Sales Match Your Active Filter' : 'No Sales Recorded Yet'}
           </h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', maxWidth: '420px', margin: '0 auto 1.25rem auto' }}>
@@ -445,14 +445,17 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
                 setToDate('')
               }}
               style={{
-                padding: '0.5rem 1.1rem',
-                borderRadius: '9px',
+                padding: '0.65rem 1.25rem',
+                borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
-                color: 'var(--primary)',
-                fontWeight: '600',
+                color: 'var(--text-main)',
                 fontSize: '0.85rem',
-                cursor: 'pointer'
+                fontWeight: '500',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem'
               }}
             >
               Reset Filters
@@ -462,71 +465,78 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
               <button
                 onClick={onNewSale}
                 style={{
-                  padding: '0.55rem 1.25rem',
+                  padding: '0.65rem 1.25rem',
                   borderRadius: '10px',
                   background: 'var(--primary)',
                   border: 'none',
                   color: '#fff',
-                  fontWeight: '700',
                   fontSize: '0.88rem',
-                  cursor: 'pointer'
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
                 }}
               >
-                Create New Sale
+                <Plus size={16} /> Create First Sale
               </button>
             )
           )}
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
-          {filteredSales.map(s => {
-            const saleDate = new Date(s.created_at).toLocaleString('en-IN', {
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+          {filteredSales.map((s) => {
+            const billId = `INV-${s.id.substring(0, 8).toUpperCase()}`
+            const farmerName = s.farmers?.name || 'Walk-in / Cash Customer'
+            const farmerVillage = s.farmers?.village ? `(${s.farmers.village})` : ''
+            const totalAmount = Number(s.total_amount || 0)
+            const formattedTotal = totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            
+            // Calculate total payments & balance
+            const payments = s.payments || []
+            const totalPaid = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0)
+            const balanceDue = Math.max(0, totalAmount - totalPaid)
+            const formattedBalance = balanceDue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            
+            // Determine badge colors & label
+            let badgeBg = 'var(--success-bg)'
+            let badgeColor = 'var(--success)'
+            let badgeBorder = 'var(--success-border)'
+            let badgeLabel = 'Paid Full'
+
+            if (balanceDue > 0.01 && totalPaid > 0) {
+              badgeBg = 'var(--warning-bg)'
+              badgeColor = 'var(--warning)'
+              badgeBorder = 'var(--warning-border)'
+              badgeLabel = `Partial (Due: ₹${formattedBalance})`
+            } else if (totalPaid <= 0.01 && totalAmount > 0) {
+              badgeBg = 'var(--danger-bg)'
+              badgeColor = 'var(--danger)'
+              badgeBorder = 'var(--danger-border)'
+              badgeLabel = 'Credit Due'
+            }
+
+            const saleDate = new Date(s.created_at || s.date || Date.now()).toLocaleString('en-IN', {
               dateStyle: 'medium',
               timeStyle: 'short'
             })
-            const billId = `INV-${s.id.substring(0, 8).toUpperCase()}`
-            const farmerName = s.farmers?.name || 'Walk-in / Direct Customer'
-            const farmerVillage = s.farmers?.village ? `(${s.farmers.village})` : ''
+
             const items = s.sale_items || []
-            const payments = s.payments || []
             const isExpanded = Boolean(expandedSales[s.id])
             const displayItems = isExpanded ? items : items.slice(0, 4)
             const hiddenCount = items.length - 4
             const itemCountText = `${items.length} ${items.length === 1 ? 'item' : 'items'}`
-            const totalBillAmount = Number(s.total_amount || 0)
-            const totalPaid = payments.reduce((sum, p) => sum + Number(p.amount || 0), 0)
-            const balanceDue = Math.max(0, totalBillAmount - totalPaid)
-
-            const formattedTotal = totalBillAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-            const formattedBalance = balanceDue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-
-            let badgeLabel = 'Paid'
-            let badgeBg = 'var(--success-bg)'
-            let badgeColor = 'var(--success)'
-            let badgeBorder = 'var(--success-border)'
-
-            if (balanceDue > 0.01 && totalPaid > 0) {
-              badgeLabel = `Partial • Due ₹${formattedBalance}`
-              badgeBg = 'var(--warning-bg)'
-              badgeColor = 'var(--warning)'
-              badgeBorder = 'var(--warning-border)'
-            } else if (totalPaid <= 0.01 && totalBillAmount > 0) {
-              badgeLabel = `Credit Sale • Due ₹${formattedBalance}`
-              badgeBg = 'var(--credit-bg)'
-              badgeColor = 'var(--credit)'
-              badgeBorder = 'var(--credit-border)'
-            }
 
             return (
               <div
                 key={s.id}
                 className="glass-card"
                 style={{
-                  padding: '1.25rem 1.5rem',
-                  background: 'var(--bg-surface)',
+                  padding: '1.25rem',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '0.85rem',
+                  background: 'var(--bg-surface)',
                   width: '100%',
                   boxSizing: 'border-box',
                   overflow: 'visible',
@@ -545,14 +555,13 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
                         borderRadius: '6px',
                         color: 'var(--info)',
                         fontSize: '0.78rem',
-                        fontWeight: '800',
-                        letterSpacing: '0.03em'
+                        fontWeight: '500'
                       }}>
                         {billId}
                       </span>
 
-                      <span style={{ color: 'var(--text-main)', fontWeight: '800', fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                        <User size={16} color="var(--primary)" /> {farmerName} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>{farmerVillage}</span>
+                      <span style={{ color: 'var(--text-main)', fontWeight: '600', fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <User size={16} color="var(--primary)" /> {farmerName} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '400' }}>{farmerVillage}</span>
                       </span>
 
                       {/* Payment Status Badge */}
@@ -560,7 +569,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
                         padding: '0.2rem 0.65rem',
                         borderRadius: '20px',
                         fontSize: '0.75rem',
-                        fontWeight: '800',
+                        fontWeight: '500',
                         background: badgeBg,
                         color: badgeColor,
                         border: `1px solid ${badgeBorder}`
@@ -575,15 +584,15 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
                         <Clock size={13} color="var(--text-muted)" /> {saleDate}
                       </span>
                       <span>•</span>
-                      <span style={{ color: 'var(--text-main)', fontWeight: '600' }}>{itemCountText}</span>
+                      <span style={{ color: 'var(--text-main)', fontWeight: '500' }}>{itemCountText}</span>
                     </div>
                   </div>
 
                   {/* Total Amount, Record Payment & Reprint Buttons */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginLeft: 'auto', flexShrink: 0 }}>
                     <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', fontWeight: '600' }}>Total Bill</span>
-                      <span style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '1.15rem' }}>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', fontWeight: '500' }}>Total Bill</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '1.15rem' }}>
                         ₹{formattedTotal}
                       </span>
                     </div>
@@ -753,6 +762,7 @@ export default function SalesLogView({ user, onReprintBill, onNewSale }) {
         sale={activePaymentSale}
         isOpen={Boolean(activePaymentSale)}
         onClose={() => setActivePaymentSale(null)}
+        shopProfile={shopProfile}
         onPaymentRecorded={() => {
           fetchSales()
         }}

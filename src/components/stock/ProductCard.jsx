@@ -53,9 +53,8 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
           <span style={{
             fontSize: '0.75rem',
-            fontWeight: '700',
+            fontWeight: '500',
             textTransform: 'uppercase',
-            letterSpacing: '0.05em',
             padding: '0.25rem 0.65rem',
             borderRadius: '20px',
             background: 'var(--highlight-bg)',
@@ -105,10 +104,10 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
 
         {/* Product Name */}
         <h4 style={{
-          fontSize: '1.1rem',
-          fontWeight: '700',
+          fontSize: '1.05rem',
+          fontWeight: '600',
           color: 'var(--text-main)',
-          marginBottom: '0.75rem',
+          marginBottom: '0.65rem',
           lineHeight: '1.3'
         }}>
           {product.name}
@@ -116,15 +115,15 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
 
         {/* Price Tag */}
         <div style={{
-          fontSize: '1.25rem',
-          fontWeight: '800',
+          fontSize: '1.2rem',
+          fontWeight: '600',
           color: 'var(--primary)',
           display: 'flex',
           alignItems: 'center',
           gap: '0.1rem',
           marginBottom: '1rem'
         }}>
-          ₹{Number(product.price).toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', fontWeight: '500', color: 'var(--text-muted)' }}>/ {product.unit}</span>
+          ₹{Number(product.price).toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', fontWeight: '400', color: 'var(--text-muted)' }}>/ {product.unit}</span>
         </div>
       </div>
 
@@ -146,7 +145,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               alignItems: 'center',
               gap: '0.35rem',
               fontSize: '0.75rem',
-              fontWeight: '700',
+              fontWeight: '500',
               padding: '0.25rem 0.6rem',
               borderRadius: '8px',
               background: 'var(--danger-bg)',
@@ -157,7 +156,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
             </div>
           ) : (
             <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Stock: <strong style={{ color: 'var(--text-main)', fontSize: '1rem' }}>{Number(product.quantity)}</strong> {product.unit}
+              Stock: <strong style={{ color: 'var(--text-main)', fontSize: '0.95rem', fontWeight: '600' }}>{Number(product.quantity)}</strong> {product.unit}
             </div>
           )}
         </div>
@@ -166,34 +165,32 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.4rem',
+          gap: '0.25rem',
           background: 'var(--bg-surface-hover)',
-          padding: '0.25rem',
-          borderRadius: '10px',
+          padding: '0.2rem 0.35rem',
+          borderRadius: '8px',
           border: '1px solid var(--border-color)'
         }}>
           <button
             onClick={() => handleAdjust(-1)}
             disabled={adjusting || Number(product.quantity) <= 0}
-            title="Nudge Stock Down (-1)"
+            title="Decrement Stock (-1)"
             style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '7px',
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-color)',
-              color: 'var(--text-main)',
+              background: 'transparent',
+              border: 'none',
+              color: (adjusting || Number(product.quantity) <= 0) ? 'var(--text-dim)' : 'var(--text-muted)',
               cursor: (adjusting || Number(product.quantity) <= 0) ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              opacity: Number(product.quantity) <= 0 ? 0.4 : 1
+              padding: '0.25rem',
+              borderRadius: '4px'
             }}
           >
             <Minus size={14} />
           </button>
 
-          <span style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-main)', minWidth: '24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-main)', minWidth: '24px', textAlign: 'center' }}>
             {Number(product.quantity)}
           </span>
 

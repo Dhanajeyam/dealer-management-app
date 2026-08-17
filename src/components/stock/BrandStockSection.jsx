@@ -72,14 +72,14 @@ export default function BrandStockSection({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Layers size={20} color="var(--primary)" />
-            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               {brandName}
             </h3>
           </div>
 
           <span style={{
             fontSize: '0.78rem',
-            fontWeight: '600',
+            fontWeight: '500',
             color: 'var(--text-muted)',
             background: 'var(--bg-surface-hover)',
             padding: '0.2rem 0.65rem',
@@ -92,7 +92,7 @@ export default function BrandStockSection({
           {outOfStockCount > 0 && (
             <span style={{
               fontSize: '0.75rem',
-              fontWeight: '600',
+              fontWeight: '500',
               color: 'var(--danger)',
               background: 'var(--danger-bg)',
               padding: '0.2rem 0.6rem',
@@ -110,10 +110,10 @@ export default function BrandStockSection({
         {/* Right Side: Total Valuation Subtotal */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', textTransform: 'uppercase' }}>
               Subtotal Value
             </span>
-            <span style={{ fontSize: '1.05rem', fontWeight: '700', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center' }}>
+            <span style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center' }}>
               ₹{brandStockValue.toLocaleString('en-IN')}
             </span>
           </div>
@@ -159,7 +159,7 @@ export default function BrandStockSection({
                   border: '1px solid var(--border-color)',
                   color: 'var(--primary)',
                   fontSize: '0.85rem',
-                  fontWeight: '700',
+                  fontWeight: '600',
                   cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 /* Modern Agri-Tech Responsive Design System - Dual Light & Dark Forest Themes */
 :root, [data-theme="dark"] {
   /* Dark Forest Theme Palette */
@@ -25,9 +27,9 @@
   --highlight-border: #285A38;
   --highlight-text: #75F59B;
 
-  --text-main: #F1F7F3;
-  --text-muted: #9AA99F;
-  --text-dim: #68766E;
+  --text-main: #E3EBE6;
+  --text-muted: #95A49B;
+  --text-dim: #65746B;
 
   --success: #4EEB7C;
   --success-bg: rgba(78, 235, 124, 0.10);
@@ -49,8 +51,9 @@
   --info-bg: rgba(99, 201, 209, 0.10);
   --info-border: rgba(99, 201, 209, 0.28);
 
-  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: var(--font-family);
+  --font-body: var(--font-family);
 
   --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.40);
   --shadow-hover: 0 12px 38px rgba(0, 0, 0, 0.55);
@@ -90,9 +93,9 @@
   --highlight-border: #A3D8B3;
   --highlight-text: #16A34A;
 
-  --text-main: #17201A;
-  --text-muted: #64706A;
-  --text-dim: #85938B;
+  --text-main: #18221C;
+  --text-muted: #5C6A63;
+  --text-dim: #829188;
 
   --success: #16A34A;
   --success-bg: rgba(22, 163, 74, 0.10);
@@ -114,8 +117,9 @@
   --info-bg: rgba(8, 145, 178, 0.10);
   --info-border: rgba(8, 145, 178, 0.28);
 
-  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: var(--font-family);
+  --font-body: var(--font-family);
 
   --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(22, 163, 74, 0.04);
   --shadow-hover: 0 16px 38px -5px rgba(0, 0, 0, 0.10), 0 6px 20px rgba(22, 163, 74, 0.08);
@@ -141,10 +145,17 @@ html, body {
   min-height: 100vh;
   background-color: var(--bg-primary);
   color: var(--text-main);
-  font-family: var(--font-body);
+  font-family: var(--font-family);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  letter-spacing: normal;
+}
+
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  letter-spacing: normal;
 }
 
 #root {
@@ -153,11 +164,45 @@ html, body {
   flex-direction: column;
 }
 
-/* Typography Utilities */
+/* Typography Hierarchy Utilities */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  font-family: var(--font-family);
   color: var(--text-main);
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.35;
+}
+
+h4 {
+  font-size: 1.00rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.4;
+}
+
+h5, h6 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.4;
 }
 
 /* Glassmorphism Card (Light Natural Theme) */
@@ -272,7 +317,7 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
   color: var(--text-muted);
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -290,6 +335,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--primary-light);
   color: var(--primary);
   border: 1px solid rgba(50, 214, 107, 0.24);
+  font-weight: 600;
 }
 
 .header-actions {
@@ -306,7 +352,7 @@ h1, h2, h3, h4, h5, h6 {
   border: none;
   color: #fff;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -328,7 +374,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border-color);
   color: var(--text-main);
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -568,7 +614,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .sidebar-brand-title {
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--text-main);
   margin: 0;
   white-space: nowrap;
@@ -585,6 +631,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 0.1rem;
+  font-weight: 400;
 }
 
 /* Sidebar Navigation Items */
@@ -601,8 +648,8 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-nav-label {
   padding: 0.25rem 0.5rem 0.5rem 0.5rem;
   font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   color: var(--text-dim);
   text-transform: uppercase;
 }
@@ -615,7 +662,7 @@ h1, h2, h3, h4, h5, h6 {
   background: transparent;
   color: var(--text-muted);
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -634,7 +681,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--primary-light);
   color: var(--primary);
   border-color: rgba(50, 214, 107, 0.25);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .sidebar-nav-item-left {
@@ -646,7 +693,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .sidebar-nav-badge {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 500;
   padding: 0.15rem 0.5rem;
   border-radius: 99px;
   background: var(--bg-surface-hover);
@@ -672,6 +719,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: space-between;
   background-color: var(--bg-surface);
+  font-weight: 400;
 }
 
 /* Desktop Collapse Button & Rail Mode Styles */
@@ -853,7 +901,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .dashboard-topbar-title {
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text-main);
   margin: 0;
 }
@@ -861,6 +910,7 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-topbar-subtitle {
   font-size: 0.78rem;
   color: var(--text-muted);
+  font-weight: 400;
 }
 
 .dashboard-topbar-right {
@@ -873,7 +923,7 @@ h1, h2, h3, h4, h5, h6 {
 .landing-nav-link {
   color: var(--text-muted);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.45rem 0.85rem;
   border-radius: 8px;
   transition: all 0.2s ease;

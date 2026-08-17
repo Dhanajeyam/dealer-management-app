@@ -22,7 +22,7 @@ import {
 } from 'lucide-react'
 import RecordPaymentModal from '../sales/RecordPaymentModal'
 
-export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBill }) {
+export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile, onReprintBill }) {
   const [sales, setSales] = useState([])
   const [loadingSales, setLoadingSales] = useState(false)
   const [expandedSales, setExpandedSales] = useState({})
@@ -185,7 +185,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
               <User size={26} color="#10b981" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
                 {farmer.name}
               </h3>
               <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -227,26 +227,26 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
             fontSize: '0.9rem',
             height: 'fit-content'
           }}>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-main)', margin: 0, textTransform: 'uppercase', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
               Customer Details
             </h4>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-main)' }}>
               <Phone size={17} color="var(--primary)" />
               <span style={{ color: 'var(--text-muted)' }}>Phone:</span>
-              <strong style={{ marginLeft: 'auto', color: 'var(--text-main)' }}>{farmer.phone || 'Not provided'}</strong>
+              <strong style={{ marginLeft: 'auto', color: 'var(--text-main)', fontWeight: '500' }}>{farmer.phone || 'Not provided'}</strong>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-main)' }}>
               <MapPin size={17} color="var(--accent)" />
               <span style={{ color: 'var(--text-muted)' }}>Village:</span>
-              <strong style={{ marginLeft: 'auto', color: 'var(--text-main)' }}>{farmer.village || 'Not specified'}</strong>
+              <strong style={{ marginLeft: 'auto', color: 'var(--text-main)', fontWeight: '500' }}>{farmer.village || 'Not specified'}</strong>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-main)' }}>
               <Calendar size={17} color="var(--warning)" />
               <span style={{ color: 'var(--text-muted)' }}>Registered:</span>
-              <strong style={{ marginLeft: 'auto', color: 'var(--text-main)' }}>{formattedDate}</strong>
+              <strong style={{ marginLeft: 'auto', color: 'var(--text-main)', fontWeight: '500' }}>{formattedDate}</strong>
             </div>
 
             {/* Total Lifetime Spending Badge */}
@@ -260,10 +260,10 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
               flexDirection: 'column',
               gap: '0.35rem'
             }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: '600' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '500' }}>
                 All-Time Purchased Value
               </span>
-              <span style={{ color: 'var(--primary)', fontSize: '1.4rem', fontWeight: '800', display: 'flex', alignItems: 'center' }}>
+              <span style={{ color: 'var(--primary)', fontSize: '1.35rem', fontWeight: '700', display: 'flex', alignItems: 'center' }}>
                 ₹{totalPurchasedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
@@ -278,10 +278,10 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
               flexDirection: 'column',
               gap: '0.35rem'
             }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: '600' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '500' }}>
                 Pending Credit Balance
               </span>
-              <span style={{ color: totalOutstandingAmount > 0 ? 'var(--danger)' : 'var(--primary)', fontSize: '1.4rem', fontWeight: '800', display: 'flex', alignItems: 'center' }}>
+              <span style={{ color: totalOutstandingAmount > 0 ? 'var(--danger)' : 'var(--primary)', fontSize: '1.35rem', fontWeight: '700', display: 'flex', alignItems: 'center' }}>
                 ₹{totalOutstandingAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>
@@ -292,7 +292,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <ShoppingBag size={19} color="var(--primary)" />
-                <h4 style={{ fontSize: '1.05rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
                   Purchase History ({filteredSales.length})
                 </h4>
               </div>
@@ -460,10 +460,10 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <Sparkles size={16} color="var(--primary)" />
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '600' }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '500' }}>
                     {getFilterLabel()}:
                   </span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary)' }}>
+                  <span style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--primary)' }}>
                     ₹{filteredTotalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                   <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -609,7 +609,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
 
                             return (
                               <div style={{
-                                fontWeight: '800',
+                                fontWeight: '600',
                                 color: 'var(--text-main)',
                                 fontSize: '0.98rem',
                                 display: 'flex',
@@ -624,17 +624,16 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
                                   borderRadius: '6px',
                                   color: 'var(--info)',
                                   fontSize: '0.78rem',
-                                  fontWeight: '700',
-                                  letterSpacing: '0.03em'
+                                  fontWeight: '500'
                                 }}>
                                   {billId}
                                 </span>
                                 <span style={{ color: 'var(--text-muted)' }}>•</span>
-                                <span style={{ color: 'var(--text-main)', fontSize: '0.88rem', fontWeight: '600' }}>
+                                <span style={{ color: 'var(--text-main)', fontSize: '0.88rem', fontWeight: '500' }}>
                                   {itemCountText}
                                 </span>
                                 <span style={{ color: 'var(--text-muted)' }}>•</span>
-                                <span style={{ color: 'var(--primary)', fontWeight: '800', fontSize: '1.05rem' }}>
+                                <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '1.05rem' }}>
                                   ₹{formattedTotal}
                                 </span>
 
@@ -642,7 +641,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
                                   padding: '0.15rem 0.55rem',
                                   borderRadius: '16px',
                                   fontSize: '0.75rem',
-                                  fontWeight: '800',
+                                  fontWeight: '500',
                                   background: badgeBg,
                                   color: badgeColor,
                                   border: `1px solid ${badgeBorder}`
@@ -680,7 +679,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
                                     background: 'var(--primary)',
                                     border: 'none',
                                     color: '#fff',
-                                    fontWeight: '700',
+                                    fontWeight: '500',
                                     fontSize: '0.78rem',
                                     cursor: 'pointer',
                                     boxShadow: 'var(--shadow-glow)'
@@ -713,7 +712,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
                               background: 'var(--primary-light)',
                               border: '1px solid var(--border-color)',
                               color: 'var(--primary)',
-                              fontWeight: '600',
+                              fontWeight: '500',
                               fontSize: '0.78rem',
                               cursor: 'pointer',
                               transition: 'all 0.2s ease'
@@ -745,9 +744,9 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
                             return (
                               <div key={item.id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: '0.85rem', flexWrap: 'wrap', gap: '0.3rem' }}>
                                 <span style={{ color: 'var(--text-muted)', flex: '1 1 220px', minWidth: 0, wordBreak: 'break-word' }}>
-                                  • <strong style={{ color: 'var(--text-main)' }}>{item.product_name}</strong> ({item.product_brand}) × {item.qty} {item.unit}
+                                  • <strong style={{ color: 'var(--text-main)', fontWeight: '500' }}>{item.product_name}</strong> ({item.product_brand}) × {item.qty} {item.unit}
                                 </span>
-                                <span style={{ color: 'var(--primary)', fontWeight: '700', whiteSpace: 'nowrap', marginLeft: 'auto' }}>
+                                <span style={{ color: 'var(--primary)', fontWeight: '600', whiteSpace: 'nowrap', marginLeft: 'auto' }}>
                                   ₹{itemTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style={{ color: 'var(--text-muted)', fontWeight: 'normal', fontSize: '0.75rem' }}>(₹{Number(item.price_at_sale).toFixed(2)}/{item.unit})</span>
                                 </span>
                               </div>
@@ -764,7 +763,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
                                   border: 'none',
                                   color: 'var(--primary)',
                                   fontSize: '0.8rem',
-                                  fontWeight: '700',
+                                  fontWeight: '500',
                                   cursor: 'pointer',
                                   display: 'inline-flex',
                                   alignItems: 'center',
@@ -815,6 +814,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, onReprintBi
         sale={activePaymentSale}
         isOpen={Boolean(activePaymentSale)}
         onClose={() => setActivePaymentSale(null)}
+        shopProfile={shopProfile}
         onPaymentRecorded={() => {
           if (farmer?.id) fetchFarmerSales(farmer.id)
         }}

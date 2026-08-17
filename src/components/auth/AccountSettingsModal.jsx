@@ -129,7 +129,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
               <ShieldCheck size={20} color="var(--primary)" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'var(--text-main)', margin: 0 }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
                 Account Settings
               </h3>
               <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -195,7 +195,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
 
         {/* User Email Information */}
         <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+          <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
             Registered Account Email
           </label>
           <div style={{
@@ -208,7 +208,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
             border: '1px solid var(--border-color)',
             color: 'var(--text-main)',
             fontSize: '0.9rem',
-            fontWeight: '600'
+            fontWeight: '500'
           }}>
             <Mail size={18} color="var(--primary)" />
             <span>{user?.email || 'N/A'}</span>
@@ -217,13 +217,13 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
 
         {/* Password Update Form */}
         <form onSubmit={handleUpdatePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-main)', textTransform: 'uppercase' }}>
             Change Password
           </div>
 
           {/* Current Password Field */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Current Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -261,7 +261,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
 
           {/* New Password Field */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               New Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -299,7 +299,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
 
           {/* Confirm New Password Field */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Confirm New Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -337,7 +337,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
                 background: 'transparent',
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-muted)',
-                fontWeight: '700',
+                fontWeight: '500',
                 fontSize: '0.875rem',
                 cursor: 'pointer'
               }}
@@ -355,7 +355,7 @@ export default function AccountSettingsModal({ isOpen, onClose, user }) {
                 background: 'var(--primary)',
                 border: 'none',
                 color: '#fff',
-                fontWeight: '700',
+                fontWeight: '600',
                 fontSize: '0.875rem',
                 cursor: loading ? 'wait' : 'pointer',
                 boxShadow: '0 4px 14px rgba(50, 214, 107, 0.28)'
