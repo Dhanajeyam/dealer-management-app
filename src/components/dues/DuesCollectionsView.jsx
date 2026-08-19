@@ -176,35 +176,35 @@ export default function DuesCollectionsView({ user, shopProfile, onReprintBill }
       {/* KPI Metrics Header */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '1.25rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+        gap: '0.85rem'
       }}>
-        <div className="glass-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--danger)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Total Pending Credit</span>
-            <IndianRupee size={18} color="var(--danger)" />
+        <div className="glass-card" style={{ padding: '1rem', borderLeft: '4px solid var(--danger)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+            <span style={{ fontSize: '0.78rem', fontWeight: '500' }}>Total Pending</span>
+            <IndianRupee size={16} color="var(--danger)" />
           </div>
-          <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--danger)' }}>
+          <div style={{ fontSize: '1.3rem', fontWeight: '700', color: 'var(--danger)' }}>
             ₹{totalDealerDues.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--warning)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Farmers with Dues</span>
-            <Users size={18} color="var(--warning)" />
+        <div className="glass-card" style={{ padding: '1rem', borderLeft: '4px solid var(--warning)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+            <span style={{ fontSize: '0.78rem', fontWeight: '500' }}>Farmers</span>
+            <Users size={16} color="var(--warning)" />
           </div>
-          <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)' }}>
+          <div style={{ fontSize: '1.3rem', fontWeight: '700', color: 'var(--text-main)' }}>
             {farmersWithDuesCount} {farmersWithDuesCount === 1 ? 'Farmer' : 'Farmers'}
           </div>
         </div>
 
-        <div className="glass-card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--accent)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Unpaid / Partial Bills</span>
-            <FileText size={18} color="var(--accent)" />
+        <div className="glass-card" style={{ padding: '1rem', borderLeft: '4px solid var(--accent)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+            <span style={{ fontSize: '0.78rem', fontWeight: '500' }}>Pending Bills</span>
+            <FileText size={16} color="var(--accent)" />
           </div>
-          <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)' }}>
+          <div style={{ fontSize: '1.3rem', fontWeight: '700', color: 'var(--text-main)' }}>
             {totalPendingSalesCount} {totalPendingSalesCount === 1 ? 'Bill' : 'Bills'}
           </div>
         </div>
@@ -260,22 +260,22 @@ export default function DuesCollectionsView({ user, shopProfile, onReprintBill }
                 key={farmer.id}
                 className="glass-card"
                 style={{
-                  padding: '1.25rem 1.5rem',
+                  padding: '1rem 1.15rem',
                   background: 'var(--bg-surface)',
                   borderRadius: '16px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '1rem',
+                  gap: '0.85rem',
                   border: '1px solid var(--border-color)'
                 }}
               >
                 {/* Farmer Row Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{
-                      width: '42px',
-                      height: '42px',
-                      borderRadius: '12px',
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '10px',
                       background: 'var(--danger-bg)',
                       border: '1px solid var(--danger-border)',
                       display: 'flex',
@@ -283,20 +283,21 @@ export default function DuesCollectionsView({ user, shopProfile, onReprintBill }
                       justifyContent: 'center',
                       flexShrink: 0
                     }}>
-                      <Users size={22} color="var(--danger)" />
-                    </div>                    <div>
-                      <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Users size={20} color="var(--danger)" />
+                    </div>
+                    <div>
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--text-main)', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         {farmer.name}
                       </h3>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem', flexWrap: 'wrap' }}>
                         {farmer.village && (
                           <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                            <MapPin size={13} color="var(--accent)" /> {farmer.village}
+                            <MapPin size={12} color="var(--accent)" /> {farmer.village}
                           </span>
                         )}
                         {farmer.phone && (
                           <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                            <Phone size={13} color="var(--primary)" /> {farmer.phone}
+                            <Phone size={12} color="var(--primary)" /> {farmer.phone}
                           </span>
                         )}
                       </div>
@@ -304,12 +305,12 @@ export default function DuesCollectionsView({ user, shopProfile, onReprintBill }
                   </div>
 
                   {/* Right side: Outstanding Balance & Toggle */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginLeft: 'auto' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: 'auto', flexWrap: 'wrap' }}>
                     <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '500', display: 'block' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '500', display: 'block' }}>
                         Total Credit Due
                       </span>
-                      <span style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--danger)' }}>
+                      <span style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--danger)' }}>
                         ₹{farmer.totalOutstanding.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
@@ -321,17 +322,17 @@ export default function DuesCollectionsView({ user, shopProfile, onReprintBill }
                         border: '1px solid var(--border-color)',
                         color: 'var(--text-main)',
                         borderRadius: '8px',
-                        padding: '0.4rem 0.6rem',
+                        padding: '0.35rem 0.6rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.3rem',
-                        fontSize: '0.8rem',
+                        fontSize: '0.78rem',
                         fontWeight: '500'
                       }}
                     >
-                      <span>{pendingSalesCount} {pendingSalesCount === 1 ? 'Pending Bill' : 'Pending Bills'}</span>
-                      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      <span>{pendingSalesCount} {pendingSalesCount === 1 ? 'Bill' : 'Bills'}</span>
+                      {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     </button>
                   </div>
                 </div>

@@ -167,12 +167,12 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1rem'
+      padding: '0.5rem'
     }}>
       <div className="glass-card" style={{
         maxWidth: '720px',
         width: '100%',
-        maxHeight: '90vh',
+        maxHeight: 'min(94vh, 750px)',
         background: 'var(--bg-surface)',
         display: 'flex',
         flexDirection: 'column',
@@ -182,68 +182,68 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
       }}>
         {/* Modal Header */}
         <div style={{
-          padding: '1.25rem 1.5rem',
+          padding: '0.85rem 1rem',
           borderBottom: '1px solid var(--border-color)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           background: 'var(--bg-surface-hover)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--info-bg)', border: '1px solid var(--info-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Building2 size={22} color="var(--info)" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--info-bg)', border: '1px solid var(--info-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Building2 size={20} color="var(--info)" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
                 {dealer.shop_name || 'Dealer Details'}
               </h3>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'var(--text-muted)', flexWrap: 'wrap', marginTop: '0.2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.78rem', color: 'var(--text-muted)', flexWrap: 'wrap', marginTop: '0.15rem' }}>
                 {dealer.phone && <span>Ph: {dealer.phone}</span>}
                 <span style={{
-                  padding: '0.1rem 0.5rem',
+                  padding: '0.1rem 0.45rem',
                   borderRadius: '4px',
                   background: statusBadge.bg,
                   color: statusBadge.color,
                   fontWeight: '500',
-                  fontSize: '0.75rem',
+                  fontSize: '0.72rem',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.25rem'
                 }}>
-                  <StatusIcon size={12} /> {statusBadge.text}
+                  <StatusIcon size={11} /> {statusBadge.text}
                 </span>
 
                 {dealer.status === 'approved' && (
                   dealer.is_trial ? (
                     <span style={{
-                      padding: '0.1rem 0.5rem',
+                      padding: '0.1rem 0.45rem',
                       borderRadius: '4px',
                       background: trialInfo.badgeBg,
                       color: trialInfo.badgeColor,
                       border: `1px solid ${trialInfo.badgeColor}40`,
                       fontWeight: '600',
-                      fontSize: '0.75rem',
+                      fontSize: '0.72rem',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.25rem'
                     }}>
-                      {trialInfo.isExpired ? <Hourglass size={12} /> : <Clock size={12} />}
+                      {trialInfo.isExpired ? <Hourglass size={11} /> : <Clock size={11} />}
                       {trialInfo.badgeText}
                     </span>
                   ) : (
                     <span style={{
-                      padding: '0.1rem 0.5rem',
+                      padding: '0.1rem 0.45rem',
                       borderRadius: '4px',
                       background: 'var(--primary-light)',
                       color: 'var(--primary)',
                       border: '1px solid rgba(22, 163, 74, 0.25)',
                       fontWeight: '600',
-                      fontSize: '0.75rem',
+                      fontSize: '0.72rem',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.25rem'
                     }}>
-                      <Sparkles size={12} /> Paid Account
+                      <Sparkles size={11} /> Paid Account
                     </span>
                   )
                 )}
@@ -253,60 +253,60 @@ export default function DealerDrillDownModal({ dealer, isOpen, onClose }) {
 
           <button
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.25rem' }}
           >
-            <X size={22} />
+            <X size={20} />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div style={{ padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           
           {/* Quick Metrics Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-            <div style={{ padding: '0.85rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-              <Package size={18} color="var(--info)" style={{ marginBottom: '0.3rem' }} />
-              <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)' }}>{counts.products}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Stock Items</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: '0.65rem' }}>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+              <Package size={16} color="var(--info)" style={{ marginBottom: '0.25rem' }} />
+              <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)' }}>{counts.products}</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Stock Items</div>
             </div>
 
-            <div style={{ padding: '0.85rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-              <Users size={18} color="var(--primary)" style={{ marginBottom: '0.3rem' }} />
-              <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)' }}>{counts.farmers}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Farmers Registered</div>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+              <Users size={16} color="var(--primary)" style={{ marginBottom: '0.25rem' }} />
+              <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)' }}>{counts.farmers}</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Farmers</div>
             </div>
 
-            <div style={{ padding: '0.85rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-              <TrendingUp size={18} color="var(--warning)" style={{ marginBottom: '0.3rem' }} />
-              <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)' }}>{counts.sales}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Total Sales Made</div>
+            <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'var(--bg-surface-hover)', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+              <TrendingUp size={16} color="var(--warning)" style={{ marginBottom: '0.25rem' }} />
+              <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)' }}>{counts.sales}</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Sales</div>
             </div>
           </div>
 
           {/* Revenue Breakdown */}
           <div>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <IndianRupee size={16} color="var(--primary)" /> Revenue Overview
+            <h4 style={{ fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.65rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <IndianRupee size={15} color="var(--primary)" /> Revenue Overview
             </h4>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-              <div style={{ padding: '1rem', borderRadius: '10px', background: 'var(--primary-light)', border: '1px solid var(--border-color)' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '500', textTransform: 'uppercase' }}>Today</span>
-                <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginTop: '0.2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.65rem' }}>
+              <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'var(--primary-light)', border: '1px solid var(--border-color)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--primary)', fontWeight: '500', textTransform: 'uppercase' }}>Today</span>
+                <div style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', marginTop: '0.2rem' }}>
                   ₹{revenue.today.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div style={{ padding: '1rem', borderRadius: '10px', background: 'var(--info-bg)', border: '1px solid var(--info-border)' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--info)', fontWeight: '500', textTransform: 'uppercase' }}>This Week</span>
-                <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginTop: '0.2rem' }}>
+              <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'var(--info-bg)', border: '1px solid var(--info-border)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--info)', fontWeight: '500', textTransform: 'uppercase' }}>This Week</span>
+                <div style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', marginTop: '0.2rem' }}>
                   ₹{revenue.this_week.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div style={{ padding: '1rem', borderRadius: '10px', background: 'var(--warning-bg)', border: '1px solid var(--warning-border)' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--warning)', fontWeight: '500', textTransform: 'uppercase' }}>This Month</span>
-                <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', marginTop: '0.2rem' }}>
+              <div style={{ padding: '0.75rem', borderRadius: '10px', background: 'var(--warning-bg)', border: '1px solid var(--warning-border)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--warning)', fontWeight: '500', textTransform: 'uppercase' }}>This Month</span>
+                <div style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', marginTop: '0.2rem' }}>
                   ₹{revenue.this_month.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
               </div>

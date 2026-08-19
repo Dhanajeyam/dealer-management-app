@@ -222,11 +222,11 @@ export default function AnalyticsView({ onNavigateToStock }) {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-        gap: '1.25rem'
+        gap: '1rem'
       }}>
         {/* Today's Revenue */}
         <div className="glass-card" style={{
-          padding: '1.5rem',
+          padding: '1.25rem',
           background: 'var(--bg-surface)',
           border: '1px solid var(--border-color)',
           borderTop: '4px solid var(--primary)',
@@ -234,22 +234,22 @@ export default function AnalyticsView({ onNavigateToStock }) {
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase' }}>
               Today's Revenue
             </span>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Calendar size={20} color="var(--primary)" />
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Calendar size={18} color="var(--primary)" />
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
               ₹{revenue.today_billed.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', marginTop: '0.3rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', marginTop: '0.25rem' }}>
               Cash Collected: ₹{revenue.today_collected.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
               Billed vs actual payments today
             </div>
           </div>
@@ -257,7 +257,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
 
         {/* This Week's Revenue */}
         <div className="glass-card" style={{
-          padding: '1.5rem',
+          padding: '1.25rem',
           background: 'var(--bg-surface)',
           border: '1px solid var(--border-color)',
           borderTop: '4px solid var(--accent)',
@@ -265,22 +265,22 @@ export default function AnalyticsView({ onNavigateToStock }) {
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--accent)', textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--accent)', textTransform: 'uppercase' }}>
               This Week's Revenue
             </span>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--accent-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <BarChart3 size={20} color="var(--accent)" />
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--accent-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <BarChart3 size={18} color="var(--accent)" />
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
               ₹{revenue.this_week_billed.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: '500', marginTop: '0.3rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: '500', marginTop: '0.25rem' }}>
               Cash Collected: ₹{revenue.this_week_collected.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
               Billed vs actual payments this week
             </div>
           </div>
@@ -288,7 +288,7 @@ export default function AnalyticsView({ onNavigateToStock }) {
 
         {/* This Month's Revenue */}
         <div className="glass-card" style={{
-          padding: '1.5rem',
+          padding: '1.25rem',
           background: 'var(--bg-surface)',
           border: '1px solid var(--border-color)',
           borderTop: '4px solid var(--primary)',
@@ -296,22 +296,22 @@ export default function AnalyticsView({ onNavigateToStock }) {
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.88rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--primary)', textTransform: 'uppercase' }}>
               This Month's Revenue
             </span>
-            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <IndianRupee size={20} color="var(--primary)" />
+            <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IndianRupee size={18} color="var(--primary)" />
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
+            <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
               ₹{revenue.this_month_billed.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', marginTop: '0.3rem' }}>
+            <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', marginTop: '0.25rem' }}>
               Cash Collected: ₹{revenue.this_month_collected.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
               Billed vs actual payments this month
             </div>
           </div>
@@ -321,11 +321,11 @@ export default function AnalyticsView({ onNavigateToStock }) {
       {/* SECTION 2 & 3 GRID: TOP 5 PRODUCTS & LOW STOCK REORDER */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-        gap: '1.5rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '1.25rem'
       }}>
         {/* SECTION 2: TOP 5 PRODUCTS BY QUANTITY SOLD */}
-        <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
+        <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
               <Award size={22} color="var(--warning)" />

@@ -125,13 +125,13 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1rem',
+        padding: '0.5rem',
         overflowY: 'auto'
       }}>
         <div className="modal-card-container" style={{
           maxWidth: '640px',
           width: '100%',
-          maxHeight: '90vh',
+          maxHeight: 'min(94vh, 760px)',
           display: 'flex',
           flexDirection: 'column',
           background: 'var(--bg-surface, #1e293b)',
@@ -142,62 +142,63 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
         }}>
           {/* Modal Title & Actions */}
           <div style={{
-            padding: '1.25rem 1.5rem',
+            padding: '0.85rem 1rem',
             borderBottom: '1px solid var(--border-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            gap: '0.5rem',
             background: 'var(--bg-surface-hover)'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <CheckCircle2 size={24} color="var(--success)" />
-              <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
+              <CheckCircle2 size={22} color="var(--success)" style={{ flexShrink: 0 }} />
+              <div style={{ minWidth: 0 }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   Sale Invoice &amp; Receipt
                 </h3>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
                   Bill ID: {billNumber}
                 </p>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
               <button
                 onClick={handlePrint}
                 className="no-print"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.6rem 1.1rem',
-                  borderRadius: '10px',
+                  gap: '0.35rem',
+                  padding: '0.45rem 0.85rem',
+                  borderRadius: '9px',
                   background: 'var(--primary)',
                   color: '#fff',
                   fontWeight: '600',
-                  fontSize: '0.88rem',
+                  fontSize: '0.8rem',
                   border: 'none',
                   cursor: 'pointer',
                   boxShadow: 'var(--shadow-glow)'
                 }}
               >
-                <Printer size={18} />
+                <Printer size={15} />
                 Print Bill
               </button>
               <button
                 onClick={onClose}
                 className="no-print"
-                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.2rem' }}
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.25rem' }}
               >
-                <X size={22} />
+                <X size={20} />
               </button>
             </div>
           </div>
 
           {/* Printable Receipt Body */}
-          <div className="modal-body-container" style={{ padding: '1.5rem', overflowY: 'auto' }}>
+          <div className="modal-body-container" style={{ padding: '0.85rem', overflowY: 'auto' }}>
             <div id="printable-bill-area" style={{
               background: '#ffffff',
               color: 'var(--text-main)',
-              padding: '1.75rem',
+              padding: '1.25rem 1rem',
               borderRadius: '12px',
               border: '1px solid var(--border-color)',
               fontFamily: 'var(--font-family)'
@@ -218,60 +219,53 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                       <h2 style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--primary)', margin: 0, letterSpacing: '-0.01em' }}>
                         {shopProfile?.shop_name || 'Agri-Chemical Distribution'}
                       </h2>
-                      <p style={{ fontSize: '0.85rem', color: '#475569', margin: '0.2rem 0 0 0' }}>
-                        Authorized Dealer • Seeds, Fertilizers &amp; Pesticides
-                      </p>
                       {shopProfile?.address && (
-                        <p style={{ fontSize: '0.85rem', color: '#475569', margin: '0.1rem 0 0 0' }}>
-                          Address: {shopProfile.address}
-                        </p>
-                      )}
-                      {shopProfile?.phone && (
-                        <p style={{ fontSize: '0.85rem', color: '#475569', margin: '0.1rem 0 0 0' }}>
-                          Ph: {shopProfile.phone}
-                        </p>
-                      )}
-                    </div>
-
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{
-                        display: 'inline-block',
-                        padding: '0.25rem 0.75rem',
-                        background: hasGstin ? '#ecfdf5' : '#f1f5f9',
-                        color: hasGstin ? '#047857' : '#334155',
-                        borderRadius: '6px',
-                        fontWeight: '700',
-                        fontSize: '0.85rem',
-                        marginBottom: '0.3rem',
-                        border: `1px solid ${hasGstin ? '#a7f3d0' : '#cbd5e1'}`
-                      }}>
-                        {hasGstin ? 'TAX INVOICE' : 'SALE BILL'}
-                      </div>
-                      {hasGstin && (
-                        <div style={{ fontSize: '0.82rem', color: '#047857', fontWeight: '700', marginBottom: '0.15rem' }}>
-                          GSTIN: {shopProfile.gstin.trim().toUpperCase()}
+                        <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '0.2rem' }}>
+                          {shopProfile.address}
                         </div>
                       )}
-                      <div style={{ fontSize: '0.85rem', color: '#334155', fontWeight: '600' }}>
-                        {billNumber}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.1rem' }}>
-                        {formattedDate}
+                      {shopProfile?.phone && (
+                        <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: '0.1rem' }}>
+                          Phone: {shopProfile.phone}
+                        </div>
+                      )}
+                      {hasGstin && (
+                        <div style={{ fontSize: '0.82rem', color: '#15803d', fontWeight: '600', marginTop: '0.15rem' }}>
+                          GSTIN: {shopProfile.gstin}
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{
+                        display: 'inline-block',
+                        padding: '0.25rem 0.65rem',
+                        borderRadius: '6px',
+                        background: statusBg,
+                        color: statusColor,
+                        border: `1px solid ${statusBorder}`,
+                        fontSize: '0.75rem',
+                        fontWeight: '700',
+                        textTransform: 'uppercase'
+                      }}>
+                        {paymentStatusLabel}
+                      </span>
+                      <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '0.4rem' }}>
+                        Date: {formattedDate}
                       </div>
                     </div>
                   </div>
                 )
               })()}
 
-              {/* Customer Details Box */}
+              {/* Farmer Info Box */}
               <div style={{
                 background: '#f8fafc',
                 border: '1px solid #e2e8f0',
                 borderRadius: '8px',
-                padding: '0.85rem 1rem',
-                marginBottom: '1.25rem',
+                padding: '0.75rem 0.85rem',
+                marginBottom: '1rem',
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
                 gap: '0.5rem'
               }}>
                 <div>
@@ -282,62 +276,65 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                     {activeFarmer?.name || 'Walk-in Customer'}
                   </span>
                 </div>
-                <div style={{ textAlign: 'right' }}>
+                <div style={{ textAlign: 'left' }}>
                   {activeFarmer?.phone && (
-                    <div style={{ fontSize: '0.85rem', color: '#334155' }}>
+                    <div style={{ fontSize: '0.82rem', color: '#334155' }}>
                       <span style={{ color: '#64748b' }}>Phone: </span>{activeFarmer.phone}
                     </div>
                   )}
                   {activeFarmer?.village && (
-                    <div style={{ fontSize: '0.85rem', color: '#334155' }}>
+                    <div style={{ fontSize: '0.82rem', color: '#334155' }}>
                       <span style={{ color: '#64748b' }}>Village: </span>{activeFarmer.village}
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Purchased Items Table */}
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                marginBottom: '1.25rem',
-                fontSize: '0.88rem'
-              }}>
-                <thead>
-                  <tr style={{ background: '#f1f5f9', borderBottom: '2px solid #cbd5e1', textAlign: 'left' }}>
-                    <th style={{ padding: '0.6rem 0.5rem', width: '5%', color: '#334155' }}>#</th>
-                    <th style={{ padding: '0.6rem 0.5rem', color: '#334155' }}>Product &amp; Brand</th>
-                    <th style={{ padding: '0.6rem 0.5rem', textAlign: 'right', color: '#334155' }}>Qty</th>
-                    <th style={{ padding: '0.6rem 0.5rem', textAlign: 'right', color: '#334155' }}>Rate (₹)</th>
-                    <th style={{ padding: '0.6rem 0.5rem', textAlign: 'right', color: '#334155' }}>Amount (₹)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sale_items.map((item, index) => {
-                    const qty = Number(item.qty || 0)
-                    const price = Number(item.price_at_sale || 0)
-                    const lineTotal = qty * price
-                    return (
-                      <tr key={item.id || index} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                        <td style={{ padding: '0.6rem 0.5rem', color: '#64748b' }}>{index + 1}</td>
-                        <td style={{ padding: '0.6rem 0.5rem' }}>
-                          <div style={{ fontWeight: '600', color: '#0f172a' }}>{item.product_name}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{item.product_brand}</div>
-                        </td>
-                        <td style={{ padding: '0.6rem 0.5rem', textAlign: 'right', fontWeight: '600' }}>
-                          {qty} {item.unit || ''}
-                        </td>
-                        <td style={{ padding: '0.6rem 0.5rem', textAlign: 'right' }}>
-                          ₹{price.toFixed(2)}
-                        </td>
-                        <td style={{ padding: '0.6rem 0.5rem', textAlign: 'right', fontWeight: '700', color: '#0f172a' }}>
-                          ₹{lineTotal.toFixed(2)}
-                        </td>
-                      </tr>
+              {/* Purchased Items Table in Responsive Container */}
+              <div className="responsive-table-container" style={{ overflowX: 'auto' }}>
+                <table style={{
+                  width: '100%',
+                  minWidth: '300px',
+                  borderCollapse: 'collapse',
+                  marginBottom: '1.25rem',
+                  fontSize: '0.85rem'
+                }}>
+                  <thead>
+                    <tr style={{ background: '#f1f5f9', borderBottom: '2px solid #cbd5e1', textAlign: 'left' }}>
+                      <th style={{ padding: '0.5rem 0.4rem', width: '5%', color: '#334155' }}>#</th>
+                      <th style={{ padding: '0.5rem 0.4rem', color: '#334155' }}>Product &amp; Brand</th>
+                      <th style={{ padding: '0.5rem 0.4rem', textAlign: 'right', color: '#334155' }}>Qty</th>
+                      <th style={{ padding: '0.5rem 0.4rem', textAlign: 'right', color: '#334155' }}>Rate (₹)</th>
+                      <th style={{ padding: '0.5rem 0.4rem', textAlign: 'right', color: '#334155' }}>Amount (₹)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sale_items.map((item, index) => {
+                      const qty = Number(item.qty || 0)
+                      const price = Number(item.price_at_sale || 0)
+                      const lineTotal = qty * price
+                      return (
+                        <tr key={item.id || index} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                          <td style={{ padding: '0.5rem 0.4rem', color: '#64748b' }}>{index + 1}</td>
+                          <td style={{ padding: '0.5rem 0.4rem' }}>
+                            <div style={{ fontWeight: '600', color: '#0f172a' }}>{item.product_name}</div>
+                            <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{item.product_brand}</div>
+                          </td>
+                          <td style={{ padding: '0.5rem 0.4rem', textAlign: 'right', fontWeight: '600' }}>
+                            {qty} {item.unit || ''}
+                          </td>
+                          <td style={{ padding: '0.5rem 0.4rem', textAlign: 'right' }}>
+                            ₹{price.toFixed(2)}
+                          </td>
+                          <td style={{ padding: '0.5rem 0.4rem', textAlign: 'right', fontWeight: '700', color: '#0f172a' }}>
+                            ₹{lineTotal.toFixed(2)}
+                          </td>
+                        </tr>
+                      )}
                     )}
-                  )}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
 
               {/* Payment Summary Box */}
               <div style={{

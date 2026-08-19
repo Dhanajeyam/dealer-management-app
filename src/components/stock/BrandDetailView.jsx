@@ -121,81 +121,81 @@ export default function BrandDetailView({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '1rem',
-        marginBottom: '1.75rem'
+        gap: '0.85rem',
+        marginBottom: '1.5rem'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
             type="button"
             onClick={onBack}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.55rem 1rem',
-              borderRadius: '12px',
+              gap: '0.35rem',
+              padding: '0.5rem 0.85rem',
+              borderRadius: '10px',
               background: 'var(--bg-surface-hover)',
               border: '1px solid var(--border-color)',
               color: 'var(--text-muted)',
-              fontSize: '0.85rem',
+              fontSize: '0.82rem',
               fontWeight: '500',
               cursor: 'pointer',
               transition: 'all 0.2s ease'
             }}
           >
-            <ArrowLeft size={16} /> Back to All Brands
+            <ArrowLeft size={15} /> All Brands
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <Layers size={22} color="var(--primary)" />
-            <h2 style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Layers size={20} color="var(--primary)" />
+            <h2 style={{ fontSize: '1.3rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
               {brand.name}
             </h2>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
           {brand.id && (
             <button
               onClick={handleDeleteBrand}
               disabled={deletingBrand}
               style={{
-                padding: '0.6rem 1rem',
-                borderRadius: '12px',
+                padding: '0.55rem 0.85rem',
+                borderRadius: '10px',
                 background: 'var(--danger-bg)',
                 border: '1px solid var(--danger-border)',
                 color: 'var(--danger)',
-                fontSize: '0.85rem',
+                fontSize: '0.82rem',
                 fontWeight: '500',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.4rem'
+                gap: '0.35rem'
               }}
               title="Delete Brand (Protected by ON DELETE RESTRICT)"
             >
-              <Trash2 size={15} /> Delete Brand
+              <Trash2 size={14} /> Delete
             </button>
           )}
 
           <button
             onClick={() => onAddProduct(brand.name)}
             style={{
-              padding: '0.65rem 1.25rem',
-              borderRadius: '12px',
+              padding: '0.55rem 1.1rem',
+              borderRadius: '10px',
               background: 'var(--primary)',
               border: 'none',
               color: '#fff',
-              fontSize: '0.9rem',
+              fontSize: '0.85rem',
               fontWeight: '600',
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.5rem',
+              gap: '0.4rem',
               boxShadow: 'var(--shadow-glow)'
             }}
           >
-            <Plus size={18} /> Add {brand.name} Product
+            <Plus size={16} /> Add Product
           </button>
         </div>
       </div>
@@ -203,18 +203,18 @@ export default function BrandDetailView({
       {/* Delete Error Notification Banner */}
       {deleteError && (
         <div style={{
-          padding: '1rem 1.25rem',
+          padding: '0.85rem 1rem',
           borderRadius: '12px',
           background: 'var(--danger-bg)',
           border: '1px solid var(--danger-border)',
           color: 'var(--danger)',
-          fontSize: '0.9rem',
-          marginBottom: '1.5rem',
+          fontSize: '0.85rem',
+          marginBottom: '1.25rem',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.6rem'
+          gap: '0.5rem'
         }}>
-          <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+          <AlertTriangle size={16} style={{ flexShrink: 0 }} />
           <span>{deleteError}</span>
         </div>
       )}
@@ -222,33 +222,33 @@ export default function BrandDetailView({
       {/* Brand Stat Summary Cards */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '1rem',
-        marginBottom: '1.75rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+        gap: '0.75rem',
+        marginBottom: '1.5rem'
       }}>
-        <div className="glass-card" style={{ padding: '1rem 1.25rem' }}>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
-            Total Brand Products
+        <div className="glass-card" style={{ padding: '0.85rem 1rem' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+            Products
           </span>
-          <span style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--text-main)' }}>
+          <span style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)' }}>
             {totalCount}
           </span>
         </div>
 
-        <div className="glass-card" style={{ padding: '1rem 1.25rem' }}>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
-            Current Page Value
+        <div className="glass-card" style={{ padding: '0.85rem 1rem' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+            Stock Value
           </span>
-          <span style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--primary)' }}>
+          <span style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--primary)' }}>
             ₹{brandValuation.toLocaleString('en-IN')}
           </span>
         </div>
 
-        <div className="glass-card" style={{ padding: '1rem 1.25rem', borderColor: outOfStockCount > 0 ? 'var(--danger-border)' : 'var(--border-color)' }}>
-          <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
-            Out of Stock on Page
+        <div className="glass-card" style={{ padding: '0.85rem 1rem', borderColor: outOfStockCount > 0 ? 'var(--danger-border)' : 'var(--border-color)' }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.2rem' }}>
+            Out of Stock
           </span>
-          <span style={{ fontSize: '1.35rem', fontWeight: '700', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
+          <span style={{ fontSize: '1.2rem', fontWeight: '700', color: outOfStockCount > 0 ? 'var(--danger)' : 'var(--text-main)' }}>
             {outOfStockCount}
           </span>
         </div>

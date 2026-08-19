@@ -64,7 +64,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
             {product.brand}
           </span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
             <button
               onClick={() => onEdit(product)}
               title="Edit Product"
@@ -73,14 +73,16 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-muted)',
                 borderRadius: '8px',
-                padding: '0.35rem',
+                padding: '0.45rem',
+                minWidth: '34px',
+                minHeight: '34px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
             >
-              <Edit3 size={14} />
+              <Edit3 size={15} />
             </button>
             <button
               onClick={() => onDelete(product)}
@@ -90,14 +92,16 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
                 border: '1px solid var(--danger-border)',
                 color: 'var(--danger)',
                 borderRadius: '8px',
-                padding: '0.35rem',
+                padding: '0.45rem',
+                minWidth: '34px',
+                minHeight: '34px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
             >
-              <Trash2 size={14} />
+              <Trash2 size={15} />
             </button>
           </div>
         </div>
@@ -161,14 +165,14 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
           )}
         </div>
 
-        {/* Atomic +/- Buttons */}
+        {/* Atomic +/- Buttons with enlarged touch area */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.25rem',
+          gap: '0.35rem',
           background: 'var(--bg-surface-hover)',
-          padding: '0.2rem 0.35rem',
-          borderRadius: '8px',
+          padding: '0.25rem 0.45rem',
+          borderRadius: '10px',
           border: '1px solid var(--border-color)'
         }}>
           <button
@@ -183,14 +187,15 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0.25rem',
-              borderRadius: '4px'
+              width: '32px',
+              height: '32px',
+              borderRadius: '6px'
             }}
           >
-            <Minus size={14} />
+            <Minus size={16} />
           </button>
 
-          <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-main)', minWidth: '24px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-main)', minWidth: '28px', textAlign: 'center' }}>
             {Number(product.quantity)}
           </span>
 
@@ -199,9 +204,9 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
             disabled={adjusting}
             title="Nudge Stock Up (+1)"
             style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '7px',
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
               background: 'var(--primary)',
               border: 'none',
               color: '#fff',
@@ -211,7 +216,7 @@ export default function ProductCard({ product, onEdit, onDelete, onQuantityChang
               justifyContent: 'center'
             }}
           >
-            <Plus size={14} />
+            <Plus size={16} />
           </button>
         </div>
       </div>

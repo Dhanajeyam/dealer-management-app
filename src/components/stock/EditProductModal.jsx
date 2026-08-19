@@ -112,22 +112,24 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1rem'
+      padding: '0.5rem'
     }}>
       <div className="glass-card" style={{
         maxWidth: '480px',
         width: '100%',
-        padding: '2rem',
-        background: 'var(--bg-surface)'
+        padding: '1.25rem',
+        background: 'var(--bg-surface)',
+        maxHeight: 'min(94vh, 700px)',
+        overflowY: 'auto'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Edit3 size={20} color="var(--primary)" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>Edit Product Details</h3>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Edit Product Details</h3>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.25rem' }}
           >
             <X size={20} />
           </button>
@@ -151,7 +153,7 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
           </div>
         )}
 
-        <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+        <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               Brand Name
@@ -163,13 +165,14 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
               required
               style={{
                 width: '100%',
-                padding: '0.75rem 1rem',
+                padding: '0.65rem 0.85rem',
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-main)',
-                fontSize: '0.95rem',
-                outline: 'none'
+                fontSize: '0.9rem',
+                outline: 'none',
+                boxSizing: 'border-box'
               }}
             />
           </div>
@@ -185,18 +188,19 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
               required
               style={{
                 width: '100%',
-                padding: '0.75rem 1rem',
+                padding: '0.65rem 0.85rem',
                 borderRadius: '10px',
                 background: 'var(--bg-surface-hover)',
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-main)',
-                fontSize: '0.95rem',
-                outline: 'none'
+                fontSize: '0.9rem',
+                outline: 'none',
+                boxSizing: 'border-box'
               }}
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
             <div>
               <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
                 Stock Quantity
@@ -210,13 +214,14 @@ export default function EditProductModal({ product, isOpen, onClose, onProductUp
                 required
                 style={{
                   width: '100%',
-                  padding: '0.75rem 1rem',
+                  padding: '0.65rem 0.85rem',
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.95rem',
-                  outline: 'none'
+                  fontSize: '0.9rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
                 }}
               />
             </div>

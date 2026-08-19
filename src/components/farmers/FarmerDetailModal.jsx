@@ -288,7 +288,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
           </div>
 
           {/* Right Column / Main Area: Purchase History Feed */}
-          <div className="farmer-history-main" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div className="farmer-history-main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <ShoppingBag size={19} color="var(--primary)" />
@@ -547,7 +547,7 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
                 )}
               </div>
             ) : (
-              <div style={{ flex: 1, overflowY: 'auto', paddingRight: '0.35rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div className="farmer-sales-list">
                 {filteredSales.map(s => {
                   const saleDate = new Date(s.created_at).toLocaleString('en-IN', {
                     dateStyle: 'medium',
@@ -556,8 +556,6 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
                   const billId = `INV-${s.id.substring(0, 8).toUpperCase()}`
                   const items = s.sale_items || []
                   const isExpanded = Boolean(expandedSales[s.id])
-                  const displayItems = isExpanded ? items : items.slice(0, 4)
-                  const hiddenCount = items.length - 4
                   const itemCountText = `${items.length} ${items.length === 1 ? 'item' : 'items'}`
                   const formattedTotal = Number(s.total_amount || 0).toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
@@ -582,7 +580,11 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
                       }}
                     >
                       {/* Header Row: Bill ID · Item Count · Total Amount */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <div 
+                        className="farmer-purchase-header"
+                        onClick={() => toggleExpandSale(s.id)}
+                        title={isExpanded ? 'Click to hide items' : 'Click to view items'}
+                      >
                         <div>
                           {(() => {
                             const totalBill = Number(s.total_amount || 0)
@@ -658,8 +660,11 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
                           </div>
                         </div>
 
-                        {/* Action Buttons: Record Payment & Reprint */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
+                        {/* Action Buttons: Record Payment, Reprint & Expand Toggle Button */}
+                        <div 
+                          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto', flexWrap: 'wrap' }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           {(() => {
                             const totalBill = Number(s.total_amount || 0)
                             const payments = s.payments || []
@@ -721,25 +726,25 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
                           >
                             <Printer size={14} /> Reprint
                           </button>
+
+                          {/* Expand / Collapse Chevron Button */}
+                          <button
+                            type="button"
+                            className="farmer-purchase-toggle-btn"
+                            onClick={() => toggleExpandSale(s.id)}
+                            aria-label={isExpanded ? 'Hide items' : 'View items'}
+                            title={isExpanded ? 'Hide itemized breakdown' : 'View itemized breakdown'}
+                          >
+                            <span>{isExpanded ? 'Hide items' : 'View items'}</span>
+                            {isExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                          </button>
                         </div>
                       </div>
 
-                      {/* Itemized Line Items List (Zero internal scrollbars, fluid height) */}
+                      {/* Itemized Line Items List */}
                       {items.length > 0 && (
-                        <div style={{
-                          background: 'var(--bg-surface-hover)',
-                          borderRadius: '10px',
-                          padding: '0.75rem 0.95rem',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.45rem',
-                          border: '1px dashed var(--border-color)',
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          overflow: 'visible',
-                          maxHeight: 'none'
-                        }}>
-                          {displayItems.map((item, idx) => {
+                        <div className={`farmer-purchase-items ${isExpanded ? 'is-expanded' : 'is-collapsed'}`}>
+                          {items.map((item, idx) => {
                             const itemTotal = Number(item.qty || 0) * Number(item.price_at_sale || 0)
                             return (
                               <div key={item.id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: '0.85rem', flexWrap: 'wrap', gap: '0.3rem' }}>
@@ -752,33 +757,6 @@ export default function FarmerDetailModal({ farmer, isOpen, onClose, shopProfile
                               </div>
                             )
                           })}
-
-                          {items.length > 4 && (
-                            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.4rem', marginTop: '0.2rem' }}>
-                              <button
-                                type="button"
-                                onClick={() => toggleExpandSale(s.id)}
-                                style={{
-                                  background: 'transparent',
-                                  border: 'none',
-                                  color: 'var(--primary)',
-                                  fontSize: '0.8rem',
-                                  fontWeight: '500',
-                                  cursor: 'pointer',
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: '0.35rem',
-                                  padding: '0.2rem 0'
-                                }}
-                              >
-                                {isExpanded ? (
-                                  <>Show fewer items <ChevronUp size={14} /></>
-                                ) : (
-                                  <>+{hiddenCount} more items — tap to expand <ChevronDown size={14} /></>
-                                )}
-                              </button>
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>

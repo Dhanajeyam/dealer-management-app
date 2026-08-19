@@ -60,22 +60,24 @@ export default function EditFarmerModal({ farmer, isOpen, onClose, onFarmerUpdat
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1rem'
+      padding: '0.5rem'
     }}>
       <div className="glass-card" style={{
         maxWidth: '480px',
         width: '100%',
-        padding: '2rem',
-        background: 'var(--bg-surface)'
+        padding: '1.25rem',
+        background: 'var(--bg-surface)',
+        maxHeight: 'min(94vh, 650px)',
+        overflowY: 'auto'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Edit3 size={20} color="var(--info)" />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Edit Farmer Profile</h3>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>Edit Farmer Profile</h3>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.25rem' }}
           >
             <X size={20} />
           </button>
@@ -99,13 +101,13 @@ export default function EditFarmerModal({ farmer, isOpen, onClose, onFarmerUpdat
           </div>
         )}
 
-        <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+        <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               Farmer Full Name *
             </label>
             <div style={{ position: 'relative' }}>
-              <User size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+              <User size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 type="text"
                 value={name}
@@ -113,24 +115,25 @@ export default function EditFarmerModal({ farmer, isOpen, onClose, onFarmerUpdat
                 required
                 style={{
                   width: '100%',
-                  padding: '0.75rem 1rem 0.75rem 2.75rem',
+                  padding: '0.65rem 0.85rem 0.65rem 2.5rem',
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.95rem',
-                  outline: 'none'
+                  fontSize: '0.9rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
                 }}
               />
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               Phone Number
             </label>
             <div style={{ position: 'relative' }}>
-              <Phone size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+              <Phone size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 type="tel"
                 value={phone}
@@ -138,24 +141,25 @@ export default function EditFarmerModal({ farmer, isOpen, onClose, onFarmerUpdat
                 placeholder="Optional"
                 style={{
                   width: '100%',
-                  padding: '0.75rem 1rem 0.75rem 2.75rem',
+                  padding: '0.65rem 0.85rem 0.65rem 2.5rem',
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.95rem',
-                  outline: 'none'
+                  fontSize: '0.9rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
                 }}
               />
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               Village / Location
             </label>
             <div style={{ position: 'relative' }}>
-              <MapPin size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+              <MapPin size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 type="text"
                 value={village}
@@ -163,13 +167,14 @@ export default function EditFarmerModal({ farmer, isOpen, onClose, onFarmerUpdat
                 placeholder="Optional"
                 style={{
                   width: '100%',
-                  padding: '0.75rem 1rem 0.75rem 2.75rem',
+                  padding: '0.65rem 0.85rem 0.65rem 2.5rem',
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.95rem',
-                  outline: 'none'
+                  fontSize: '0.9rem',
+                  outline: 'none',
+                  boxSizing: 'border-box'
                 }}
               />
             </div>

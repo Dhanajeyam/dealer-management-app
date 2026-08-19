@@ -27,7 +27,7 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
             <User size={20} color="var(--primary)" />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
             <button
               onClick={() => onEdit(farmer)}
               title="Edit Farmer"
@@ -36,14 +36,16 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
                 border: '1px solid var(--border-color)',
                 color: 'var(--text-muted)',
                 borderRadius: '8px',
-                padding: '0.35rem',
+                padding: '0.45rem',
+                minWidth: '34px',
+                minHeight: '34px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
             >
-              <Edit3 size={14} />
+              <Edit3 size={15} />
             </button>
             <button
               onClick={() => onDelete(farmer)}
@@ -53,14 +55,16 @@ export default function FarmerCard({ farmer, onView, onEdit, onDelete }) {
                 border: '1px solid var(--danger-border)',
                 color: 'var(--danger)',
                 borderRadius: '8px',
-                padding: '0.35rem',
+                padding: '0.45rem',
+                minWidth: '34px',
+                minHeight: '34px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
             >
-              <Trash2 size={14} />
+              <Trash2 size={15} />
             </button>
           </div>
         </div>

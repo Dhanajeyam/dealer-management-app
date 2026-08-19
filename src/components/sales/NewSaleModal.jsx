@@ -292,12 +292,12 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1rem'
+      padding: '0.5rem'
     }}>
       <div className="glass-card" style={{
         maxWidth: '900px',
         width: '100%',
-        maxHeight: '90vh',
+        maxHeight: 'min(94vh, 760px)',
         display: 'flex',
         flexDirection: 'column',
         background: 'var(--bg-surface, #1e293b)',
@@ -307,7 +307,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
       }}>
         {/* Header */}
         <div style={{
-          padding: '1.25rem 1.5rem',
+          padding: '1rem 1.25rem',
           borderBottom: '1px solid var(--border-color, rgba(255,255,255,0.1))',
           display: 'flex',
           alignItems: 'center',
@@ -315,46 +315,40 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
           background: 'var(--bg-surface-hover)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <ShoppingCart size={22} color="var(--primary)" />
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+            <ShoppingCart size={20} color="var(--primary)" />
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
               Create New Sale / Checkout
             </h3>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.25rem' }}
           >
-            <X size={22} />
+            <X size={20} />
           </button>
         </div>
 
         {/* Error Notification */}
         {error && (
           <div style={{
-            margin: '1rem 1.5rem 0 1.5rem',
-            padding: '0.75rem 1rem',
+            margin: '0.75rem 1rem 0 1rem',
+            padding: '0.65rem 0.85rem',
             borderRadius: '10px',
             background: 'rgba(239, 68, 68, 0.15)',
             border: '1px solid rgba(239, 68, 68, 0.3)',
             color: '#f87171',
-            fontSize: '0.88rem',
+            fontSize: '0.85rem',
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem'
           }}>
-            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            <AlertCircle size={16} style={{ flexShrink: 0 }} />
             <span>{error}</span>
           </div>
         )}
 
         {/* Content Body Grid (Left: Selection & Cart, Right: Summary & Confirm) */}
-        <div style={{
-          padding: '1.5rem',
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 1fr',
-          gap: '1.5rem',
-          overflowY: 'auto'
-        }}>
+        <div className="new-sale-modal-grid">
           {/* LEFT COLUMN: Farmer & Item Picker */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* Section 1: Farmer Selection */}
@@ -406,7 +400,7 @@ export default function NewSaleModal({ isOpen, onClose, products = [], farmers =
                       fontSize: '0.85rem'
                     }}
                   />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.5rem' }}>
                     <input
                       type="text"
                       placeholder="Phone Number"

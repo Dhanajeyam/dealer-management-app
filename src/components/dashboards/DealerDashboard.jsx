@@ -246,10 +246,10 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
   const trialInfo = getTrialInfo(effectiveProfile)
 
   const navItems = [
-    { id: 'stock', label: 'Stock', icon: Package },
-    { id: 'sales', label: 'Sales', icon: FileText },
-    { id: 'farmers', label: 'Farmers', icon: Users },
-    { id: 'dues', label: 'Credit Dues', icon: AlertTriangle, color: activeTab === 'dues' ? 'var(--danger)' : undefined },
+    { id: 'stock', label: 'Stock', icon: Package, primary: true },
+    { id: 'sales', label: 'Sales', icon: FileText, primary: true },
+    { id: 'farmers', label: 'Farmers', icon: Users, primary: true },
+    { id: 'dues', label: 'Credit Dues', icon: AlertTriangle, color: activeTab === 'dues' ? 'var(--danger)' : undefined, primary: true },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     { id: 'settings', label: 'Settings', icon: Settings }
   ]
@@ -273,15 +273,17 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '0.35rem',
-          padding: '0.4rem 0.75rem',
+          padding: '0.35rem 0.65rem',
           borderRadius: '8px',
           background: 'var(--warning-bg)',
           color: 'var(--warning)',
           border: '1px solid var(--warning-border)',
-          fontSize: '0.78rem',
+          fontSize: '0.75rem',
           fontWeight: '600'
         }}>
-          <Clock size={13} /> {trialInfo.text}
+          <Clock size={12} />
+          <span className="desktop-only">{trialInfo.text}</span>
+          <span className="mobile-only">{trialInfo.daysLeft}d left</span>
         </div>
       )}
 
@@ -289,7 +291,9 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         onClick={() => setIsNewSaleOpen(true)}
         className="btn-new-sale"
       >
-        <ShoppingCart size={17} /> + New Sale / Cart
+        <ShoppingCart size={16} />
+        <span className="desktop-only">+ New Sale / Cart</span>
+        <span className="mobile-only">+ Sale</span>
       </button>
 
       <button
@@ -297,7 +301,8 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
         className="btn-signout"
         title={user?.email ? `Signed in as ${user.email}` : 'Sign Out'}
       >
-        <LogOut size={15} /> Sign Out
+        <LogOut size={14} />
+        <span className="desktop-only">Sign Out</span>
       </button>
     </>
   )
@@ -406,24 +411,24 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
             {/* Farmers Metrics Bar */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-              gap: '1.25rem',
-              marginBottom: '2rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+              gap: '0.85rem',
+              marginBottom: '1.5rem'
             }}>
-              <div className="glass-card" style={{ padding: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Registered Farmers</span>
-                  <Users size={18} color="var(--primary)" />
+              <div className="glass-card" style={{ padding: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: '500' }}>Registered Farmers</span>
+                  <Users size={16} color="var(--primary)" />
                 </div>
-                <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)' }}>{farmers.length}</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-main)' }}>{farmers.length}</div>
               </div>
 
-              <div className="glass-card" style={{ padding: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: '500' }}>Villages Covered</span>
-                  <MapPin size={18} color="var(--accent)" />
+              <div className="glass-card" style={{ padding: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: '500' }}>Villages Covered</span>
+                  <MapPin size={16} color="var(--accent)" />
                 </div>
-                <div style={{ fontSize: '1.65rem', fontWeight: '700', color: 'var(--text-main)' }}>{totalVillagesCount}</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-main)' }}>{totalVillagesCount}</div>
               </div>
             </div>
 
@@ -433,11 +438,11 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: '1rem',
-              marginBottom: '2rem'
+              gap: '0.85rem',
+              marginBottom: '1.5rem'
             }}>
               {/* Search Box */}
-              <div style={{ position: 'relative', minWidth: '260px', flex: '1 1 300px' }}>
+              <div style={{ position: 'relative', minWidth: 0, flex: '1 1 240px' }}>
                 <Search size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
                 <input
                   type="text"
@@ -452,7 +457,8 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                     border: '1px solid var(--border-color)',
                     color: 'var(--text-main)',
                     fontSize: '0.9rem',
-                    outline: 'none'
+                    outline: 'none',
+                    boxSizing: 'border-box'
                   }}
                 />
               </div>
@@ -461,13 +467,13 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
               <button
                 onClick={() => setIsAddFarmerOpen(true)}
                 style={{
-                  padding: '0.75rem 1.4rem',
+                  padding: '0.75rem 1.25rem',
                   borderRadius: '12px',
                   background: 'var(--primary)',
                   border: 'none',
                   color: '#fff',
-                  fontSize: '0.95rem',
-                  fontWeight: '700',
+                  fontSize: '0.9rem',
+                  fontWeight: '600',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -475,7 +481,7 @@ export default function DealerDashboard({ profile, user, onSignOut }) {
                   boxShadow: 'var(--shadow-glow)'
                 }}
               >
-                <UserPlus size={20} /> Add New Farmer
+                <UserPlus size={18} /> Add New Farmer
               </button>
             </div>
 

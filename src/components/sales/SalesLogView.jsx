@@ -523,8 +523,6 @@ export default function SalesLogView({ user, shopProfile, onReprintBill, onNewSa
 
             const items = s.sale_items || []
             const isExpanded = Boolean(expandedSales[s.id])
-            const displayItems = isExpanded ? items : items.slice(0, 4)
-            const hiddenCount = items.length - 4
             const itemCountText = `${items.length} ${items.length === 1 ? 'item' : 'items'}`
 
             return (
@@ -544,130 +542,144 @@ export default function SalesLogView({ user, shopProfile, onReprintBill, onNewSa
                 }}
               >
                 {/* Sale Card Header Row */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
-                  <div>
-                    {/* Bill ID, Farmer Name & Payment Status Badge */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '0.3rem' }}>
-                      <span style={{
-                        background: 'var(--info-bg)',
-                        border: '1px solid var(--info-border)',
-                        padding: '0.15rem 0.55rem',
-                        borderRadius: '6px',
-                        color: 'var(--info)',
-                        fontSize: '0.78rem',
-                        fontWeight: '500'
-                      }}>
-                        {billId}
-                      </span>
+                <div className="sales-card-header">
+                  <div className="sales-card-info-col">
+                    {/* Row 1: Bill ID, Farmer Name & Payment Status Badge */}
+                    <div className="sales-card-top-row">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+                        <span style={{
+                          background: 'var(--info-bg)',
+                          border: '1px solid var(--info-border)',
+                          padding: '0.15rem 0.55rem',
+                          borderRadius: '6px',
+                          color: 'var(--info)',
+                          fontSize: '0.78rem',
+                          fontWeight: '500'
+                        }}>
+                          {billId}
+                        </span>
 
-                      <span style={{ color: 'var(--text-main)', fontWeight: '600', fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                        <User size={16} color="var(--primary)" /> {farmerName} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '400' }}>{farmerVillage}</span>
-                      </span>
+                        <span style={{ color: 'var(--text-main)', fontWeight: '600', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <User size={14} color="var(--primary)" /> {farmerName} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '400' }}>({farmerVillage || 'No Village'})</span>
+                        </span>
+                      </div>
 
                       {/* Payment Status Badge */}
                       <span style={{
-                        padding: '0.2rem 0.65rem',
+                        padding: '0.18rem 0.6rem',
                         borderRadius: '20px',
                         fontSize: '0.75rem',
                         fontWeight: '500',
                         background: badgeBg,
                         color: badgeColor,
-                        border: `1px solid ${badgeBorder}`
+                        border: `1px solid ${badgeBorder}`,
+                        whiteSpace: 'nowrap'
                       }}>
                         {badgeLabel}
                       </span>
                     </div>
 
-                    {/* Date / Time & Item Count */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                        <Clock size={13} color="var(--text-muted)" /> {saleDate}
-                      </span>
-                      <span>•</span>
-                      <span style={{ color: 'var(--text-main)', fontWeight: '500' }}>{itemCountText}</span>
+                    {/* Row 2: Date / Time & Item Count (+ Tap-to-expand) */}
+                    <div 
+                      className="sales-card-second-row"
+                      onClick={() => toggleExpandSale(s.id)}
+                      title={isExpanded ? 'Click to hide items' : 'Click to view items'}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                          <Clock size={12} color="var(--text-muted)" /> {saleDate}
+                        </span>
+                        <span>•</span>
+                        <span style={{ color: 'var(--text-main)', fontWeight: '500' }}>{itemCountText}</span>
+                      </div>
+
+                      {/* Expand / Collapse Indicator Button */}
+                      <button
+                        type="button"
+                        className="sales-card-toggle-btn"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleExpandSale(s.id)
+                        }}
+                        aria-label={isExpanded ? 'Hide items' : 'View items'}
+                        title={isExpanded ? 'Hide items' : 'View items'}
+                      >
+                        <span>{isExpanded ? 'Hide items' : 'View items'}</span>
+                        {isExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                      </button>
                     </div>
                   </div>
 
-                  {/* Total Amount, Record Payment & Reprint Buttons */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginLeft: 'auto', flexShrink: 0 }}>
-                    <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', fontWeight: '500' }}>Total Bill</span>
+                  {/* Row 3: Total Amount, Record Payment & Reprint Buttons */}
+                  <div className="sales-card-actions">
+                    <div style={{ textAlign: 'left' }}>
+                      <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', fontWeight: '600', letterSpacing: '0.03em' }}>TOTAL BILL</span>
                       <span style={{ color: 'var(--primary)', fontWeight: '700', fontSize: '1.15rem' }}>
                         ₹{formattedTotal}
                       </span>
                     </div>
 
-                    {balanceDue > 0.01 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                      {balanceDue > 0.01 && (
+                        <button
+                          type="button"
+                          onClick={() => setActivePaymentSale({ ...s, payments })}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            padding: '0.45rem 0.75rem',
+                            borderRadius: '8px',
+                            background: 'var(--primary)',
+                            border: 'none',
+                            color: '#fff',
+                            fontWeight: '700',
+                            fontSize: '0.78rem',
+                            cursor: 'pointer',
+                            boxShadow: 'var(--shadow-glow)'
+                          }}
+                        >
+                          <CreditCard size={13} /> Record Payment
+                        </button>
+                      )}
+
                       <button
                         type="button"
-                        onClick={() => setActivePaymentSale({ ...s, payments })}
+                        onClick={() => {
+                          if (onReprintBill) {
+                            onReprintBill({
+                              ...s,
+                              farmer: s.farmers || { name: farmerName },
+                              payments
+                            })
+                          }
+                        }}
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '0.35rem',
-                          padding: '0.45rem 0.85rem',
+                          padding: '0.45rem 0.75rem',
                           borderRadius: '8px',
-                          background: 'var(--primary)',
-                          border: 'none',
-                          color: '#fff',
+                          background: 'var(--primary-light)',
+                          border: '1px solid var(--border-color)',
+                          color: 'var(--primary)',
                           fontWeight: '700',
-                          fontSize: '0.8rem',
+                          fontSize: '0.78rem',
                           cursor: 'pointer',
-                          boxShadow: 'var(--shadow-glow)'
+                          transition: 'all 0.2s ease'
                         }}
+                        title="Reprint Bill Receipt"
                       >
-                        <CreditCard size={14} /> Record Payment
+                        <Printer size={13} /> Reprint
                       </button>
-                    )}
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onReprintBill) {
-                          onReprintBill({
-                            ...s,
-                            farmer: s.farmers || { name: farmerName },
-                            payments
-                          })
-                        }
-                      }}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.4rem',
-                        padding: '0.45rem 0.85rem',
-                        borderRadius: '8px',
-                        background: 'var(--primary-light)',
-                        border: '1px solid var(--border-color)',
-                        color: 'var(--primary)',
-                        fontWeight: '700',
-                        fontSize: '0.8rem',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease'
-                      }}
-                      title="Reprint Bill Receipt"
-                    >
-                      <Printer size={14} /> Reprint
-                    </button>
+                    </div>
                   </div>
                 </div>
 
                 {/* Line Items List */}
                 {items.length > 0 && (
-                  <div style={{
-                    background: 'var(--bg-surface-hover)',
-                    borderRadius: '10px',
-                    padding: '0.75rem 1rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.45rem',
-                    border: '1px dashed var(--border-color)',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    overflow: 'visible',
-                    maxHeight: 'none'
-                  }}>
-                    {displayItems.map((item, idx) => {
+                  <div className={`sales-card-items ${isExpanded ? 'is-expanded' : 'is-collapsed'}`}>
+                    {items.map((item, idx) => {
                       const itemTotal = Number(item.qty || 0) * Number(item.price_at_sale || 0)
                       return (
                         <div key={item.id || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', fontSize: '0.85rem', flexWrap: 'wrap', gap: '0.4rem' }}>
@@ -681,32 +693,27 @@ export default function SalesLogView({ user, shopProfile, onReprintBill, onNewSa
                       )
                     })}
 
-                    {items.length > 4 && (
-                      <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.4rem', marginTop: '0.2rem' }}>
-                        <button
-                          type="button"
-                          onClick={() => toggleExpandSale(s.id)}
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'var(--primary)',
-                            fontSize: '0.8rem',
-                            fontWeight: '700',
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            padding: '0.2rem 0'
-                          }}
-                        >
-                          {isExpanded ? (
-                            <>Show fewer items <ChevronUp size={14} /></>
-                          ) : (
-                            <>+{hiddenCount} more items — tap to expand <ChevronDown size={14} /></>
-                          )}
-                        </button>
-                      </div>
-                    )}
+                    {/* Collapse Button at bottom of expanded items */}
+                    <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.4rem', marginTop: '0.2rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => toggleExpandSale(s.id)}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'var(--primary)',
+                          fontSize: '0.8rem',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          padding: '0.2rem 0'
+                        }}
+                      >
+                        Hide item details <ChevronUp size={14} />
+                      </button>
+                    </div>
                   </div>
                 )}
 

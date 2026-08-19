@@ -131,11 +131,11 @@ export default function BrandListView({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '1rem',
-        marginBottom: '2rem'
+        gap: '0.85rem',
+        marginBottom: '1.5rem'
       }}>
         {/* Search Input Box */}
-        <div style={{ position: 'relative', minWidth: '280px', flex: '1 1 320px' }}>
+        <div style={{ position: 'relative', minWidth: 0, flex: '1 1 240px' }}>
           <Search size={18} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             type="text"
@@ -150,7 +150,8 @@ export default function BrandListView({
               border: '1px solid var(--border-color)',
               color: 'var(--text-main)',
               fontSize: '0.9rem',
-              outline: 'none'
+              outline: 'none',
+              boxSizing: 'border-box'
             }}
           />
         </div>
@@ -159,12 +160,12 @@ export default function BrandListView({
         <button
           onClick={onAddStock}
           style={{
-            padding: '0.75rem 1.4rem',
+            padding: '0.75rem 1.25rem',
             borderRadius: '12px',
             background: 'var(--primary)',
             border: 'none',
             color: '#fff',
-            fontSize: '0.95rem',
+            fontSize: '0.9rem',
             fontWeight: '600',
             cursor: 'pointer',
             display: 'flex',
@@ -173,7 +174,7 @@ export default function BrandListView({
             boxShadow: 'var(--shadow-glow)'
           }}
         >
-          <Plus size={20} /> Add Stock Item
+          <Plus size={18} /> Add Stock Item
         </button>
       </div>
 
@@ -217,8 +218,8 @@ export default function BrandListView({
         /* Brand Cards Grid */
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-          gap: '1.5rem'
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: '1.25rem'
         }}>
           {brandsSummary.map((brand) => (
             <div

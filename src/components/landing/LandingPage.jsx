@@ -52,7 +52,7 @@ export default function LandingPage() {
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: '1px solid var(--border-color)',
-        padding: '0.85rem 2rem'
+        padding: '0.75rem 1rem'
       }}>
         <div style={{
           maxWidth: '1200px',
@@ -60,27 +60,28 @@ export default function LandingPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '1rem'
+          gap: '0.75rem'
         }}>
           {/* Brand Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none', minWidth: 0 }}>
             <div style={{
-              width: '38px',
-              height: '38px',
+              width: '36px',
+              height: '36px',
               borderRadius: '10px',
               background: 'var(--primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: 'var(--shadow-glow)'
+              boxShadow: 'var(--shadow-glow)',
+              flexShrink: 0
             }}>
-              <Store size={22} color="#FFFFFF" />
+              <Store size={20} color="#FFFFFF" />
             </div>
-            <div>
-              <span style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.015em', display: 'block', lineHeight: 1.1 }}>
+            <div style={{ minWidth: 0 }}>
+              <span style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.015em', display: 'block', lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 ChemicalShop
               </span>
-              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '400' }}>
+              <span className="desktop-only" style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '400' }}>
                 Agri-Dealer Retail Platform
               </span>
             </div>
@@ -102,44 +103,44 @@ export default function LandingPage() {
           </nav>
 
           {/* Action CTAs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
             <Link
               to="/app"
               style={{
-                padding: '0.55rem 1rem',
+                padding: '0.5rem 0.85rem',
                 borderRadius: '10px',
                 border: '1px solid var(--border-color)',
                 background: 'var(--bg-surface)',
                 color: 'var(--text-main)',
-                fontSize: '0.85rem',
+                fontSize: '0.82rem',
                 fontWeight: '500',
                 textDecoration: 'none',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                transition: 'all 0.2s'
+                whiteSpace: 'nowrap'
               }}
             >
-              Dealer Sign In
+              Sign In
             </Link>
 
             <Link
               to="/app?mode=signup"
               style={{
-                padding: '0.55rem 1.15rem',
+                padding: '0.5rem 0.95rem',
                 borderRadius: '10px',
                 border: 'none',
                 background: 'var(--primary)',
                 color: '#FFFFFF',
-                fontSize: '0.85rem',
+                fontSize: '0.82rem',
                 fontWeight: '600',
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.4rem',
+                gap: '0.35rem',
                 boxShadow: 'var(--shadow-glow)',
-                transition: 'all 0.2s'
+                whiteSpace: 'nowrap'
               }}
             >
-              Get Started <ArrowRight size={15} />
+              Get Started <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -150,7 +151,7 @@ export default function LandingPage() {
       {/* ========================================================================= */}
       <section style={{
         position: 'relative',
-        padding: '4.5rem 1.5rem 5rem 1.5rem',
+        padding: '3.5rem 1rem 4rem 1rem',
         background: 'var(--bg-primary)',
         overflow: 'hidden'
       }}>
@@ -170,8 +171,8 @@ export default function LandingPage() {
           maxWidth: '1200px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: '3.5rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '2.5rem',
           alignItems: 'center',
           position: 'relative',
           zIndex: 2
@@ -183,38 +184,38 @@ export default function LandingPage() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.45rem',
-              padding: '0.4rem 1rem',
+              padding: '0.4rem 0.9rem',
               borderRadius: '999px',
               background: 'var(--primary-light)',
               border: '1px solid rgba(22, 163, 74, 0.25)',
               color: 'var(--primary)',
-              fontSize: '0.82rem',
+              fontSize: '0.8rem',
               fontWeight: '500',
               marginBottom: '1.25rem',
               boxShadow: '0 2px 8px rgba(22, 163, 74, 0.08)'
             }}>
               <Sprout size={16} />
-              <span>Built for Indian Pesticide, Fertilizer & Seed Retailers</span>
+              <span>Built for Indian Agri-Input Retailers</span>
             </div>
 
             {/* Main Headline */}
             <h1 style={{
-              fontSize: 'clamp(2.2rem, 4.5vw, 3.2rem)',
+              fontSize: 'clamp(1.9rem, 4.5vw, 3.2rem)',
               fontWeight: '700',
-              lineHeight: 1.18,
+              lineHeight: 1.2,
               letterSpacing: '-0.02em',
               color: 'var(--text-main)',
               marginBottom: '1.25rem'
             }}>
-              Smart Stock, 15-Sec Billing & Farmer Credit Tracking for Agri-Dealers
+              Smart Stock, 15-Sec Billing &amp; Farmer Credit Tracking for Agri-Dealers
             </h1>
 
             {/* Subheadline */}
             <p style={{
-              fontSize: '1.05rem',
+              fontSize: '0.98rem',
               color: 'var(--text-muted)',
-              lineHeight: 1.65,
-              marginBottom: '2rem'
+              lineHeight: 1.6,
+              marginBottom: '1.75rem'
             }}>
               Designed specifically for agrochemical store owners. Group formulations by manufacturer brand (Bayer, Syngenta, UPL), generate GST-ready thermal bills in seconds, and eliminate untracked farmer credit.
             </p>
@@ -223,18 +224,18 @@ export default function LandingPage() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1rem',
+              gap: '0.75rem',
               flexWrap: 'wrap',
-              marginBottom: '2.25rem'
+              marginBottom: '2rem'
             }}>
               <Link
                 to="/app?mode=signup"
                 style={{
-                  padding: '0.9rem 2rem',
+                  padding: '0.85rem 1.75rem',
                   borderRadius: '12px',
                   background: 'var(--primary)',
                   color: '#FFFFFF',
-                  fontSize: '1rem',
+                  fontSize: '0.95rem',
                   fontWeight: '600',
                   textDecoration: 'none',
                   display: 'inline-flex',
@@ -250,12 +251,12 @@ export default function LandingPage() {
               <Link
                 to="/app"
                 style={{
-                  padding: '0.9rem 1.75rem',
+                  padding: '0.85rem 1.5rem',
                   borderRadius: '12px',
                   background: 'var(--bg-surface)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '1rem',
+                  fontSize: '0.95rem',
                   fontWeight: '500',
                   textDecoration: 'none',
                   display: 'inline-flex',
@@ -272,104 +273,104 @@ export default function LandingPage() {
             {/* Trust & Key Features Checklist */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '0.75rem',
-              fontSize: '0.85rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+              gap: '0.65rem',
+              fontSize: '0.82rem',
               color: 'var(--text-main)',
               fontWeight: '500',
               paddingTop: '1.25rem',
               borderTop: '1px solid var(--border-color)'
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Check size={16} color="var(--primary)" /> No Credit Card Required
+                <Check size={15} color="var(--primary)" /> No Credit Card Required
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Check size={16} color="var(--primary)" /> 15-Sec Thermal WiFi Billing
+                <Check size={15} color="var(--primary)" /> 15-Sec Thermal Billing
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Check size={16} color="var(--primary)" /> Dynamic Shop UPI QR
+                <Check size={15} color="var(--primary)" /> Dynamic Shop UPI QR
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Check size={16} color="var(--primary)" /> Harvest-Cycle Credit Ledger
+                <Check size={15} color="var(--primary)" /> Farmer Credit Ledger
               </span>
             </div>
           </div>
 
-          {/* Right Column: Soft Elevated Agricultural Photo Frame with Non-Seasonal Badges */}
+          {/* Right Column: Soft Elevated Agricultural Photo Frame */}
           <div style={{ position: 'relative' }}>
             <div className="landing-card" style={{
               overflow: 'hidden',
               position: 'relative'
             }}>
-              {/* Real Agricultural Photography */}
               <img
                 src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1000&q=80"
                 alt="Agricultural crop field in morning sunlight"
-                style={{ width: '100%', height: '420px', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }}
               />
 
-              {/* Floating Metric Overlay 1 (Top Left) - Non-seasonal clean badge */}
+              {/* Floating Metric Overlay 1 (Top Left) */}
               <div style={{
                 position: 'absolute',
-                top: '1.25rem',
-                left: '1.25rem',
+                top: '1rem',
+                left: '1rem',
                 background: 'var(--bg-glass)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 border: '1px solid var(--border-color)',
-                borderRadius: '12px',
-                padding: '0.65rem 1rem',
+                borderRadius: '10px',
+                padding: '0.45rem 0.75rem',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
+                gap: '0.4rem',
                 boxShadow: 'var(--shadow-card)'
               }}>
                 <div style={{
-                  width: '10px',
-                  height: '10px',
+                  width: '8px',
+                  height: '8px',
                   borderRadius: '50%',
                   background: 'var(--primary)',
                   boxShadow: '0 0 8px var(--primary)'
                 }} />
-                <span style={{ fontSize: '0.82rem', fontWeight: '600', color: 'var(--text-main)' }}>
-                  Real-Time Dealer Cloud System
+                <span style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--text-main)' }}>
+                  Real-Time Cloud POS
                 </span>
               </div>
 
               {/* Floating Metric Overlay 2 (Bottom Card Overlay) */}
               <div style={{
                 position: 'absolute',
-                bottom: '1.25rem',
-                left: '1.25rem',
-                right: '1.25rem',
+                bottom: '1rem',
+                left: '1rem',
+                right: '1rem',
                 background: 'var(--bg-glass)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
                 border: '1px solid var(--border-color)',
-                borderRadius: '14px',
-                padding: '1rem 1.25rem',
+                borderRadius: '12px',
+                padding: '0.75rem 1rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '1rem',
+                gap: '0.75rem',
                 boxShadow: 'var(--shadow-card)'
               }}>
-                <div>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '500', display: 'block' }}>
-                    Multi-Brand Inventory & Billing
+                <div style={{ minWidth: 0 }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '500', display: 'block' }}>
+                    Multi-Brand Inventory
                   </span>
-                  <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600' }}>
+                  <strong style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
                     Bayer • Syngenta • UPL • Tata
                   </strong>
                 </div>
                 <span style={{
                   background: 'var(--primary-light)',
                   color: 'var(--primary)',
-                  fontSize: '0.78rem',
+                  fontSize: '0.75rem',
                   fontWeight: '600',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: '8px',
-                  border: '1px solid var(--primary-glow)'
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: '6px',
+                  border: '1px solid var(--primary-glow)',
+                  flexShrink: 0
                 }}>
                   15-Sec POS
                 </span>
@@ -383,20 +384,20 @@ export default function LandingPage() {
       {/* 3. SHOWCASE SECTION (PHOTO CARD WITH SOLID-COLOR EMERALD TEXT PANEL)       */}
       {/* ========================================================================= */}
       <section id="showcase" style={{
-        padding: '5rem 1.5rem',
+        padding: '4rem 1rem',
         background: 'var(--bg-surface)',
         borderTop: '1px solid var(--border-color)',
         borderBottom: '1px solid var(--border-color)'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Core Dealership Pillars
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
-              Engineered for Speed, Accuracy & Zero Lost Revenue
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+              Engineered for Speed, Accuracy &amp; Zero Lost Revenue
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
               Three high-impact capabilities that give agri-input dealers complete control over their daily retail counter.
             </p>
           </div>
@@ -404,8 +405,8 @@ export default function LandingPage() {
           {/* 3 Showcase Cards with Solid-Color Emerald Text Overlay Panel */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '1.75rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.5rem'
           }}>
             {/* Showcase 1: Farmer Credit Ledger */}
             <div className="landing-card" style={{
@@ -578,36 +579,35 @@ export default function LandingPage() {
       {/* ========================================================================= */}
       {/* 4. FEATURE GRID - CLEAN MINIMAL SAAS WITH HOVER BORDER HIGHLIGHT          */}
       {/* ========================================================================= */}
-      <section id="features" style={{ padding: '5.5rem 1.5rem', background: 'var(--bg-primary)' }}>
+      <section id="features" style={{ padding: '4rem 1rem', background: 'var(--bg-primary)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Complete Feature Suite
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
               Everything Required to Run a High-Volume Agri Store
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
               Clean, reliable tools tailored for the daily operational workflow of pesticide, fertilizer, and seed dealerships.
             </p>
           </div>
 
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '1.5rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1.25rem'
           }}>
             {/* Feature 1: Brand Stock */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
-              cursor: 'pointer'
+              gap: '0.85rem'
             }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'var(--primary-light)',
                 color: 'var(--primary)',
@@ -615,13 +615,13 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Package size={24} />
+                <Package size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
                   Brand-Based Stock Management
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
                   Categorize insecticides, fungicides, and fertilizers by manufacturer (Bayer, Syngenta, UPL, Tata). Automatic inventory valuation computed as <code style={{ color: 'var(--primary)', fontWeight: '600' }}>SUM(Qty × Price)</code>.
                 </p>
               </div>
@@ -629,15 +629,14 @@ export default function LandingPage() {
 
             {/* Feature 2: Farmer Ledger */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
-              cursor: 'pointer'
+              gap: '0.85rem'
             }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'rgba(37, 99, 235, 0.1)',
                 color: 'var(--credit)',
@@ -645,13 +644,13 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Users size={24} />
+                <Users size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  Farmer Purchase History & Ledger
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Farmer Purchase History &amp; Ledger
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
                   Store farmer phone numbers, village names, and complete itemized historical purchase records. Search any customer in under 2 seconds.
                 </p>
               </div>
@@ -659,15 +658,14 @@ export default function LandingPage() {
 
             {/* Feature 3: Fast POS & Thermal Printing */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
-              cursor: 'pointer'
+              gap: '0.85rem'
             }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'var(--primary-light)',
                 color: 'var(--primary)',
@@ -675,13 +673,13 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Printer size={24} />
+                <Printer size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  15-Second Billing & WiFi Print
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  15-Second Billing &amp; WiFi Print
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
                   Lightning fast cart checkout with automatic line total calculations, real-time stock deduction, and instant 58mm/80mm thermal receipt printing.
                 </p>
               </div>
@@ -689,15 +687,14 @@ export default function LandingPage() {
 
             {/* Feature 4: Partial Payment & Credit Tracking */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
-              cursor: 'pointer'
+              gap: '0.85rem'
             }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'rgba(217, 119, 6, 0.1)',
                 color: 'var(--warning)',
@@ -705,13 +702,13 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <AlertTriangle size={24} />
+                <AlertTriangle size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  Partial Payment & Credit Tracking
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Partial Payment &amp; Credit Tracking
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
                   Split any sale between cash paid upfront and credit owed. Clear visual status tags: <span style={{ color: 'var(--credit)', fontWeight: '600' }}>Credit Sale</span>, <span style={{ color: 'var(--warning)', fontWeight: '600' }}>Partial Due</span>, and <span style={{ color: 'var(--success)', fontWeight: '600' }}>Paid</span>.
                 </p>
               </div>
@@ -719,15 +716,14 @@ export default function LandingPage() {
 
             {/* Feature 5: Dynamic UPI QR */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
-              cursor: 'pointer'
+              gap: '0.85rem'
             }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'var(--primary-light)',
                 color: 'var(--primary)',
@@ -735,13 +731,13 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <QrCode size={24} />
+                <QrCode size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
                   Dynamic Shop UPI QR Payments
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
                   Configurable shop UPI ID (Paytm, PhonePe, GPay, Bank VPA) automatically generates a dynamic payment QR code with the exact bill amount for fast customer scans.
                 </p>
               </div>
@@ -749,15 +745,14 @@ export default function LandingPage() {
 
             {/* Feature 6: Revenue Analytics */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1rem',
-              cursor: 'pointer'
+              gap: '0.85rem'
             }}>
               <div style={{
-                width: '46px',
-                height: '46px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'var(--primary-light)',
                 color: 'var(--primary)',
@@ -765,13 +760,13 @@ export default function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <TrendingUp size={24} />
+                <TrendingUp size={22} />
               </div>
               <div>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  Revenue & Sales Analytics
+                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Revenue &amp; Sales Analytics
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
                   Real-time sales insights for Today, This Week, and This Month. Discover your Top 5 best-selling chemicals and low-stock replenishment reorders.
                 </p>
               </div>
@@ -784,32 +779,32 @@ export default function LandingPage() {
       {/* 5. PROBLEM VS. SOLUTION STRIP WITH INCREASED VISUAL SEPARATION            */}
       {/* ========================================================================= */}
       <section id="solutions" style={{
-        padding: '5rem 1.5rem',
+        padding: '4rem 1rem',
         background: 'var(--bg-surface)',
         borderTop: '1px solid var(--border-color)',
         borderBottom: '1px solid var(--border-color)'
       }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Solving Everyday Dealer Bottlenecks
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
-              Built to Eliminate Retail Friction & Lost Revenue
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+              Built to Eliminate Retail Friction &amp; Lost Revenue
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '640px', margin: '0.5rem auto 0 auto' }}>
               Agri-input retail has unique business challenges. Here is how ChemicalShop systematically solves each:
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
             {/* Pair 1: Credit Tracking */}
             <div className="landing-card" style={{
-              padding: '1.75rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              gap: '1.25rem'
+              gap: '1rem'
             }}>
               {/* Problem Block */}
               <div>
@@ -829,16 +824,16 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  Lost Farmer Credit & Disputed Dues
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Lost Farmer Credit &amp; Disputed Dues
                 </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Handwritten ledger books get damaged or lost. Seasonal credit accumulates without itemized bill proof, leading to disputes at payment time.
                 </p>
               </div>
 
               {/* Distinct Separator */}
-              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.25rem 0' }} />
+              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.15rem 0' }} />
 
               {/* Solution Block */}
               <div>
@@ -858,7 +853,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   Transparent farmer ledgers with bill-by-bill purchase history and one-click partial payment recording.
                 </p>
               </div>
@@ -866,11 +861,11 @@ export default function LandingPage() {
 
             {/* Pair 2: Blind Stock */}
             <div className="landing-card" style={{
-              padding: '1.75rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              gap: '1.25rem'
+              gap: '1rem'
             }}>
               {/* Problem Block */}
               <div>
@@ -890,16 +885,16 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
                   Blind Stock Across 50+ Brands
                 </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Dealers accidentally run out of critical pest-control sprays during peak infestation while overstocked chemicals sit on shelves.
                 </p>
               </div>
 
               {/* Distinct Separator */}
-              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.25rem 0' }} />
+              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.15rem 0' }} />
 
               {/* Solution Block */}
               <div>
@@ -919,7 +914,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   Real-time stock catalog organized by brand (Bayer, Syngenta, UPL) with automatic valuation and out-of-stock badges.
                 </p>
               </div>
@@ -927,11 +922,11 @@ export default function LandingPage() {
 
             {/* Pair 3: Billing Queues */}
             <div className="landing-card" style={{
-              padding: '1.75rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              gap: '1.25rem'
+              gap: '1rem'
             }}>
               {/* Problem Block */}
               <div>
@@ -951,16 +946,16 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
-                  Slow Paper Bills & Math Errors
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Slow Paper Bills &amp; Math Errors
                 </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Writing bills by hand creates long queues in the morning rush, causes calculation errors, and delays customer service.
                 </p>
               </div>
 
               {/* Distinct Separator */}
-              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.25rem 0' }} />
+              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.15rem 0' }} />
 
               {/* Solution Block */}
               <div>
@@ -980,7 +975,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   15-second fast checkout with instant thermal receipt generation and automatic stock deduction.
                 </p>
               </div>
@@ -988,11 +983,11 @@ export default function LandingPage() {
 
             {/* Pair 4: Cash vs UPI Reconciliation */}
             <div className="landing-card" style={{
-              padding: '1.75rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              gap: '1.25rem'
+              gap: '1rem'
             }}>
               {/* Problem Block */}
               <div>
@@ -1012,16 +1007,16 @@ export default function LandingPage() {
                 }}>
                   <XCircle size={13} /> The Challenge
                 </div>
-                <h4 style={{ fontSize: '1.02rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
                   Messy Cash vs. UPI Reconciliation
                 </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Cash box totals never match end-of-day bills when some customers pay partial cash, some UPI, and others take credit.
                 </p>
               </div>
 
               {/* Distinct Separator */}
-              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.25rem 0' }} />
+              <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.15rem 0' }} />
 
               {/* Solution Block */}
               <div>
@@ -1041,7 +1036,7 @@ export default function LandingPage() {
                 }}>
                   <CheckCircle2 size={13} /> ChemicalShop Solution
                 </div>
-                <p style={{ fontSize: '0.86rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-main)', fontWeight: '500', lineHeight: '1.45' }}>
                   Live revenue analytics separating Cash, UPI, and Credit sales automatically with exact payment audit trails.
                 </p>
               </div>
@@ -1053,9 +1048,9 @@ export default function LandingPage() {
       {/* ========================================================================= */}
       {/* 6. BUILT FOR AGRI-DEALERS SPECIFICALLY                                    */}
       {/* ========================================================================= */}
-      <section id="built-for-dealers" style={{ padding: '5.5rem 1.5rem', background: 'var(--bg-primary)' }}>
+      <section id="built-for-dealers" style={{ padding: '4rem 1rem', background: 'var(--bg-primary)' }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
             <div>
               <div style={{
                 display: 'inline-flex',
@@ -1072,41 +1067,41 @@ export default function LandingPage() {
               }}>
                 <Leaf size={14} /> Domain Specialized Software
               </div>
-              <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', lineHeight: 1.2, marginBottom: '1.25rem' }}>
+              <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', lineHeight: 1.2, marginBottom: '1.25rem' }}>
                 Why Generic Supermarket Billing Software Fails Agri-Stores
               </h2>
-              <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+              <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
                 Agri-input retail is fundamentally different from retail grocery stores. Farmers buy specific technical chemical formulations on credit cycles and return later after harvesting their crop.
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
-                <div style={{ display: 'flex', gap: '0.85rem' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '0.15rem' }}>
-                    <Check size={16} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '0.15rem' }}>
+                    <Check size={15} />
                   </div>
                   <div>
-                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>Brand-First Inventory Architecture</strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Group chemicals by Bayer, Syngenta, UPL, Dhanuka, and Tata Rallis with pack sizes and active ingredients.</span>
+                    <strong style={{ fontSize: '0.92rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>Brand-First Inventory Architecture</strong>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Group chemicals by Bayer, Syngenta, UPL, Dhanuka, and Tata Rallis with pack sizes and active ingredients.</span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.85rem' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '0.15rem' }}>
-                    <Check size={16} />
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '0.15rem' }}>
+                    <Check size={15} />
                   </div>
                   <div>
-                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>Harvest-Cycle Credit Management</strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Designed around partial advances and crop cycles (Paddy, Cotton, Sugarcane, Chilli) so no balance is lost.</span>
+                    <strong style={{ fontSize: '0.92rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>Harvest-Cycle Credit Management</strong>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Designed around partial advances and crop cycles (Paddy, Cotton, Sugarcane, Chilli) so no balance is lost.</span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.85rem' }}>
-                  <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '0.15rem' }}>
-                    <Check size={16} />
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '0.15rem' }}>
+                    <Check size={15} />
                   </div>
                   <div>
-                    <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>GST & Invoice Compliance</strong>
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Generate clean GSTIN-compliant thermal bills and PDF invoices with your shop details and contact numbers.</span>
+                    <strong style={{ fontSize: '0.92rem', color: 'var(--text-main)', fontWeight: '600', display: 'block' }}>GST &amp; Invoice Compliance</strong>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Generate clean GSTIN-compliant thermal bills and PDF invoices with your shop details and contact numbers.</span>
                   </div>
                 </div>
               </div>
@@ -1114,10 +1109,10 @@ export default function LandingPage() {
 
             {/* Brand Matrix Visual Card with Elevated Depth */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               overflow: 'hidden'
             }}>
-              <div style={{ position: 'relative', height: '140px', borderRadius: '14px', overflow: 'hidden', marginBottom: '1.5rem' }}>
+              <div style={{ position: 'relative', height: '130px', borderRadius: '12px', overflow: 'hidden', marginBottom: '1.25rem' }}>
                 <img
                   src="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=800&q=80"
                   alt="Agricultural field crops and pesticide care"
@@ -1130,40 +1125,40 @@ export default function LandingPage() {
                 }} />
                 <span style={{
                   position: 'absolute',
-                  bottom: '0.75rem',
-                  left: '1rem',
+                  bottom: '0.65rem',
+                  left: '0.85rem',
                   color: '#FFFFFF',
-                  fontSize: '0.88rem',
+                  fontSize: '0.82rem',
                   fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.4rem'
                 }}>
-                  <Layers size={16} color="var(--primary)" /> Top Supported Chemical Brands
+                  <Layers size={15} color="var(--primary)" /> Top Supported Chemical Brands
                 </span>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.85rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.65rem' }}>
                 {['Bayer CropScience', 'Syngenta India', 'UPL Limited', 'FMC Corporation', 'Tata Rallis India', 'Dhanuka Agritech', 'Coromandel Intl.', 'PI Industries'].map((brand, idx) => (
                   <div key={idx} style={{
-                    padding: '0.75rem 1rem',
+                    padding: '0.6rem 0.75rem',
                     background: 'var(--bg-surface-hover)',
                     border: '1px solid var(--border-color)',
-                    borderRadius: '10px',
-                    fontSize: '0.82rem',
+                    borderRadius: '8px',
+                    fontSize: '0.78rem',
                     fontWeight: '500',
                     color: 'var(--text-main)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.45rem'
+                    gap: '0.4rem'
                   }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)' }} />
-                    {brand}
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary)', flexShrink: 0 }} />
+                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{brand}</span>
                   </div>
                 ))}
               </div>
 
-              <div style={{ marginTop: '1.5rem', padding: '0.85rem', background: 'var(--primary-light)', borderRadius: '10px', fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '500', textAlign: 'center' }}>
+              <div style={{ marginTop: '1.25rem', padding: '0.75rem', background: 'var(--primary-light)', borderRadius: '10px', fontSize: '0.78rem', color: 'var(--primary)', fontWeight: '500', textAlign: 'center' }}>
                 + Add custom local brands and fertilizer batches in 1-click
               </div>
             </div>
@@ -1175,28 +1170,28 @@ export default function LandingPage() {
       {/* 7. HOW IT WORKS (4-STEP FLOW)                                             */}
       {/* ========================================================================= */}
       <section id="how-it-works" style={{
-        padding: '5.5rem 1.5rem',
+        padding: '4rem 1rem',
         background: 'var(--bg-surface)',
         borderTop: '1px solid var(--border-color)',
         borderBottom: '1px solid var(--border-color)'
       }}>
         <div style={{ maxWidth: '1140px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <span style={{ fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', color: 'var(--primary)' }}>
               Simple 4-Step Workflow
             </span>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', fontWeight: '700', letterSpacing: '-0.015em', color: 'var(--text-main)', marginTop: '0.4rem' }}>
               How ChemicalShop Works in Your Store
             </h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: '580px', margin: '0.5rem auto 0 auto' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', maxWidth: '580px', margin: '0.5rem auto 0 auto' }}>
               No complicated training required. Any store assistant can master the workflow in 5 minutes.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
             {/* Step 1 */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between'
@@ -1207,17 +1202,17 @@ export default function LandingPage() {
                   background: 'var(--primary-light)',
                   color: 'var(--primary)',
                   fontWeight: '600',
-                  fontSize: '0.82rem',
-                  padding: '0.25rem 0.65rem',
+                  fontSize: '0.78rem',
+                  padding: '0.2rem 0.55rem',
                   borderRadius: '6px',
-                  marginBottom: '1rem'
+                  marginBottom: '0.75rem'
                 }}>
                   Step 01
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
                   Add Stock by Brand
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Enter product names, brand, available bottle/bag quantity, and selling prices.
                 </p>
               </div>
@@ -1225,7 +1220,7 @@ export default function LandingPage() {
 
             {/* Step 2 */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between'
@@ -1236,17 +1231,17 @@ export default function LandingPage() {
                   background: 'rgba(37, 99, 235, 0.1)',
                   color: 'var(--credit)',
                   fontWeight: '600',
-                  fontSize: '0.82rem',
-                  padding: '0.25rem 0.65rem',
+                  fontSize: '0.78rem',
+                  padding: '0.2rem 0.55rem',
                   borderRadius: '6px',
-                  marginBottom: '1rem'
+                  marginBottom: '0.75rem'
                 }}>
                   Step 02
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                  Farmer Select & Cart
+                <h3 style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Farmer Select &amp; Cart
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Select an existing farmer or add a new customer. Pick products directly from live stock.
                 </p>
               </div>
@@ -1254,7 +1249,7 @@ export default function LandingPage() {
 
             {/* Step 3 */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between'
@@ -1265,17 +1260,17 @@ export default function LandingPage() {
                   background: 'rgba(217, 119, 6, 0.1)',
                   color: 'var(--warning)',
                   fontWeight: '600',
-                  fontSize: '0.82rem',
-                  padding: '0.25rem 0.65rem',
+                  fontSize: '0.78rem',
+                  padding: '0.2rem 0.55rem',
                   borderRadius: '6px',
-                  marginBottom: '1rem'
+                  marginBottom: '0.75rem'
                 }}>
                   Step 03
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                  Instant Bill & QR Pay
+                <h3 style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Instant Bill &amp; QR Pay
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Generate GST bill in seconds. Customer pays via Cash, dynamic UPI QR code, or takes credit.
                 </p>
               </div>
@@ -1283,7 +1278,7 @@ export default function LandingPage() {
 
             {/* Step 4 */}
             <div className="landing-card" style={{
-              padding: '2rem',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between'
@@ -1294,17 +1289,17 @@ export default function LandingPage() {
                   background: 'var(--primary-light)',
                   color: 'var(--primary)',
                   fontWeight: '600',
-                  fontSize: '0.82rem',
-                  padding: '0.25rem 0.65rem',
+                  fontSize: '0.78rem',
+                  padding: '0.2rem 0.55rem',
                   borderRadius: '6px',
-                  marginBottom: '1rem'
+                  marginBottom: '0.75rem'
                 }}>
                   Step 04
                 </span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-                  Track Dues & Settle
+                <h3 style={{ fontSize: '1.05rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.35rem' }}>
+                  Track Dues &amp; Settle
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
                   Review outstanding balances anytime in the Dues tab and record partial payment collections.
                 </p>
               </div>
@@ -1316,35 +1311,35 @@ export default function LandingPage() {
       {/* ========================================================================= */}
       {/* 8. HIGH-CONTRAST EMERALD CTA SECTION                                      */}
       {/* ========================================================================= */}
-      <section style={{ padding: '4rem 1.5rem 5.5rem 1.5rem', background: 'var(--bg-primary)' }}>
+      <section style={{ padding: '3.5rem 1rem 4.5rem 1rem', background: 'var(--bg-primary)' }}>
         <div style={{
           maxWidth: '1040px',
           margin: '0 auto',
-          borderRadius: '24px',
+          borderRadius: '20px',
           background: 'linear-gradient(135deg, #15803D 0%, #166534 100%)',
-          padding: '4rem 2rem',
+          padding: '3rem 1.5rem',
           textAlign: 'center',
           color: '#FFFFFF',
           boxShadow: '0 25px 60px -10px rgba(21, 128, 61, 0.35)',
           position: 'relative',
           overflow: 'hidden'
         }}>
-          <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: '700', letterSpacing: '-0.015em', marginBottom: '1rem', color: '#FFFFFF' }}>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.8rem)', fontWeight: '700', letterSpacing: '-0.015em', marginBottom: '0.85rem', color: '#FFFFFF' }}>
             Ready to Modernize Your Agri-Chemical Store?
           </h2>
-          <p style={{ fontSize: '1.05rem', color: '#DCFCE7', maxWidth: '650px', margin: '0 auto 2.5rem auto', lineHeight: '1.6', fontWeight: '400' }}>
+          <p style={{ fontSize: '0.98rem', color: '#DCFCE7', maxWidth: '650px', margin: '0 auto 2rem auto', lineHeight: '1.6', fontWeight: '400' }}>
             Join smart pesticide and fertilizer dealers simplifying their daily billing, brand stock tracking, and farmer credit collections.
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
             <Link
               to="/app?mode=signup"
               style={{
-                padding: '0.95rem 2.25rem',
+                padding: '0.85rem 1.85rem',
                 borderRadius: '12px',
                 background: '#FFFFFF',
                 color: '#15803D',
-                fontSize: '1.05rem',
+                fontSize: '0.95rem',
                 fontWeight: '600',
                 textDecoration: 'none',
                 display: 'inline-flex',
@@ -1354,18 +1349,18 @@ export default function LandingPage() {
                 transition: 'transform 0.15s'
               }}
             >
-              Register Dealer Shop <ArrowRight size={18} />
+              Register Dealer Shop <ArrowRight size={17} />
             </Link>
 
             <Link
               to="/app"
               style={{
-                padding: '0.95rem 2rem',
+                padding: '0.85rem 1.65rem',
                 borderRadius: '12px',
                 background: 'rgba(255, 255, 255, 0.15)',
                 border: '1px solid rgba(255, 255, 255, 0.3)',
                 color: '#FFFFFF',
-                fontSize: '1.05rem',
+                fontSize: '0.95rem',
                 fontWeight: '500',
                 textDecoration: 'none',
                 display: 'inline-flex',
@@ -1387,7 +1382,7 @@ export default function LandingPage() {
         marginTop: 'auto',
         background: 'var(--bg-surface)',
         borderTop: '1px solid var(--border-color)',
-        padding: '3.5rem 1.5rem 2rem 1.5rem',
+        padding: '2.5rem 1rem 1.5rem 1rem',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -1410,8 +1405,8 @@ export default function LandingPage() {
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: '1.5rem',
-            paddingBottom: '2.5rem',
+            gap: '1rem',
+            paddingBottom: '2rem',
             borderBottom: '1px solid var(--border-color)'
           }}>
             {/* Logo and Brand */}
@@ -1429,35 +1424,35 @@ export default function LandingPage() {
                 <Store size={20} color="#FFFFFF" />
               </div>
               <div>
-                <span style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.015em', display: 'block', lineHeight: 1.1 }}>
+                <span style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', letterSpacing: '-0.015em', display: 'block', lineHeight: 1.1 }}>
                   ChemicalShop
                 </span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '400' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: '400' }}>
                   Agri-Dealer Management System
                 </span>
               </div>
             </div>
 
             {/* Generic Support Action (No exposed personal numbers) */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
               <a
                 href="mailto:support@chemicalshop.in"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.45rem',
-                  padding: '0.5rem 1rem',
+                  padding: '0.45rem 0.85rem',
                   borderRadius: '10px',
                   background: 'var(--bg-surface-hover)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.85rem',
+                  fontSize: '0.8rem',
                   fontWeight: '500',
                   textDecoration: 'none',
                   transition: 'border-color 0.2s'
                 }}
               >
-                <Mail size={16} color="var(--primary)" /> Contact Support (support@chemicalshop.in)
+                <Mail size={15} color="var(--primary)" /> support@chemicalshop.in
               </a>
 
               <Link
@@ -1466,17 +1461,17 @@ export default function LandingPage() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.45rem',
-                  padding: '0.5rem 1rem',
+                  padding: '0.45rem 0.85rem',
                   borderRadius: '10px',
                   background: 'var(--primary-light)',
                   border: '1px solid rgba(22, 163, 74, 0.25)',
                   color: 'var(--primary)',
-                  fontSize: '0.85rem',
+                  fontSize: '0.8rem',
                   fontWeight: '600',
                   textDecoration: 'none'
                 }}
               >
-                Open Free Account <ArrowUpRight size={15} />
+                Open Account <ArrowUpRight size={14} />
               </Link>
             </div>
           </div>
@@ -1484,9 +1479,9 @@ export default function LandingPage() {
           {/* Row 2: Multi-Column Links & Details */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '2.5rem',
-            padding: '2.5rem 0',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: '1.75rem',
+            padding: '2rem 0',
             borderBottom: '1px solid var(--border-color)'
           }}>
             {/* Col 1: Summary */}

@@ -16,18 +16,19 @@ export default function PendingGate({ profile, user, onRefresh, onSignOut }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1.5rem',
+      padding: '1rem',
       backgroundColor: 'var(--bg-primary)'
     }}>
       <div style={{
         maxWidth: '520px',
         width: '100%',
-        padding: '2.5rem 2.25rem',
+        padding: 'clamp(1.25rem, 5vw, 2.25rem)',
         textAlign: 'center',
         background: '#FFFFFF',
-        borderRadius: '24px',
+        borderRadius: '20px',
         border: '1px solid #E2E8F0',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.1)',
+        boxSizing: 'border-box'
       }}>
         {/* Animated Clock / Pending Icon */}
         <div style={{

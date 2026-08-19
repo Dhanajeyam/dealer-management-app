@@ -282,10 +282,10 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
   })
 
   const navItems = [
-    { id: 'pending', label: 'Pending Signups', icon: Clock, color: activeTab === 'pending' ? 'var(--warning)' : undefined },
-    { id: 'dealers', label: 'Dealer Directory', icon: Building2 },
-    { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'pending', label: 'Pending Signups', shortLabel: 'Pending', icon: Clock, color: activeTab === 'pending' ? 'var(--warning)' : undefined, primary: true },
+    { id: 'dealers', label: 'Dealer Directory', shortLabel: 'Dealers', icon: Building2, primary: true },
+    { id: 'leaderboard', label: 'Leaderboard', shortLabel: 'Leaderboard', icon: Trophy, primary: true },
+    { id: 'settings', label: 'Settings', shortLabel: 'Settings', icon: Settings, primary: true }
   ]
 
   const getHeaderTitle = () => {
@@ -406,7 +406,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
               </p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
               {pendingDealers.map(d => {
                 const createdDate = d.created_at
                   ? new Date(d.created_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -418,7 +418,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                     key={d.id}
                     className="glass-card"
                     style={{
-                      padding: '1.5rem',
+                      padding: '1.25rem',
                       border: '1px solid rgba(245, 158, 11, 0.3)',
                       background: 'var(--bg-surface)',
                       display: 'flex',
@@ -612,7 +612,7 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                 </p>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
                 {filteredDealers.map(d => {
                   const statusBadge = d.status === 'approved' 
                     ? { text: 'Approved', color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)' }
@@ -629,11 +629,11 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                       key={d.id}
                       className="glass-card"
                       style={{
-                        padding: '1.4rem',
+                        padding: '1.15rem',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        gap: '1rem',
+                        gap: '0.85rem',
                         border: isApproved && d.is_trial && trialInfo.isExpired ? '1px solid var(--danger-border)' : '1px solid var(--border-color)'
                       }}
                     >
@@ -1003,52 +1003,55 @@ export default function AdminDashboard({ profile, user, onSignOut }) {
                       key={lb.dealer_id}
                       className="glass-card"
                       style={{
-                        padding: '1.1rem 1.4rem',
+                        padding: '1rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        flexWrap: 'wrap',
+                        gap: '0.75rem',
                         border: rank === 1 ? '1px solid rgba(245, 158, 11, 0.4)' : '1px solid var(--border-color)',
                         background: rank === 1 ? 'var(--warning-bg)' : 'var(--bg-surface)'
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <div style={{
-                          width: '36px',
-                          height: '36px',
-                          borderRadius: '10px',
+                          width: '34px',
+                          height: '34px',
+                          borderRadius: '8px',
                           background: `${badgeColor}25`,
                           color: badgeColor,
                           fontWeight: '600',
-                          fontSize: '1rem',
+                          fontSize: '0.95rem',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          border: `1px solid ${badgeColor}50`
+                          border: `1px solid ${badgeColor}50`,
+                          flexShrink: 0
                         }}>
                           #{rank}
                         </div>
 
                         <div>
-                          <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1.05rem' }}>
+                          <div style={{ fontWeight: '600', color: 'var(--text-main)', fontSize: '1rem' }}>
                             {lb.shop_name}
                           </div>
                           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                            {lb.phone ? `Ph: ${lb.phone} • ` : ''}{lb.total_sales_count} sales completed
+                            {lb.phone ? `Ph: ${lb.phone} • ` : ''}{lb.total_sales_count} sales
                           </div>
                         </div>
                       </div>
 
-                      <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                      <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: 'auto', flexWrap: 'wrap' }}>
                         <div>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>This Month</div>
-                          <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.1rem' }}>
+                          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>This Month</div>
+                          <div style={{ fontWeight: '700', color: 'var(--primary)', fontSize: '1.05rem' }}>
                             ₹{Number(lb.this_month_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </div>
                         </div>
 
-                        <div style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: '1.25rem' }}>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>All-Time</div>
-                          <div style={{ fontWeight: '600', color: 'var(--info)', fontSize: '1rem' }}>
+                        <div style={{ borderLeft: '1px solid var(--border-color)', paddingLeft: '0.85rem' }}>
+                          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>All-Time</div>
+                          <div style={{ fontWeight: '600', color: 'var(--info)', fontSize: '0.95rem' }}>
                             ₹{Number(lb.all_time_revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                           </div>
                         </div>

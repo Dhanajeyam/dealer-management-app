@@ -121,14 +121,14 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '1rem'
+      padding: '0.5rem'
     }}>
       <div className="glass-card" style={{
         maxWidth: '520px',
         width: '100%',
-        maxHeight: '90vh',
+        maxHeight: 'min(94vh, 700px)',
         overflowY: 'auto',
-        padding: '1.75rem',
+        padding: '1.25rem',
         background: 'var(--bg-surface)',
         display: 'flex',
         flexDirection: 'column',
@@ -138,14 +138,14 @@ export default function EditDealerModal({ dealer, isOpen, onClose, onDealerUpdat
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <Building2 size={22} color="var(--info)" />
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
-              Edit Dealer & Subscription
+            <Building2 size={22} color="var(--primary)" />
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)', margin: 0 }}>
+              Edit Dealer Status & Profile
             </h3>
           </div>
           <button
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.25rem' }}
           >
             <X size={20} />
           </button>

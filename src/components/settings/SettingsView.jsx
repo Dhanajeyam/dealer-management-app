@@ -173,26 +173,27 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '1000px', margin: '0 auto', paddingBottom: '3rem' }}>
       
-      {/* SECTION 1: BUSINESS PROFILE SETTINGS */}
-      <div className="glass-card" style={{ padding: '2rem', borderRadius: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>
+      {/* SECTION 1: BUSINESS STORE PROFILE */}
+      <div className="glass-card" style={{ padding: '1.25rem', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', paddingBottom: '0.85rem', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
+            width: '40px',
+            height: '40px',
             borderRadius: '12px',
             background: 'var(--primary-light)',
             border: '1px solid rgba(50, 214, 107, 0.24)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            flexShrink: 0
           }}>
-            <Store size={22} color="var(--primary)" />
+            <Store size={20} color="var(--primary)" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Business Profile
             </h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
               Shop credentials, contact info, and tax registration (GSTIN) shown on printed receipts
             </p>
           </div>
@@ -212,7 +213,7 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
           </div>
         )}
 
-        <form onSubmit={handleSaveProfile} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
+        <form onSubmit={handleSaveProfile} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
           <div>
             <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
               Shop / Store Name <span style={{ color: 'var(--danger)' }}>*</span>
@@ -362,25 +363,26 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
       </div>
 
       {/* SECTION 2: ACCOUNT & SECURITY SETTINGS */}
-      <div className="glass-card" style={{ padding: '2rem', borderRadius: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>
+      <div className="glass-card" style={{ padding: '1.25rem', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', paddingBottom: '0.85rem', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
+            width: '40px',
+            height: '40px',
             borderRadius: '12px',
             background: 'var(--primary-light)',
             border: '1px solid rgba(50, 214, 107, 0.24)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            flexShrink: 0
           }}>
-            <ShieldCheck size={22} color="var(--primary)" />
+            <ShieldCheck size={20} color="var(--primary)" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Account &amp; Security
             </h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
               Account email credentials and password re-authentication settings
             </p>
           </div>
@@ -401,31 +403,31 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
         )}
 
         {/* Read-Only Account Email */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+        <div style={{ marginBottom: '1.25rem' }}>
+          <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
             Registered Account Email (Display Only)
           </label>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.65rem',
-            padding: '0.75rem 1rem',
+            padding: '0.65rem 0.85rem',
             borderRadius: '10px',
             background: 'var(--bg-surface-hover)',
             border: '1px solid var(--border-color)',
             color: 'var(--text-main)',
-            fontSize: '0.9rem',
+            fontSize: '0.88rem',
             fontWeight: '500'
           }}>
-            <Mail size={18} color="var(--primary)" />
+            <Mail size={16} color="var(--primary)" />
             <span>{user?.email || 'N/A'}</span>
           </div>
         </div>
 
         {/* Password Update Form */}
-        <form onSubmit={handleUpdatePassword} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem' }}>
+        <form onSubmit={handleUpdatePassword} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               Current Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -437,29 +439,29 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
                 placeholder="Verify current password"
                 style={{
                   width: '100%',
-                  padding: '0.75rem 2.5rem 0.75rem 2.5rem',
+                  padding: '0.65rem 2.2rem 0.65rem 2.2rem',
                   borderRadius: '10px',
                   background: 'var(--bg-primary)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.88rem',
                   outline: 'none',
                   boxSizing: 'border-box'
                 }}
               />
-              <Lock size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <Lock size={15} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               <button
                 type="button"
                 onClick={() => setShowCurrentPass(!showCurrentPass)}
-                style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }}
+                style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }}
               >
-                {showCurrentPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                {showCurrentPass ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               New Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -471,29 +473,29 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
                 placeholder="Min 6 characters"
                 style={{
                   width: '100%',
-                  padding: '0.75rem 2.5rem 0.75rem 2.5rem',
+                  padding: '0.65rem 2.2rem 0.65rem 2.2rem',
                   borderRadius: '10px',
                   background: 'var(--bg-primary)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.88rem',
                   outline: 'none',
                   boxSizing: 'border-box'
                 }}
               />
-              <KeyRound size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <KeyRound size={15} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
               <button
                 type="button"
                 onClick={() => setShowNewPass(!showNewPass)}
-                style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }}
+                style={{ position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0 }}
               >
-                {showNewPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                {showNewPass ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+            <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: '500', color: 'var(--text-muted)', marginBottom: '0.35rem' }}>
               Confirm New Password <span style={{ color: 'var(--danger)' }}>*</span>
             </label>
             <div style={{ position: 'relative' }}>
@@ -505,17 +507,17 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
                 placeholder="Re-enter new password"
                 style={{
                   width: '100%',
-                  padding: '0.75rem 1rem 0.75rem 2.5rem',
+                  padding: '0.65rem 1rem 0.65rem 2.2rem',
                   borderRadius: '10px',
                   background: 'var(--bg-primary)',
                   border: '1px solid var(--border-color)',
                   color: 'var(--text-main)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.88rem',
                   outline: 'none',
                   boxSizing: 'border-box'
                 }}
               />
-              <KeyRound size={16} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+              <KeyRound size={15} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
             </div>
           </div>
 
@@ -524,21 +526,21 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
               type="submit"
               disabled={updatingPassword}
               style={{
-                padding: '0.75rem 1.75rem',
+                padding: '0.65rem 1.5rem',
                 borderRadius: '10px',
                 background: 'var(--primary)',
                 border: 'none',
                 color: '#fff',
                 fontWeight: '600',
-                fontSize: '0.875rem',
+                fontSize: '0.85rem',
                 cursor: updatingPassword ? 'wait' : 'pointer',
                 boxShadow: '0 4px 14px rgba(50, 214, 107, 0.28)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem'
+                gap: '0.4rem'
               }}
             >
-              <KeyRound size={18} />
+              <KeyRound size={16} />
               {updatingPassword ? 'Updating...' : 'Update Security Password'}
             </button>
           </div>
@@ -546,32 +548,33 @@ export default function SettingsView({ profile, user, onProfileUpdated }) {
       </div>
 
       {/* SECTION 3: THEME & APPEARANCE */}
-      <div className="glass-card" style={{ padding: '2rem', borderRadius: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border-color)' }}>
+      <div className="glass-card" style={{ padding: '1.25rem', borderRadius: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', paddingBottom: '0.85rem', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{
-            width: '42px',
-            height: '42px',
+            width: '40px',
+            height: '40px',
             borderRadius: '12px',
             background: 'var(--primary-light)',
             border: '1px solid rgba(50, 214, 107, 0.24)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            flexShrink: 0
           }}>
-            <Palette size={22} color="var(--primary)" />
+            <Palette size={20} color="var(--primary)" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>
               Theme &amp; Appearance
             </h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0.15rem 0 0 0' }}>
               Choose application theme palette (Light, Dark, or System OS default) applied across all screens
             </p>
           </div>
         </div>
 
         {/* Theme Pills */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
           
           {/* Light Theme Button */}
           <button

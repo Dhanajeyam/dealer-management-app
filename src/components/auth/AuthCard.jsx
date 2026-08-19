@@ -72,7 +72,7 @@ export default function AuthCard({ onAuthSuccess, initialView }) {
       </div>
 
       {/* Auth Card Container */}
-      <div className="glass-card" style={{ padding: '2.25rem 2rem' }}>
+      <div className="glass-card" style={{ padding: 'clamp(1.25rem, 5vw, 2rem)' }}>
         {view === 'login' && (
           <LoginForm
             onSuccess={onAuthSuccess}

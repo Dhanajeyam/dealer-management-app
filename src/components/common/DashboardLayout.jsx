@@ -7,6 +7,7 @@ export default function DashboardLayout({
   brandIcon,
   brandAction,
   navItems = [],
+  bottomNavItems,
   activeTab,
   onTabChange,
   headerTitle,
@@ -22,12 +23,24 @@ export default function DashboardLayout({
     setIsMobileOpen(false)
   }
 
+  // Derive bottom navigation items
+  const primaryTabs = bottomNavItems || navItems.filter(item => item.primary)
+  const bottomTabs = primaryTabs.length > 0 ? primaryTabs : navItems.slice(0, 4)
+  const secondaryTabs = navItems.filter(item => !bottomTabs.some(p => p.id === item.id))
+
   return (
     <div className={`dashboard-layout ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       {/* Mobile Drawer Overlay Backdrop */}
       <div 
         className={`sidebar-overlay ${isMobileOpen ? 'mobile-open' : ''}`}
         onClick={() => setIsMobileOpen(false)}
+        onTouchEnd={(e) => {
+          e.preventDefault()
+          setIsMobileOpen(false)
+        }}
+        role="button"
+        tabIndex={0}
+        aria-label="Close menu backdrop"
       />
 
       {/* Left Sidebar Layout */}
@@ -65,14 +78,14 @@ export default function DashboardLayout({
           </button>
 
           {/* Close button inside mobile drawer */}
-          {isMobileOpen && (
-            <button
-              onClick={() => setIsMobileOpen(false)}
-              className="mobile-close-btn"
-            >
-              <X size={20} />
-            </button>
-          )}
+          <button
+            onClick={() => setIsMobileOpen(false)}
+            className="mobile-close-btn"
+            aria-label="Close sidebar"
+            title="Close sidebar"
+          >
+            <X size={20} />
+          </button>
         </div>
 
         {/* Vertical Navigation Links */}
@@ -118,6 +131,7 @@ export default function DashboardLayout({
               className="mobile-menu-btn"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               title="Toggle Menu"
+              aria-label="Open menu"
             >
               <Menu size={20} />
             </button>
@@ -139,6 +153,36 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+
+      {/* Mobile Native Bottom Navigation Bar for Primary Destinations */}
+      {bottomTabs.length > 0 && (
+        <nav className="mobile-bottom-nav" aria-label="Primary Mobile Navigation">
+          {bottomTabs.map((item) => {
+            const Icon = item.icon
+            const isActive = activeTab === item.id
+            const displayLabel = item.shortLabel || item.label
+
+            return (
+              <button
+                key={item.id}
+                onClick={() => onTabChange(item.id)}
+                className={`mobile-bottom-nav-item ${isActive ? 'active' : ''}`}
+                aria-label={item.label}
+              >
+                {isActive && <div className="mobile-bottom-nav-indicator" />}
+                {Icon && (
+                  <Icon 
+                    size={20} 
+                    className="mobile-bottom-nav-icon"
+                    color={isActive ? 'var(--primary)' : 'var(--text-muted)'} 
+                  />
+                )}
+                <span>{displayLabel}</span>
+              </button>
+            )
+          })}
+        </nav>
+      )}
     </div>
   )
 }
