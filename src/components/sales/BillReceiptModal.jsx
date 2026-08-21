@@ -1,7 +1,16 @@
-import React from 'react'
-import { X, Printer, CheckCircle2, Store, Calendar, User, Phone, MapPin, Tag, IndianRupee } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { X, Printer, CheckCircle2, Store, Calendar, User, Phone, MapPin, Tag, IndianRupee, Share2, Download, Loader2, Check } from 'lucide-react'
+import { shareOrDownloadBillPdf, canSharePdfFile } from '../../utils/generateBillPdf'
 
 export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfile }) {
+  const [canShare, setCanShare] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [feedbackMsg, setFeedbackMsg] = useState('')
+
+  useEffect(() => {
+    setCanShare(canSharePdfFile())
+  }, [])
+
   if (!isOpen || !saleData) return null
 
   const {
@@ -16,6 +25,9 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
   } = saleData
 
   const activeFarmer = farmer || farmers
+
+  const hasGstin = Boolean(shopProfile?.gstin && shopProfile.gstin.trim())
+  const documentTitle = hasGstin ? 'Tax Invoice' : 'Sale Bill'
 
   const formattedDate = new Date(created_at || date || Date.now()).toLocaleString('en-IN', {
     dateStyle: 'medium',
@@ -47,6 +59,27 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
 
   const handlePrint = () => {
     window.print()
+  }
+
+  const handleShareOrDownload = async () => {
+    setIsGenerating(true)
+    setFeedbackMsg('')
+    try {
+      const result = await shareOrDownloadBillPdf(saleData, shopProfile)
+      if (result.downloaded) {
+        setFeedbackMsg('Downloaded!')
+        setTimeout(() => setFeedbackMsg(''), 3000)
+      } else if (result.shared) {
+        setFeedbackMsg('Shared!')
+        setTimeout(() => setFeedbackMsg(''), 3000)
+      }
+    } catch (err) {
+      console.error('Failed to generate/share PDF:', err)
+      setFeedbackMsg('Failed to share')
+      setTimeout(() => setFeedbackMsg(''), 3000)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
@@ -154,14 +187,61 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
               <CheckCircle2 size={22} color="var(--success)" style={{ flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
                 <h3 style={{ fontSize: '1rem', fontWeight: '700', color: 'var(--text-main)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  Sale Invoice &amp; Receipt
+                  {documentTitle} &amp; Receipt
                 </h3>
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
                   Bill ID: {billNumber}
                 </p>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              {/* WhatsApp Share / PDF Download Action */}
+              <button
+                onClick={handleShareOrDownload}
+                disabled={isGenerating}
+                className="no-print"
+                title={canShare ? 'Share genuine PDF bill via WhatsApp' : 'Download clean text-based PDF bill'}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.45rem 0.75rem',
+                  borderRadius: '9px',
+                  background: canShare ? '#16a34a' : 'var(--bg-card, #334155)',
+                  color: '#ffffff',
+                  fontWeight: '600',
+                  fontSize: '0.78rem',
+                  border: canShare ? '1px solid #22c55e' : '1px solid var(--border-color)',
+                  cursor: isGenerating ? 'not-allowed' : 'pointer',
+                  opacity: isGenerating ? 0.75 : 1,
+                  boxShadow: canShare ? '0 2px 8px rgba(22, 163, 74, 0.35)' : 'none',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 size={14} className="spin-animation" />
+                    <span>Creating PDF...</span>
+                  </>
+                ) : feedbackMsg ? (
+                  <>
+                    <Check size={14} />
+                    <span>{feedbackMsg}</span>
+                  </>
+                ) : canShare ? (
+                  <>
+                    <Share2 size={14} />
+                    <span>Share via WhatsApp</span>
+                  </>
+                ) : (
+                  <>
+                    <Download size={14} />
+                    <span>Download PDF</span>
+                  </>
+                )}
+              </button>
+
+              {/* Print Button */}
               <button
                 onClick={handlePrint}
                 className="no-print"
@@ -169,20 +249,21 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.35rem',
-                  padding: '0.45rem 0.85rem',
+                  padding: '0.45rem 0.75rem',
                   borderRadius: '9px',
                   background: 'var(--primary)',
                   color: '#fff',
                   fontWeight: '600',
-                  fontSize: '0.8rem',
+                  fontSize: '0.78rem',
                   border: 'none',
                   cursor: 'pointer',
                   boxShadow: 'var(--shadow-glow)'
                 }}
               >
-                <Printer size={15} />
-                Print Bill
+                <Printer size={14} />
+                <span>Print</span>
               </button>
+
               <button
                 onClick={onClose}
                 className="no-print"
@@ -205,7 +286,6 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
             }}>
               {/* Receipt Header */}
               {(() => {
-                const hasGstin = Boolean(shopProfile?.gstin && shopProfile.gstin.trim())
                 return (
                   <div style={{
                     display: 'flex',
@@ -216,6 +296,22 @@ export default function BillReceiptModal({ isOpen, onClose, saleData, shopProfil
                     marginBottom: '1.25rem'
                   }}>
                     <div>
+                      <div style={{ marginBottom: '0.25rem' }}>
+                        <span style={{
+                          display: 'inline-block',
+                          fontSize: '0.72rem',
+                          fontWeight: '700',
+                          letterSpacing: '0.04em',
+                          color: hasGstin ? '#15803d' : '#475569',
+                          background: hasGstin ? '#ecfdf5' : '#f1f5f9',
+                          border: `1px solid ${hasGstin ? '#a7f3d0' : '#cbd5e1'}`,
+                          padding: '0.12rem 0.45rem',
+                          borderRadius: '4px',
+                          textTransform: 'uppercase'
+                        }}>
+                          {hasGstin ? 'TAX INVOICE' : 'SALE BILL'}
+                        </span>
+                      </div>
                       <h2 style={{ fontSize: '1.35rem', fontWeight: '700', color: 'var(--primary)', margin: 0, letterSpacing: '-0.01em' }}>
                         {shopProfile?.shop_name || 'Agri-Chemical Distribution'}
                       </h2>
